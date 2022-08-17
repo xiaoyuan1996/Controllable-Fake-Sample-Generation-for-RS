@@ -2,6 +2,7 @@ import random
 
 import numpy as np
 
+# finding
 
 class RandomCrop(object):
     """Crop randomly the image in a sample.
