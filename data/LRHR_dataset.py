@@ -86,27 +86,37 @@ class LRHRDataset(Dataset):
                 img_SR = Image.open(BytesIO(sr_img_bytes)).convert("RGB")
                 if self.need_LR:
                     img_LR = Image.open(BytesIO(lr_img_bytes)).convert("RGB")
-        else:
+        elif self.datatype == 'random':
             image_HR = cv2.imread(self.hr_path[index])
             print(self.hr_path[index])
             img_HR = cv2.cvtColor(image_HR,cv2.COLOR_BGR2RGB)
-            print(self.sr_path[index])
+            print(self.sr_path[index],np.min(image_HR))
             image_SR = cv2.imread(self.sr_path[index])
             img_SR = cv2.cvtColor(image_SR,cv2.COLOR_BGR2RGB)
+            sample = {'SR': img_SR, 'HR': img_HR}
+            sample = self.randomcrop(sample)
             #img_SR = Image.open(self.sr_path[index]).convert("RGB")
             if self.need_LR:
                 image_LR = cv2.imread(self.lr_path[index])
                 img_LR = cv2.cvtColor(image_LR,cv2.COLOR_BGR2RGB)
+                sample = {'SR': img_SR, 'HR': img_HR, 'LR': img_LR}
+                sample = self.randomcrop(sample)
+                #img_LR = Image.open(self.lr_path[index]).convert("RGB")
+        else:
+            img_HR = Image.open(self.hr_path[index]).convert("RGB")
+            img_SR = Image.open(self.sr_path[index]).convert("RGB")
+            sample = {'SR': img_SR, 'HR': img_HR}
+            #sample = self.randomcrop(sample)
+            if self.need_LR:
+                img_LR = Image.open(self.lr_path[index]).convert("RGB")
+                sample = {'SR': img_SR, 'HR': img_HR, 'LR': img_LR}
+                #sample = self.randomcrop(sample)
                 #img_LR = Image.open(self.lr_path[index]).convert("RGB")
         if self.need_LR:
-            sample = {'SR': img_SR, 'HR': img_HR,'LR': img_LR}
-            sample = self.randomcrop(sample)
             [sample['LR'], sample['SR'], sample['HR']] = Util.transform_augment(
                 [sample['LR'], sample['SR'], sample['HR']], split=self.split, min_max=(-1, 1))
             return {'LR': sample['LR'], 'HR':sample['HR'], 'SR': sample['SR'], 'Index': index}
         else:
-            sample = {'SR': img_SR, 'HR': img_HR}
-            sample = self.randomcrop(sample)
             [sample['SR'], sample['HR']] = Util.transform_augment(
                 [sample['SR'], sample['HR']], split=self.split, min_max=(-1, 1))
             return {'HR': sample['HR'], 'SR': sample['SR'], 'Index': index}
