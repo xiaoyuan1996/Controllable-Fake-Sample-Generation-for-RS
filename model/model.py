@@ -160,6 +160,7 @@ class DDPM(BaseModel):
             #     gen_path), strict=False)
             if self.opt['phase'] == 'train':
                 # optimizer
+                #从文件中加载一个用torch.save()保存的对象
                 opt = torch.load(opt_path)
                 self.optG.load_state_dict(opt['optimizer'])
                 self.begin_step = opt['iter']

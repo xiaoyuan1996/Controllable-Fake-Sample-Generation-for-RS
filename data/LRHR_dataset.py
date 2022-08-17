@@ -3,8 +3,9 @@ import lmdb
 from PIL import Image
 from torch.utils.data import Dataset
 import random
+import cv2
 import data.util as Util
-
+from data.transform import RandomCrop
 
 class LRHRDataset(Dataset):
     def __init__(self, dataroot, datatype, l_resolution=16, r_resolution=128, split='train', data_len=-1, need_LR=False):
@@ -14,6 +15,7 @@ class LRHRDataset(Dataset):
         self.data_len = data_len
         self.need_LR = need_LR
         self.split = split
+        self.randomcrop = RandomCrop(r_resolution)
 
         if datatype == 'lmdb':
             self.env = lmdb.open(dataroot, readonly=True, lock=False,
@@ -85,15 +87,26 @@ class LRHRDataset(Dataset):
                 if self.need_LR:
                     img_LR = Image.open(BytesIO(lr_img_bytes)).convert("RGB")
         else:
-            img_HR = Image.open(self.hr_path[index]).convert("RGB")
-            img_SR = Image.open(self.sr_path[index]).convert("RGB")
+            image_HR = cv2.imread(self.hr_path[index])
+            print(self.hr_path[index])
+            img_HR = cv2.cvtColor(image_HR,cv2.COLOR_BGR2RGB)
+            print(self.sr_path[index])
+            image_SR = cv2.imread(self.sr_path[index])
+            img_SR = cv2.cvtColor(image_SR,cv2.COLOR_BGR2RGB)
+            #img_SR = Image.open(self.sr_path[index]).convert("RGB")
             if self.need_LR:
-                img_LR = Image.open(self.lr_path[index]).convert("RGB")
+                image_LR = cv2.imread(self.lr_path[index])
+                img_LR = cv2.cvtColor(image_LR,cv2.COLOR_BGR2RGB)
+                #img_LR = Image.open(self.lr_path[index]).convert("RGB")
         if self.need_LR:
-            [img_LR, img_SR, img_HR] = Util.transform_augment(
-                [img_LR, img_SR, img_HR], split=self.split, min_max=(-1, 1))
-            return {'LR': img_LR, 'HR': img_HR, 'SR': img_SR, 'Index': index}
+            sample = {'SR': img_SR, 'HR': img_HR,'LR': img_LR}
+            sample = self.randomcrop(sample)
+            [sample['LR'], sample['SR'], sample['HR']] = Util.transform_augment(
+                [sample['LR'], sample['SR'], sample['HR']], split=self.split, min_max=(-1, 1))
+            return {'LR': sample['LR'], 'HR':sample['HR'], 'SR': sample['SR'], 'Index': index}
         else:
-            [img_SR, img_HR] = Util.transform_augment(
-                [img_SR, img_HR], split=self.split, min_max=(-1, 1))
-            return {'HR': img_HR, 'SR': img_SR, 'Index': index}
+            sample = {'SR': img_SR, 'HR': img_HR}
+            sample = self.randomcrop(sample)
+            [sample['SR'], sample['HR']] = Util.transform_augment(
+                [sample['SR'], sample['HR']], split=self.split, min_max=(-1, 1))
+            return {'HR': sample['HR'], 'SR': sample['SR'], 'Index': index}

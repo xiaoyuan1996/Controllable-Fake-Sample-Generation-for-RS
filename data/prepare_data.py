@@ -161,11 +161,11 @@ def prepare(img_path, out_path, n_worker, sizes=(16, 128), resample=Image.BICUBI
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', '-p', type=str,
-                        default='{}/Dataset/celebahq_256'.format(Path.home()))
+                        default='{}/dataset/celeba_hq_256'.format(Path.home()))
     parser.add_argument('--out', '-o', type=str,
                         default='./dataset/celebahq')
 
-    parser.add_argument('--size', type=str, default='64,512')
+    parser.add_argument('--size', type=str, default='32,256')
     parser.add_argument('--n_worker', type=int, default=3)
     parser.add_argument('--resample', type=str, default='bicubic')
     # default save in png format

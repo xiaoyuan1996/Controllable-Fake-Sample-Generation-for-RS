@@ -6,13 +6,14 @@ import logging
 import core.logger as Logger
 import core.metrics as Metrics
 from core.wandb_logger import WandbLogger
-from tensorboardX import SummaryWriter
+#from tensorboardX import SummaryWriter
 import os
 import numpy as np
-
+#NCCL__DEBUG = info
+#USE_SYSTEM_NCCL = 1
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/sr_sr3_16_128.json',
+    parser.add_argument('-c', '--config', type=str, default='config/false_generate.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['train', 'val'],
                         help='Run either train(training) or val(generation)', default='train')
@@ -37,7 +38,7 @@ if __name__ == "__main__":
     Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
     logger = logging.getLogger('base')
     logger.info(Logger.dict2str(opt))
-    tb_logger = SummaryWriter(log_dir=opt['path']['tb_logger'])
+    #tb_logger = SummaryWriter(log_dir=opt['path']['tb_logger'])
 
     # Initialize WandbLogger
     if opt['enable_wandb']:
@@ -93,7 +94,7 @@ if __name__ == "__main__":
                         current_epoch, current_step)
                     for k, v in logs.items():
                         message += '{:s}: {:.4e} '.format(k, v)
-                        tb_logger.add_scalar(k, v, current_step)
+                        #tb_logger.add_scalar(k, v, current_step)
                     logger.info(message)
 
                     if wandb_logger:
@@ -103,8 +104,8 @@ if __name__ == "__main__":
                 if current_step % opt['train']['val_freq'] == 0:
                     avg_psnr = 0.0
                     idx = 0
-                    result_path = '{}/{}'.format(opt['path']
-                                                 ['results'], current_epoch)
+                    result_path = '{}/{}'.format(opt['path']['results'], current_epoch)
+                    print(result_path)
                     os.makedirs(result_path, exist_ok=True)
 
                     diffusion.set_new_noise_schedule(
@@ -128,11 +129,11 @@ if __name__ == "__main__":
                             lr_img, '{}/{}_{}_lr.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
                             fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
-                        tb_logger.add_image(
-                            'Iter_{}'.format(current_step),
-                            np.transpose(np.concatenate(
-                                (fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
-                            idx)
+                        #tb_logger.add_image(
+                            #'Iter_{}'.format(current_step),
+                            #np.transpose(np.concatenate(
+                                #(fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
+                            #idx)
                         avg_psnr += Metrics.calculate_psnr(
                             sr_img, hr_img)
 
@@ -151,7 +152,7 @@ if __name__ == "__main__":
                     logger_val.info('<epoch:{:3d}, iter:{:8,d}> psnr: {:.4e}'.format(
                         current_epoch, current_step, avg_psnr))
                     # tensorboard logger
-                    tb_logger.add_scalar('psnr', avg_psnr, current_step)
+                    #tb_logger.add_scalar('psnr', avg_psnr, current_step)
 
                     if wandb_logger:
                         wandb_logger.log_metrics({
