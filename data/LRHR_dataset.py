@@ -5,6 +5,7 @@ from torch.utils.data import Dataset
 import random
 import cv2
 import data.util as Util
+import numpy as np
 from data.transform import RandomCrop
 
 class LRHRDataset(Dataset):
