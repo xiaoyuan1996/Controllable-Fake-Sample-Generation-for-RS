@@ -27,7 +27,7 @@ class LRHRDataset(Dataset):
                 self.data_len = self.dataset_len
             else:
                 self.data_len = min(self.data_len, self.dataset_len)
-        elif datatype == 'img'| datatype == 'random':
+        elif datatype == 'img' or datatype == 'random':
             self.sr_path = Util.get_paths_from_images(
                 '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
             self.hr_path = Util.get_paths_from_images(
