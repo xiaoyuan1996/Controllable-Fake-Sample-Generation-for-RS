@@ -80,6 +80,8 @@ def transform_augment(img_list, split='val', min_max=(0, 1)):
         #print(imgs.shape)
         #imgs = torchvision.transforms.ToPILImage(imgs)
         #print(imgs)
+        imgs = imgs.squeeze(0)
+        imgs = torchvision.transforms.ToPILImage(imgs)
         imgs = hflip(imgs)
         imgs = torch.unbind(imgs, dim=0)
     ret_img = [img * (min_max[1] - min_max[0]) + min_max[0] for img in imgs]
