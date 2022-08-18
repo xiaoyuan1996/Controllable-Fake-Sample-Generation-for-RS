@@ -78,10 +78,12 @@ def transform_augment(img_list, split='val', min_max=(0, 1)):
     print(torch.min(imgs[1]), torch.max(imgs[1]))
     if split == 'train':
         imgs = torch.stack(imgs, 0)
-        print(imgs.shape)
+        #print(imgs.shape)
         #imgs = torchvision.transforms.ToPILImage(imgs)
         #print(imgs)
         imgs = hflip(imgs)
         imgs = torch.unbind(imgs, dim=0)
     ret_img = [img * (min_max[1] - min_max[0]) + min_max[0] for img in imgs]
+    print("ret_img:")
+    print(ret_img.shape)
     return ret_img
