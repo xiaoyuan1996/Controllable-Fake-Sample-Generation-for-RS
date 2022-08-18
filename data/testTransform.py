@@ -4,6 +4,7 @@ from PIL import Image
 import util as Util
 import numpy as np
 from transform import RandomCrop
+import os
 #import core.metrics as Metrics
 def test():
     randomcrop = RandomCrop(256)
@@ -18,7 +19,7 @@ def test():
     sample = randomcrop(sample)
     img = Image.fromarray(
         np.transpose(sample['HR'], (2, 0, 1)),"RGB")
-    path = "/data/diffusion_data/dataset/test/P0406.png"
+    path = os.path.join("/data/diffusion_data/dataset/test","P0406.png")
     img.save(path)
 
     [sample['SR'], sample['HR']] = Util.transform_augment(
