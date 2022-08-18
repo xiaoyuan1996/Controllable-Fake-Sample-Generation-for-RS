@@ -17,14 +17,16 @@ def test():
     img_SR = cv2.cvtColor(image_SR, cv2.COLOR_BGR2RGB)
     sample = {'SR': img_SR, 'HR': img_HR}
     sample = randomcrop(sample)
-    img1 = Image.fromarray(sample['HR'],"RGB")
-    img2 = Image.fromarray(sample['HR'], "RGB")
+    # img1 = Image.fromarray(sample['HR'],"RGB")
+    # img2 = Image.fromarray(sample['HR'], "RGB")
     dir = "/data/diffusion_data/dataset/test"
     os.makedirs(dir,exist_ok=True)
     path1 = os.path.join(dir,"P0406.png")
     path2 = os.path.join(dir, "P0406_instance_color_RGB.png")
-    img1.save(path1)
-    img2.save(path2)
+    cv2.imwrite(sample['HR'], path1)
+    cv2.imwrite(sample['SR'], path2)
+    # img1.save(path1)
+    # img2.save(path2)
 
     [sample['SR'], sample['HR']] = Util.transform_augment(
         [sample['SR'], sample['HR']], split='train', min_max=(-1, 1))
