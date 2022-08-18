@@ -51,6 +51,7 @@ class RandomCrop(object):
             img_crop[cont_top:cont_top + ch, cont_left:cont_left + cw] = \
                 img[img_top:img_top + ch, img_left:img_left + cw]
             print("key:"+key)
+            print(np.min(img_crop),np.max(img_crop))
             sample[key] = img_crop
 
         return sample

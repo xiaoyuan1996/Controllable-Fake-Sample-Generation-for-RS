@@ -89,9 +89,9 @@ class LRHRDataset(Dataset):
                     img_LR = Image.open(BytesIO(lr_img_bytes)).convert("RGB")
         elif self.datatype == 'random':
             image_HR = cv2.imread(self.hr_path[index])
-            print(self.hr_path[index])
+            #print(self.hr_path[index])
             img_HR = cv2.cvtColor(image_HR,cv2.COLOR_BGR2RGB)
-            print(self.sr_path[index],np.min(image_HR))
+            print(self.hr_path[index],np.min(img_HR))
             image_SR = cv2.imread(self.sr_path[index])
             img_SR = cv2.cvtColor(image_SR,cv2.COLOR_BGR2RGB)
             sample = {'SR': img_SR, 'HR': img_HR}
