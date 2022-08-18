@@ -50,6 +50,7 @@ class DDPM(BaseModel):
         l_pix = self.netG(self.data)
         # need to average in multi-gpu
         b, c, h, w = self.data['HR'].shape
+        print(torch.min(self.data['HR'][0]))
         l_pix = l_pix.sum()/int(b*c*h*w)
         l_pix.backward()
         self.optG.step()
