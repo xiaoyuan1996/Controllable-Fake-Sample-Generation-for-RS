@@ -19,7 +19,9 @@ def test():
     sample = randomcrop(sample)
     img = Image.fromarray(
         np.transpose(sample['HR'], (2, 0, 1)),"RGB")
-    path = os.path.join("/data/diffusion_data/dataset/test","P0406.png")
+    dir = "/data/diffusion_data/dataset/test"
+    os.makedirs(dir,exist_ok=True)
+    path = os.path.join(dir,"P0406.png")
     img.save(path)
 
     [sample['SR'], sample['HR']] = Util.transform_augment(
