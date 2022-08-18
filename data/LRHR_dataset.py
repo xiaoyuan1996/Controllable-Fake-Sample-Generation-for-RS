@@ -114,12 +114,12 @@ class LRHRDataset(Dataset):
                 #sample = self.randomcrop(sample)
                 #img_LR = Image.open(self.lr_path[index]).convert("RGB")
         if self.need_LR:
-            [sample['LR'], sample['SR'], sample['HR']] = Util.transform_augment(
-                [sample['LR'], sample['SR'], sample['HR']], split=self.split, min_max=(-1, 1))
+            [sample['HR'], sample['SR'], sample['LR']] = Util.transform_augment(
+                [sample['HR'], sample['SR'], sample['LR']], split=self.split, min_max=(-1, 1))
             return {'LR': sample['LR'], 'HR':sample['HR'], 'SR': sample['SR'], 'Index': index}
         else:
-            [sample['SR'], sample['HR']] = Util.transform_augment(
-                [sample['SR'], sample['HR']], split=self.split, min_max=(-1, 1))
+            [sample['HR'], sample['SR']] = Util.transform_augment(
+                [sample['HR'], sample['SR']], split=self.split, min_max=(-1, 1))
             print(sample['HR'])
             print(sample['HR'].shape)
             return {'HR': sample['HR'], 'SR': sample['SR'], 'Index': index}
