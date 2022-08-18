@@ -120,4 +120,6 @@ class LRHRDataset(Dataset):
         else:
             [sample['SR'], sample['HR']] = Util.transform_augment(
                 [sample['SR'], sample['HR']], split=self.split, min_max=(-1, 1))
+            print(sample['HR'])
+            print(sample['HR'].shape)
             return {'HR': sample['HR'], 'SR': sample['SR'], 'Index': index}
