@@ -17,8 +17,7 @@ def test():
     img_SR = cv2.cvtColor(image_SR, cv2.COLOR_BGR2RGB)
     sample = {'SR': img_SR, 'HR': img_HR}
     sample = randomcrop(sample)
-    img = Image.fromarray(
-        np.transpose(sample['HR'], (2, 0, 1)),"RGB")
+    img = Image.fromarray(sample['HR'],"RGB")
     dir = "/data/diffusion_data/dataset/test"
     os.makedirs(dir,exist_ok=True)
     path = os.path.join(dir,"P0406.png")
