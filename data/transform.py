@@ -25,7 +25,7 @@ class RandomCrop(object):
         h, w = sample['HR'].shape[:2]
         ch = min(h, self.output_size[0])
         cw = min(w, self.output_size[1])
-        print(ch,cw)
+        #print(ch,cw)
 
         h_space = h - self.output_size[0]
         w_space = w - self.output_size[1]
