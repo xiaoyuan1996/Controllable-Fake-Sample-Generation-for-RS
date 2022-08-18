@@ -1,9 +1,9 @@
 import torch
 import cv2
 from PIL import Image
-import data.util as Util
+import util as Util
 import numpy as np
-from data.transform import RandomCrop
+from transform import RandomCrop
 import core.metrics as Metrics
 def test():
     randomcrop = RandomCrop(256)
