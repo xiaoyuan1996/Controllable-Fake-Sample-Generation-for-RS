@@ -23,8 +23,8 @@ def test():
     os.makedirs(dir,exist_ok=True)
     path1 = os.path.join(dir,"P0406.png")
     path2 = os.path.join(dir, "P0406_instance_color_RGB.png")
-    cv2.imwrite(sample['HR'], path1)
-    cv2.imwrite(sample['SR'], path2)
+    cv2.imwrite(path1,sample['HR'] )
+    cv2.imwrite(path2, sample['SR'])
     # img1.save(path1)
     # img2.save(path2)
 
