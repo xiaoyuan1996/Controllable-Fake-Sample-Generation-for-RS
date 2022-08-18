@@ -8,7 +8,7 @@ from transform import RandomCrop
 def test():
     randomcrop = RandomCrop(256)
     hr_path = "/data/diffusion_data/dataset/false_generate/hr_256/P0406.png"
-    sr_path = "/data/diffusion_data/dataset/false_generate/sr_32_256/P0406_instance_color_RGB.png "
+    sr_path = "/data/diffusion_data/dataset/false_generate/sr_32_256/P0406_instance_color_RGB.png"
     image_HR = cv2.imread(hr_path)
     # print(self.hr_path[index])
     img_HR = cv2.cvtColor(image_HR, cv2.COLOR_BGR2RGB)
