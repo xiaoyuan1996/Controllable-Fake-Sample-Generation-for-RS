@@ -50,8 +50,8 @@ class RandomCrop(object):
             img_crop = np.zeros((self.output_size[0], self.output_size[1], 3), np.float32)
             img_crop[cont_top:cont_top + ch, cont_left:cont_left + cw] = \
                 img[img_top:img_top + ch, img_left:img_left + cw]
-            print("key:"+key)
-            print(np.min(img_crop),np.max(img_crop))
+            # print("key:"+key)
+            # print(np.min(img_crop),np.max(img_crop))
             sample[key] = img_crop
 
         return sample
