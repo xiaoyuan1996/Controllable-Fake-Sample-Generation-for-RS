@@ -4,7 +4,7 @@ from PIL import Image
 import util as Util
 import numpy as np
 from transform import RandomCrop
-import core.metrics as Metrics
+#import core.metrics as Metrics
 def test():
     randomcrop = RandomCrop(256)
     hr_path = "/data/diffusion_data/dataset/false_generate/hr_256/P0406.png"
