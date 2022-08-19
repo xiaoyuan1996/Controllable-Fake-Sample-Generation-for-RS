@@ -120,7 +120,7 @@ if __name__ == "__main__":
                         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
                         lr_img = Metrics.tensor2img(visuals['LR'])  # uint8
                         fake_img = Metrics.tensor2img(visuals['INF'])  # uint8
-                        cv2.imwrite('{}/{}_{}_hr1.png'.format(result_path, current_step, idx), hr_img)
+                        #cv2.imwrite('{}/{}_{}_hr1.png'.format(result_path, current_step, idx), hr_img)
                         # generation
                         Metrics.save_img(
                             hr_img, '{}/{}_{}_hr.png'.format(result_path, current_step, idx))
