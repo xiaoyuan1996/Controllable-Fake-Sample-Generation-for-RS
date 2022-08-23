@@ -31,7 +31,7 @@
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             "datatype": "random", //lmdb or img, path of img files
             "l_resolution": 32,
-            "r_resolution": 256,
+            "r_resolution": 128,
             "data_len": 50 // data length in validation
         }
     },
@@ -70,7 +70,7 @@
             }
         },
         "diffusion": {
-            "image_size": 256,
+            "image_size": 128,
             "channels": 3, //sample channel
             "conditional": true // unconditional generation or unconditional generation(super_resolution)
         }
