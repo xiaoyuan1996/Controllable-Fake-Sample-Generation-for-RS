@@ -28,13 +28,33 @@ class LRHRDataset(Dataset):
                 self.data_len = self.dataset_len
             else:
                 self.data_len = min(self.data_len, self.dataset_len)
-        elif datatype == 'img' or datatype == 'random':
+        elif datatype == 'img':
+            self.sr_path = Util.get_paths_from_images(
+                '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
+            self.hr_path = Util.get_paths_from_images(
+                '{}/hr_{}'.format(dataroot, r_resolution))
+            if self.need_LR:
+                self.lr_path = Util.get_paths_from_images(
+                    '{}/lr_{}'.format(dataroot, l_resolution))
+            self.dataset_len = len(self.hr_path)
+            if self.data_len <= 0:
+                self.data_len = self.dataset_len
+        elif datatype == 'random':
             # self.sr_path = Util.get_paths_from_images(
             #     '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
             # self.hr_path = Util.get_paths_from_images(
             #     '{}/hr_{}'.format(dataroot, r_resolution))
             self.hr_path = Util.get_paths_from_images('{}/hr_256'.format(dataroot))
             self.sr_path = Util.get_paths_from_images('{}/sr_32_256'.format(dataroot))
+            if self.need_LR:
+                self.lr_path = Util.get_paths_from_images(
+                    '{}/lr_{}'.format(dataroot, l_resolution))
+            self.dataset_len = len(self.hr_path)
+            if self.data_len <= 0:
+                self.data_len = self.dataset_len
+        elif datatype == 'segmentation':
+            self.hr_path = Util.get_paths_from_images('{}/images')
+            self.sr_path = Util.get_paths_from_images('{}/rgb_labels')
             if self.need_LR:
                 self.lr_path = Util.get_paths_from_images(
                     '{}/lr_{}'.format(dataroot, l_resolution))
