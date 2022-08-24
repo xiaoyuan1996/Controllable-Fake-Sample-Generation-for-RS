@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-         "resume_state": "/data/diffusion_data/experiments/false_generate_220822_090710/checkpoint/I280000_E1187" //pretrain model or training state
+         "resume_state": null //pretrain model or training state
     },
     "datasets": {
         "train": {
