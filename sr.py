@@ -14,7 +14,7 @@ import cv2
 #USE_SYSTEM_NCCL = 1
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/false_generate2.json',
+    parser.add_argument('-c', '--config', type=str, default='config/false_generate.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['train', 'val'],
                         help='Run either train(training) or val(generation)', default='train')
