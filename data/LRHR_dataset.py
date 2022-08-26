@@ -118,8 +118,8 @@ class LRHRDataset(Dataset):
             # img_SR = cv2.cvtColor(image_SR,cv2.COLOR_BGR2RGB)
             # sample = {'SR': img_SR, 'HR': img_HR}
             # sample = self.randomcrop
-            image_HR = Image.open(self.hr_path[index]).convert("RGB")
-            image_SR = Image.open(self.sr_path[index]).convert("RGB")
+            image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+            image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
             H, W, C = np.shape(image_HR)
             if H > self.r_res + 10 and W > self.r_res +10:
                 start_x = np.random.randint(0, H-self.r_res)

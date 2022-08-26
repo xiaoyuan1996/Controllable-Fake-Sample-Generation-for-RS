@@ -63,8 +63,12 @@ if __name__ == "__main__":
     idx = 0
 
     result_path = '{}'.format(opt['path']['results'])
+    sr_path = os.path.join(result_path,'sr_save')
+    hr_path = os.path.join(result_path,'hr_save')
     print(result_path)
     os.makedirs(result_path, exist_ok=True)
+    os.makedirs(sr_path, exist_ok=True)
+    os.makedirs(hr_path, exist_ok=True)
     for _,  val_data in enumerate(val_loader):
         idx += 1
         diffusion.feed_data(val_data)
@@ -88,12 +92,12 @@ if __name__ == "__main__":
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][-1]), '{}/{}_{}_sr.png'.format(result_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][-1]), '{}/{}_{}_sr.png'.format(sr_path, current_step, idx))
 
         Metrics.save_img(
-            hr_img, '{}/{}_{}_hr.png'.format(result_path, current_step, idx))
-        Metrics.save_img(
-            fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
+            hr_img, '{}/{}_{}_hr.png'.format(hr_path, current_step, idx))
+        # Metrics.save_img(
+        #     fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
 
         if wandb_logger and opt['log_infer']:
             wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img)
