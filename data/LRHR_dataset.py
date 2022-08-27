@@ -161,7 +161,7 @@ class LRHRDataset(Dataset):
                 box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
                 img_HR = image_HR.crop(box)
                 img_SR = image_SR.crop(box)
-                print(np.max(img_SR),np.min(img_SR))
+                #print(np.max(img_SR),np.min(img_SR))
 
             else:
                 img_HR = image_HR.resize((self.r_res, self.r_res))
@@ -176,7 +176,7 @@ class LRHRDataset(Dataset):
                     value = np.random.randint(0,255,size = [1,3])
                     image[x,y,:] = value
                     img_SR = Image.fromarray(image).convert('RGB')
-                print(np.max(img_SR), np.min(img_SR))
+                #print(np.max(img_SR), np.min(img_SR))
 
 
             # img_SR = Image.open(self.sr_path[index]).convert("RGB")

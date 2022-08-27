@@ -3,7 +3,7 @@ import torch
 import torchvision
 import random
 import numpy as np
-
+from PIL import Image
 IMG_EXTENSIONS = ['.jpg', '.JPG', '.jpeg', '.JPEG',
                   '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP','.tif']
 
@@ -52,6 +52,14 @@ def transform2numpy(img):
         img = img[:, :, :3]
     return img
 
+def image_process(path,out_path):
+    img = Image.open(path).convert("RGB")
+    H, W, C = np.shape(img)
+    while (H>400 or W>400):
+        H = H/2
+        W = W/2
+        img.resize(H/2,W/2)
+    img.save(out_path)
 
 def transform2tensor(img, min_max=(0, 1)):
     # HWC to CHW
