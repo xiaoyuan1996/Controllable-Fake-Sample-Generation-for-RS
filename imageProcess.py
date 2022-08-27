@@ -15,7 +15,7 @@ def main_process(files,out_path):
 label_path = '/data/diffusion_data/val/labels'
 image_path = '/data/diffusion_data/val/images'
 out_lable = '/data/diffusion_data/val/processed/labels'
-out_image = '/data/diffusion_data/val/processed/images'
+#out_image = '/data/diffusion_data/val/processed/images'
 sr_path = Util.get_paths_from_images(label_path)
 hr_path = Util.get_paths_from_images(image_path)
 main_process(sr_path,out_lable)
