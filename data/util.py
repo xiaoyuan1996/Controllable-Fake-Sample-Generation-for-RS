@@ -58,7 +58,7 @@ def image_process(path,out_path):
     while (H>400 or W>400):
         H = H//2
         W = W//2
-        img.resize(H/2,W/2)
+        img.resize(H,W)
     img.save(out_path)
 
 def transform2tensor(img, min_max=(0, 1)):
