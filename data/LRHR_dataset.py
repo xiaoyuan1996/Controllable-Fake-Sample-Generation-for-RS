@@ -17,8 +17,6 @@ class LRHRDataset(Dataset):
         self.need_LR = need_LR
         self.split = split
         self.randomcrop = RandomCrop(r_resolution)
-        self.mean = 120
-        self.sigma = 10
 
 
         if datatype == 'lmdb':
@@ -163,14 +161,18 @@ class LRHRDataset(Dataset):
                     box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
                     img_HR = image_HR.crop(box)
                     img_SR = image_SR.crop(box)
+                    print(np.max(img_SR),np.min(img_SR) == 0)
 
                 else:
                     img_HR = image_HR.resize((self.r_res, self.r_res))
                     img_SR = image_SR.resize((self.r_res, self.r_res))
                 if(np.max(img_SR) == 0):
-                    noise = np.random.normal(self.mean, self.sigma, img_SR.shape)
-                    img_SR = img_SR + noise
-                    print(np.max(noise), np.min(noise))
+                    h,w,c = img_SR.shape
+                    for i in range(1000):
+                        x = np.random.randint(0,255)
+                        y = np.random.randint(0,255)
+                        img_SR[x,y,:] = np.random.randint(0,255)
+                    print(np.max(img_SR), np.min(img_SR))
 
 
                 # img_SR = Image.open(self.sr_path[index]).convert("RGB")

@@ -74,7 +74,7 @@ def transform2tensor(img, min_max=(0, 1)):
 totensor = torchvision.transforms.ToTensor()
 hflip = torchvision.transforms.RandomHorizontalFlip()
 def transform_augment(img_list, split='val', min_max=(0, 1)):
-    print(np.min(img_list[0]), np.max(img_list[0]))
+    #print(np.min(img_list[0]), np.max(img_list[0]))
     imgs = [totensor(img) for img in img_list]
     #print(torch.min(imgs[0]), torch.max(imgs[0]))
     if split == 'train':
