@@ -56,8 +56,8 @@ def image_process(path,out_path):
     img = Image.open(path).convert("RGB")
     H, W, C = np.shape(img)
     while (H>400 or W>400):
-        H = H/2
-        W = W/2
+        H = H//2
+        W = W//2
         img.resize(H/2,W/2)
     img.save(out_path)
 
