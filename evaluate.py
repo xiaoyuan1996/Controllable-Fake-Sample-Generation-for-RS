@@ -70,5 +70,6 @@ for k in range(splits):
 
 
 mean, std  = np.mean(split_scores), np.std(split_scores)
+#print(len(split_scores))
 print('IS is %.4f' % mean)
 print('The std is %.4f' % std)

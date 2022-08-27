@@ -1,5 +1,5 @@
 {
-    "name": "false_generate",
+    "name": "false_256",
     "phase": "train", // train or val
     "gpu_ids": [
         4,5
@@ -14,7 +14,7 @@
     },
     "datasets": {
         "train": {
-            "name": "false_generate",
+            "name": "false_256",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             "datatype": "random", //lmdb or img, path of img files
@@ -26,7 +26,7 @@
             "data_len": -1 // -1 represents all data used in train
         },
         "val": {
-            "name": "false_generate",
+            "name": "false_256",
             "mode": "HR",
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             "datatype": "random", //lmdb or img, path of img files

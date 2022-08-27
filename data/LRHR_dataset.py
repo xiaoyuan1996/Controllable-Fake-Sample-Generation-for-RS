@@ -7,7 +7,7 @@ import cv2
 import data.util as Util
 import numpy as np
 from data.transform import RandomCrop
-
+IMG_MEAN = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)
 class LRHRDataset(Dataset):
     def __init__(self, dataroot, datatype, l_resolution=16, r_resolution=128, split='train', data_len=-1, need_LR=False):
         self.datatype = datatype
@@ -17,6 +17,9 @@ class LRHRDataset(Dataset):
         self.need_LR = need_LR
         self.split = split
         self.randomcrop = RandomCrop(r_resolution)
+        self.mean = 120
+        self.sigma = 10
+
 
         if datatype == 'lmdb':
             self.env = lmdb.open(dataroot, readonly=True, lock=False,
@@ -39,7 +42,7 @@ class LRHRDataset(Dataset):
             self.dataset_len = len(self.hr_path)
             if self.data_len <= 0:
                 self.data_len = self.dataset_len
-        elif datatype == 'random':
+        elif datatype == 'random' or datatype == 'change':
             # self.sr_path = Util.get_paths_from_images(
             #     '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
             # self.hr_path = Util.get_paths_from_images(
@@ -142,6 +145,37 @@ class LRHRDataset(Dataset):
                 # sample = self.randomcrop(sample)
 
                 #img_LR = Image.open(self.lr_path[index]).convert("RGB")
+            elif self.datatype == 'change':
+                # image_HR = cv2.imread(self.hr_path[index])
+                # #print(self.hr_path[index])
+                # img_HR = cv2.cvtColor(image_HR,cv2.COLOR_BGR2RGB)
+                # #print(self.hr_path[index],np.min(img_HR))
+                # image_SR = cv2.imread(self.sr_path[index])
+                # img_SR = cv2.cvtColor(image_SR,cv2.COLOR_BGR2RGB)
+                # sample = {'SR': img_SR, 'HR': img_HR}
+                # sample = self.randomcrop
+                image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+                image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
+                H, W, C = np.shape(image_HR)
+                if H > self.r_res + 10 and W > self.r_res + 10:
+                    start_x = np.random.randint(0, H - self.r_res)
+                    start_y = np.random.randint(0, W - self.r_res)
+                    box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
+                    img_HR = image_HR.crop(box)
+                    img_SR = image_SR.crop(box)
+
+                else:
+                    img_HR = image_HR.resize((self.r_res, self.r_res))
+                    img_SR = image_SR.resize((self.r_res, self.r_res))
+                if(np.max(img_SR) == 0):
+                    noise = np.random.normal(self.mean, self.sigma, img_SR.shape)
+                    img_SR = img_SR + noise
+                    print(np.max(noise), np.min(noise))
+
+
+                # img_SR = Image.open(self.sr_path[index]).convert("RGB")
+                if self.need_LR:
+                    img_LR = Image.open(self.lr_path[index]).convert("RGB")
         else:
             img_HR = Image.open(self.hr_path[index]).convert("RGB")
             img_SR = Image.open(self.sr_path[index]).convert("RGB")
