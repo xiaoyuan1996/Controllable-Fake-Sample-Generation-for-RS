@@ -161,7 +161,7 @@ class LRHRDataset(Dataset):
                 box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
                 img_HR = image_HR.crop(box)
                 img_SR = image_SR.crop(box)
-                print(np.max(img_SR),np.min(img_SR) == 0)
+                print(np.max(img_SR),np.min(img_SR))
 
             else:
                 img_HR = image_HR.resize((self.r_res, self.r_res))
@@ -169,9 +169,10 @@ class LRHRDataset(Dataset):
             if(np.max(img_SR) == 0):
                 h,w,c = img_SR.shape
                 for i in range(1000):
-                    x = np.random.randint(0,255)
-                    y = np.random.randint(0,255)
-                    img_SR[x,y,:] = np.random.randint(0,255)
+                    x = np.random.randint(0,h)
+                    y = np.random.randint(0,w)
+                    value = np.random.randint(0,255,size = [1,3])
+                    img_SR[x,y,:] = value
                 print(np.max(img_SR), np.min(img_SR))
 
 
