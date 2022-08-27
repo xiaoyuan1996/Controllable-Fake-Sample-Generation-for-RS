@@ -167,11 +167,11 @@ class LRHRDataset(Dataset):
                 img_HR = image_HR.resize((self.r_res, self.r_res))
                 img_SR = image_SR.resize((self.r_res, self.r_res))
             if(np.max(img_SR) == 0):
-                height,weight,channel = img_SR.shape
+                height,weight,channel = np.shape(img_SR)
                 for i in range(1000):
                     x = np.random.randint(0,height)
                     y = np.random.randint(0,weight)
-                    print(x,y)
+                    #print(x,y)
                     value = np.random.randint(0,255,size = [1,3])
                     img_SR[x,y,:] = value
                 print(np.max(img_SR), np.min(img_SR))
