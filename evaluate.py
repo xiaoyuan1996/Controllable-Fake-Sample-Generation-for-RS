@@ -15,7 +15,7 @@ from scipy.stats import entropy
 from torchvision.models.inception import inception_v3
 
 
-path = './dataset/celebahq_64_512/sr_64_512'
+path = '/data/diffusion_data/infer/false_generate_220827_015822/results/sr_save/'
 count = 0
 for root,dirs,files in os.walk(path):    #遍历统计
       for each in files:
