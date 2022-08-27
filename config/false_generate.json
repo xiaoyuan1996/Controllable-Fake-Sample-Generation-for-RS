@@ -2,7 +2,7 @@
     "name": "false_generate",
     "phase": "train", // train or val
     "gpu_ids": [
-        6,7
+        4,5
     ],
     "path": { //set the path
         "log": "logs",
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-         "resume_state": null //pretrain model or training state
+         "resume_state": '/data/diffusion_data/save_data/false_generate/I1000000_E4238' //pretrain model or training state
     },
     "datasets": {
         "train": {
@@ -32,7 +32,7 @@
             "datatype": "random", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 256,
-            "data_len": 50 // data length in validation
+            "data_len": 1000 // data length in validation
         }
     },
     "model": {
