@@ -143,41 +143,41 @@ class LRHRDataset(Dataset):
                 # sample = self.randomcrop(sample)
 
                 #img_LR = Image.open(self.lr_path[index]).convert("RGB")
-            elif self.datatype == 'change':
-                # image_HR = cv2.imread(self.hr_path[index])
-                # #print(self.hr_path[index])
-                # img_HR = cv2.cvtColor(image_HR,cv2.COLOR_BGR2RGB)
-                # #print(self.hr_path[index],np.min(img_HR))
-                # image_SR = cv2.imread(self.sr_path[index])
-                # img_SR = cv2.cvtColor(image_SR,cv2.COLOR_BGR2RGB)
-                # sample = {'SR': img_SR, 'HR': img_HR}
-                # sample = self.randomcrop
-                image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
-                image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
-                H, W, C = np.shape(image_HR)
-                if H > self.r_res + 10 and W > self.r_res + 10:
-                    start_x = np.random.randint(0, H - self.r_res)
-                    start_y = np.random.randint(0, W - self.r_res)
-                    box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
-                    img_HR = image_HR.crop(box)
-                    img_SR = image_SR.crop(box)
-                    print(np.max(img_SR),np.min(img_SR) == 0)
+        elif self.datatype == 'change':
+            # image_HR = cv2.imread(self.hr_path[index])
+            # #print(self.hr_path[index])
+            # img_HR = cv2.cvtColor(image_HR,cv2.COLOR_BGR2RGB)
+            # #print(self.hr_path[index],np.min(img_HR))
+            # image_SR = cv2.imread(self.sr_path[index])
+            # img_SR = cv2.cvtColor(image_SR,cv2.COLOR_BGR2RGB)
+            # sample = {'SR': img_SR, 'HR': img_HR}
+            # sample = self.randomcrop
+            image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+            image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
+            H, W, C = np.shape(image_HR)
+            if H > self.r_res + 10 and W > self.r_res + 10:
+                start_x = np.random.randint(0, H - self.r_res)
+                start_y = np.random.randint(0, W - self.r_res)
+                box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
+                img_HR = image_HR.crop(box)
+                img_SR = image_SR.crop(box)
+                print(np.max(img_SR),np.min(img_SR) == 0)
 
-                else:
-                    img_HR = image_HR.resize((self.r_res, self.r_res))
-                    img_SR = image_SR.resize((self.r_res, self.r_res))
-                if(np.max(img_SR) == 0):
-                    h,w,c = img_SR.shape
-                    for i in range(1000):
-                        x = np.random.randint(0,255)
-                        y = np.random.randint(0,255)
-                        img_SR[x,y,:] = np.random.randint(0,255)
-                    print(np.max(img_SR), np.min(img_SR))
+            else:
+                img_HR = image_HR.resize((self.r_res, self.r_res))
+                img_SR = image_SR.resize((self.r_res, self.r_res))
+            if(np.max(img_SR) == 0):
+                h,w,c = img_SR.shape
+                for i in range(1000):
+                    x = np.random.randint(0,255)
+                    y = np.random.randint(0,255)
+                    img_SR[x,y,:] = np.random.randint(0,255)
+                print(np.max(img_SR), np.min(img_SR))
 
 
-                # img_SR = Image.open(self.sr_path[index]).convert("RGB")
-                if self.need_LR:
-                    img_LR = Image.open(self.lr_path[index]).convert("RGB")
+            # img_SR = Image.open(self.sr_path[index]).convert("RGB")
+            if self.need_LR:
+                img_LR = Image.open(self.lr_path[index]).convert("RGB")
         else:
             img_HR = Image.open(self.hr_path[index]).convert("RGB")
             img_SR = Image.open(self.sr_path[index]).convert("RGB")
