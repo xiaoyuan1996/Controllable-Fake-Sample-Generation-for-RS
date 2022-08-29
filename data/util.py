@@ -60,6 +60,7 @@ def image_process(path,out_path):
         W = W//2
         print(H,W)
         img.resize((H,W),Image.ANTIALIAS)
+    print(np.shape(img))
     img.save(out_path)
 
 def transform2tensor(img, min_max=(0, 1)):
