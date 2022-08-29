@@ -42,9 +42,9 @@ class LRHRDataset(Dataset):
                 self.data_len = self.dataset_len
         elif datatype == 'infer':
             self.sr_path = Util.get_paths_from_images(
-                '{}/sr_save'.format(dataroot))
+                '{}/labels'.format(dataroot))
             self.hr_path = Util.get_paths_from_images(
-                '{}/hr_save'.format(dataroo, r_resolution))
+                '{}/images'.format(dataroot))
             if self.need_LR:
                 self.lr_path = Util.get_paths_from_images(
                     '{}/lr_save'.format(dataroot))
