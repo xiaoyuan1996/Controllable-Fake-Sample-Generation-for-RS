@@ -59,6 +59,10 @@ def image_process(path,out_path):
         H = H//2
         W = W//2
         #print(H,W)
+    p1 = H//32
+    p2 = W//32
+    H = 32*(p1+1)
+    W = 32*(p2+1)
     img = img.resize((H,W),Image.ANTIALIAS)
     print(np.shape(img))
     img.save(out_path)
