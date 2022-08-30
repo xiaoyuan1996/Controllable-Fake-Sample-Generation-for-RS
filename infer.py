@@ -11,7 +11,7 @@ import os
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/false_generate.json',
+    parser.add_argument('-c', '--config', type=str, default='config/false_generate2.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['val'], help='val(generation)', default='val')
     parser.add_argument('-gpu', '--gpu_ids', type=str, default=None)
@@ -64,12 +64,14 @@ if __name__ == "__main__":
     idx = 0
 
     result_path = '{}'.format(opt['path']['results'])
+    fake_path = os.path.join(result_path,'lr_save')
     sr_path = os.path.join(result_path,'sr_save')
     hr_path = os.path.join(result_path,'hr_save')
     print(result_path)
     os.makedirs(result_path, exist_ok=True)
     os.makedirs(sr_path, exist_ok=True)
     os.makedirs(hr_path, exist_ok=True)
+    os.makedirs(fake_path, exist_ok=True)
     for _,  val_data in enumerate(val_loader):
         idx += 1
         diffusion.feed_data(val_data)
@@ -97,8 +99,8 @@ if __name__ == "__main__":
 
         Metrics.save_img(
             hr_img, '{}/{}_{}_hr.png'.format(hr_path, current_step, idx))
-        # Metrics.save_img(
-        #     fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
+        Metrics.save_img(
+            fake_img, '{}/{}_{}_inf.png'.format(fake_path, current_step, idx))
 
         if wandb_logger and opt['log_infer']:
             wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img)
