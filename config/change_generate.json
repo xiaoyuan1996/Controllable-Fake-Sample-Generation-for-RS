@@ -2,7 +2,7 @@
     "name": "addNoise_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        4,5
+        6,7
     ],
     "path": { //set the path
         "log": "logs",
