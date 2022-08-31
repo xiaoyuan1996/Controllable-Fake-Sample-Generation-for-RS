@@ -21,7 +21,7 @@ for root,dirs,files in os.walk(path):    #遍历统计
       for each in files:
              count += 1   #统计文件夹下文件个数
 print(count)
-batch_size = 2
+batch_size = 1
 transforms_ = [
     #transforms.Resize((256, 256), Image.BICUBIC),
     transforms.ToTensor(),
