@@ -145,6 +145,7 @@ class LRHRDataset(Dataset):
                 img_HR = image_HR.resize((self.r_res, self.r_res))
                 img_SR = image_SR.resize((self.r_res, self.r_res))
             #img_SR = Image.open(self.sr_path[index]).convert("RGB")
+            print(np.max(img_SR),np.min(img_SR))
             if self.need_LR:
                 img_LR = Image.open(self.lr_path[index]).convert("RGB")
 
