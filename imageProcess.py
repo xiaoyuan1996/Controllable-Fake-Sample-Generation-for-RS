@@ -22,10 +22,12 @@ def reszie_process(files,out_path):
 
 
 
-label_path = '/data/diffusion_data/infer/false_256_220830_020020/results/sr_save'
-image_path = '/data/diffusion_data/infer/false_256_220830_020020/results/hr_save'
-out_lable = '/data/diffusion_data/infer/infer_256/sr_save'
-out_image = '/data/diffusion_data/infer/infer_256/hr_save'
+label_path = '/data/diffusion_data/infer/infer_128_220830_083118/results/sr_save'
+image_path = '/data/diffusion_data/infer/infer_128_220830_083118/results/hr_save'
+# label_path = '/data/diffusion_data/infer/false_256_220830_020020/results/sr_save'
+# image_path = '/data/diffusion_data/infer/false_256_220830_020020/results/hr_save'
+out_lable = '/data/diffusion_data/infer/infer_128/sr_save'
+out_image = '/data/diffusion_data/infer/infer_128/hr_save'
 sr_path = Util.get_paths_from_images(label_path)
 hr_path = Util.get_paths_from_images(image_path)
 # main_process(sr_path,out_lable)
