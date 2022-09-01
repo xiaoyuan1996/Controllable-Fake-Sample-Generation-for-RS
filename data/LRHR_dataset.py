@@ -180,7 +180,7 @@ class LRHRDataset(Dataset):
                 img_SR = image_SR.resize((self.r_res, self.r_res))
             if(np.max(img_SR) == 0):
                 height,weight,channel = np.shape(img_SR)
-                for i in range(1000):
+                for i in range(60000):
                     image = np.array(img_SR).copy()
                     x = np.random.randint(0,height)
                     y = np.random.randint(0,weight)
