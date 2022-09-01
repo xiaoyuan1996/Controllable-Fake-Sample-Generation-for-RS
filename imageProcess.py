@@ -36,12 +36,13 @@ def val_generate(files,out_path):
                  p2 = H//W_new + 1
                  H_new = int(H/p2)
                  for j in range(1, p2):
-                     box2 = ((i-1)*H_new, 0, i*H_new,  W_new)
+                     box2 = ((j-1)*H_new, 0, j*H_new,  W_new)
                      img_second = img_first.crop(box2)
                      print(np.shape(img_second))
                      img_new = img_second.resize((256, 256), Image.ANTIALIAS)
                      count = count + 1
                      save_path = os.path.join(out_path,str(count)+'.'+suffix)
+                     img_new.save(save_path)
         else:
             p1 = H // 512 + 1
             H_new = int(H / p1)
@@ -51,7 +52,7 @@ def val_generate(files,out_path):
                  box1 = ((i - 1) * H_new,0 ,i * H_new,W)
                  img_first = img.crop(box1)
                  for j in range(1, p2):
-                     box2 = (0, (i - 1) * W_new, H_new, i * W_new)
+                     box2 = (0, (j - 1) * W_new, H_new, j * W_new)
                      img_second = img_first.crop(box2)
                      print(np.shape(img_second))
                      img_new = img_second.resize((256, 256), Image.ANTIALIAS)
