@@ -3,7 +3,13 @@ import math
 import numpy as np
 import cv2
 from torchvision.utils import make_grid
-
+import torch.utils.data
+from scipy.stats import entropy
+from torchvision.models.inception import inception_v3
+from torch.nn import functional as F
+import torch.nn as nn
+import torchvision.transforms as transforms
+from brisque import BRISQUE
 
 def tensor2img(tensor, out_type=np.uint8, min_max=(-1, 1)):
     '''
@@ -38,6 +44,22 @@ def save_img(img, img_path, mode='RGB'):
     cv2.imwrite(img_path, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
     # cv2.imwrite(img_path, img)
 
+def eval_brisque(path, status):
+    files = os.listdir(path)
+
+    all_brisque = 0
+    idx = 0
+    for i, f in enumerate(files):
+        if status != None and status not in f:
+            continue
+
+        sub_path = os.path.join(path, f)
+        brisque = BRISQUE(sub_path, url=False).score()
+        all_brisque += brisque
+        idx += 1
+        print("{}/{}, {}:{}".format(i, len(files), sub_path, brisque))
+    return all_brisque / (idx + 1)
+
 
 def calculate_psnr(img1, img2):
     # img1 and img2 have range [0, 255]
@@ -47,6 +69,36 @@ def calculate_psnr(img1, img2):
     if mse == 0:
         return float('inf')
     return 20 * math.log10(255.0 / math.sqrt(mse))
+def get_pred(x):
+    inception_model = inception_v3(pretrained=True, transform_input=False).cuda()
+    inception_model.eval()
+    up = nn.Upsample(size=(299, 299), mode='bilinear', align_corners=False).cuda()
+    if True:
+        x = up(x)
+    x = inception_model(x)
+    return F.softmax(x, dim=1).data.cpu().numpy()
+def calculate_IS(img):
+    transforms_ = [
+        # transforms.Resize((256, 256), Image.BICUBIC),
+        transforms.ToTensor(),
+        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    ]
+    myTransform = transforms.Compose(transforms_)
+    cuda = True if torch.cuda.is_available() else False
+    print('cuda: ', cuda)
+    tensor = torch.cuda.FloatTensor
+    img = myTransform(img)
+    data = img.type(tensor)
+    #batch_size_i = data.size()[0]
+    preds = np.zeros((1, 1000))
+    preds[0:1] = get_pred(data)
+    part = preds[0: 1,:]  # split the whole data into several parts
+    py = np.mean(part, axis=0)  # marginal probability
+    scores = []
+    for i in range(part.shape[0]):
+        pyx = part[i, :]  # conditional probability
+        scores.append(entropy(pyx, py))  # compute divergence
+    mean = np.exp(np.mean(scores))
 
 
 def ssim(img1, img2):
