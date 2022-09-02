@@ -94,9 +94,11 @@ def calculate_IS(img):
     preds = np.zeros((1, 1000))
     print(np.shape(data), batch_size_i)
     preds[0:1] = get_pred(data)
+    print(preds)
     scores =[]
     for k in range(1):
         part = preds[k: (k + 1), :]  # split the whole data into several parts
+        print(part)
         py = np.mean(part, axis=0)  # marginal probability
         scores = []
         for i in range(part.shape[0]):
