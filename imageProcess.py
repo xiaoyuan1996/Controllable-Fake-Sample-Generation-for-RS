@@ -67,6 +67,19 @@ def remove_file(image_path):
         if(np.sum(img)<10000):
             os.remove(file)
             print(file)
+def remove_images(image_path):
+    files = Util.get_paths_from_images(image_path)
+    txt_file = "/data/diffusion_data/val/dataset/val.lst"
+    with open(txt_file) as file_object:
+        list = file_object.readlines()
+    for file in files:
+        file_name = os.path.basename(file)
+        name = file_name.split('.')[0]
+        if name not in list:
+            os.remove(file)
+            print(file)
+
+
 
 label_path = '/data/diffusion_data/val/images'
 image_path = '/data/diffusion_data/val/labels'
@@ -82,4 +95,5 @@ hr_path = Util.get_paths_from_images(image_path)
 # reszie_process(hr_path,out_image)
 # val_generate(sr_path,out_lable)
 # val_generate(hr_path,out_image)
-remove_file(out_image)
+# remove_file(out_image)
+remove_images(out_lable)
