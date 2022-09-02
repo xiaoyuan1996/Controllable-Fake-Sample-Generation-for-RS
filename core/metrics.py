@@ -89,8 +89,10 @@ def calculate_IS(img):
     tensor = torch.cuda.FloatTensor
     img = myTransform(img)
     data = img.type(tensor)
+
     batch_size_i = data.size()[0]
     preds = np.zeros((1, 1000))
+    print(np.shape(data),batch_size_i)
     preds[0:batch_size_i] = get_pred(data)
     part = preds[0: 1,:]  # split the whole data into several parts
     py = np.mean(part, axis=0)  # marginal probability
