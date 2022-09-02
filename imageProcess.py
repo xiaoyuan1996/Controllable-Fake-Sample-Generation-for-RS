@@ -60,6 +60,13 @@ def val_generate(files,out_path):
                      save_path = os.path.join(out_path, str(count) + '.' + suffix)
                      img_new.save(save_path)
     print("End Running")
+def remove_file(image_path):
+    files = Util.get_paths_from_images(image_path)
+    for file in files:
+        img = Image.open(file).convert("RGB")
+        if(np.sum(img)<2000):
+            os.remove(file)
+
 label_path = '/data/diffusion_data/val/images'
 image_path = '/data/diffusion_data/val/labels'
 # label_path = '/data/diffusion_data/infer/false_256_220830_020020/results/sr_save'
@@ -72,5 +79,6 @@ hr_path = Util.get_paths_from_images(image_path)
 # main_process(hr_path,out_image)
 # reszie_process(sr_path,out_lable)
 # reszie_process(hr_path,out_image)
-val_generate(sr_path,out_lable)
-val_generate(hr_path,out_image)
+# val_generate(sr_path,out_lable)
+# val_generate(hr_path,out_image)
+remove_file(out_image)
