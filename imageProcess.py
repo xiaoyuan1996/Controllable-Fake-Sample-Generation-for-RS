@@ -71,13 +71,13 @@ def remove_images(image_path):
     files = Util.get_paths_from_images(image_path)
     txt_file = "/data/diffusion_data/val/dataset/val.lst"
     with open(txt_file) as file_object:
-        list = file_object.readlines()
+        list = file_object.read().splitlines()
     print(list)
     for file in files:
         file_name = os.path.basename(file)
         name = file_name.split('.')[0]
-        print(name)
-        if name in list:
+        #print(name)
+        if name not in list:
             os.remove(file)
             print(file)
 
