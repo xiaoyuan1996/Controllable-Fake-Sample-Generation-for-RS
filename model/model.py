@@ -156,10 +156,10 @@ class DDPM(BaseModel):
             network = self.netG
             if isinstance(self.netG, nn.DataParallel):
                 network = network.module
-            network.load_state_dict(torch.load(
-                gen_path), strict=(not self.opt['model']['finetune_norm']))
             # network.load_state_dict(torch.load(
-            #     gen_path), strict=False)
+            #     gen_path), strict=(not self.opt['model']['finetune_norm']))
+            network.load_state_dict(torch.load(
+                gen_path), strict=False)
             if self.opt['phase'] == 'train':
                 # optimizer
                 #从文件中加载一个用torch.save()保存的对象
