@@ -166,15 +166,15 @@ class LRHRDataset(Dataset):
                 box = (start_y, start_x, start_y + scale, start_x + scale)
                 img_HR = image_HR.crop(box)
                 img_SR = image_SR.crop(box)
-                img_HR = img_HR.resize((scale, scale))
-                img_SR = img_SR.resize((scale, scale))
+                img_HR = img_HR.resize((self.r_res, self.r_res))
+                img_SR = img_SR.resize((self.r_res, self.r_res))
                 #print(np.max(img_SR),np.min(img_SR))
 
             else:
                 img_HR = image_HR.resize((scale, scale))
                 img_SR = image_SR.resize((scale, scale))
             if(np.max(img_SR) == 0):
-                value = np.random.randint(0, 255, size=[scale, scale, 3])
+                value = np.random.randint(0, 255, size=[self.r_res, self.r_res, 3])
                 img_SR = Image.fromarray(value).convert('RGB')
                 print("random:",np.max(img_SR), np.min(img_SR))
 
