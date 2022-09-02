@@ -136,8 +136,9 @@ if __name__ == "__main__":
                             #np.transpose(np.concatenate(
                                 #(fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
                             #idx)
-                        avg_psnr += Metrics.calculate_psnr(
-                            sr_img, hr_img)
+                        avg_is += Metrics.calculate_IS(
+                            sr_img)
+
 
                         if wandb_logger:
                             wandb_logger.log_image(
@@ -145,14 +146,15 @@ if __name__ == "__main__":
                                 np.concatenate((fake_img, sr_img, hr_img), axis=1)
                             )
 
-                    avg_psnr = avg_psnr / idx
+                    avg_is = avg_is / idx
+                    avg_brisuqe = Metrics.eval_brisque(result_path,"sr.")
                     diffusion.set_new_noise_schedule(
                         opt['model']['beta_schedule']['train'], schedule_phase='train')
                     # log
-                    logger.info('# Validation # PSNR: {:.4e}'.format(avg_psnr))
+                    logger.info('# Validation # IS: {:.4e} Brisque:{:.4e} '.format(avg_is,avg_brisuqe))
                     logger_val = logging.getLogger('val')  # validation logger
-                    logger_val.info('<epoch:{:3d}, iter:{:8,d}> psnr: {:.4e}'.format(
-                        current_epoch, current_step, avg_psnr))
+                    logger_val.info('<epoch:{:3d}, iter:{:8,d}> IS: {:.4e} brisque:{:.4e}'.format(
+                        current_epoch, current_step,avg_is,avg_brisuqe))
                     # tensorboard logger
                     #tb_logger.add_scalar('psnr', avg_psnr, current_step)
 

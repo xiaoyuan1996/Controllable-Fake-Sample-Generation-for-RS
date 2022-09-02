@@ -60,7 +60,6 @@ def eval_brisque(path, status):
         print("{}/{}, {}:{}".format(i, len(files), sub_path, brisque))
     return all_brisque / (idx + 1)
 
-
 def calculate_psnr(img1, img2):
     # img1 and img2 have range [0, 255]
     img1 = img1.astype(np.float64)
