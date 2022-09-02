@@ -72,10 +72,12 @@ def remove_images(image_path):
     txt_file = "/data/diffusion_data/val/dataset/val.lst"
     with open(txt_file) as file_object:
         list = file_object.readlines()
+    print(list)
     for file in files:
         file_name = os.path.basename(file)
         name = file_name.split('.')[0]
-        if name not in list:
+        print(name)
+        if name in list:
             os.remove(file)
             print(file)
 
@@ -93,7 +95,7 @@ hr_path = Util.get_paths_from_images(image_path)
 # main_process(hr_path,out_image)
 # reszie_process(sr_path,out_lable)
 # reszie_process(hr_path,out_image)
-val_generate(sr_path,out_lable)
+#val_generate(sr_path,out_lable)
 # val_generate(hr_path,out_image)
 # remove_file(out_image)
-# remove_images(out_lable)
+remove_images(out_lable)
