@@ -89,7 +89,7 @@ def calculate_IS(img):
     tensor = torch.cuda.FloatTensor
     img = myTransform(img)
     data = img.type(tensor)
-    data.unsqueeze(0)
+    data = data.unsqueeze(0)
     batch_size_i = data.size()[0]
     preds = np.zeros((1, 1000))
     print(np.shape(data), batch_size_i)
