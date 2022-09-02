@@ -64,8 +64,9 @@ def remove_file(image_path):
     files = Util.get_paths_from_images(image_path)
     for file in files:
         img = Image.open(file).convert("RGB")
-        if(np.sum(img)<2000):
+        if(np.sum(img)<10000):
             os.remove(file)
+            print(file)
 
 label_path = '/data/diffusion_data/val/images'
 image_path = '/data/diffusion_data/val/labels'
