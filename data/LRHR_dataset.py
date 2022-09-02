@@ -175,7 +175,7 @@ class LRHRDataset(Dataset):
                 img_SR = image_SR.resize((scale, scale))
             if(np.max(img_SR) == 0):
                 value = np.random.randint(0, 255, size=[self.r_res, self.r_res, 3])
-                img_SR = Image.fromarray(value).convert('RGB')
+                img_SR = value
                 print("random:",np.max(img_SR), np.min(img_SR))
 
 
