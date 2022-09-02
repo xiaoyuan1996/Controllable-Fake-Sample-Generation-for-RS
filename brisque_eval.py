@@ -20,7 +20,7 @@ def eval_brisque(path, status):
 
 
 if __name__ == "__main__":
-    path = "/data/diffusion_data/infer/infer_128/hr_save/"
+    path = "/data/diffusion_data/infer/infer_128_220901_030446/results/hr_save/"
     status = '.'
     brisque = eval_brisque(path, status)
     print("Ave: {}".format(brisque))
