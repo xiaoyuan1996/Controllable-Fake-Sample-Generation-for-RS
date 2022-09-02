@@ -2,7 +2,7 @@
     "name": "train_multiple_128",
     "phase": "train", // train or val
     "gpu_ids": [
-        2,3
+        6,7
     ],
     "path": { //set the path
         "log": "logs",
