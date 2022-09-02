@@ -2,7 +2,7 @@
     "name": "infer_128",
     "phase": "train", // train or val
     "gpu_ids": [
-        5
+        2,3
     ],
     "path": { //set the path
         "log": "logs",
@@ -17,7 +17,7 @@
             "name": "infer_128",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",
-            "datatype": "random", //lmdb or img, path of img files
+            "datatype": "change", //lmdb or img, path of img files
             "l_resolution": 32, // low resolution need to super_resolution
             "r_resolution": 128, // high resolution
             "batch_size": 6,
@@ -29,7 +29,7 @@
             "name": "infer_128",
             "mode": "HR",
             "dataroot": "/data/diffusion_data/val/dataset",
-            "datatype": "infer", //lmdb or img, path of img files
+            "datatype": "change", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 128,
             "data_len": 500 // data length in validation

@@ -158,28 +158,25 @@ class LRHRDataset(Dataset):
             image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
             image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
             H, W, C = np.shape(image_HR)
-            if H > self.r_res + 10 and W > self.r_res + 10:
-                start_x = np.random.randint(0, H - self.r_res)
-                start_y = np.random.randint(0, W - self.r_res)
-                box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
+            scale = random.randint(self.r_res/2,self.r_res*2)
+            print("scale:",scale)
+            if H > scale + 10 and W > scale + 10:
+                start_x = np.random.randint(0, H - scale)
+                start_y = np.random.randint(0, W - scale)
+                box = (start_y, start_x, start_y + scale, start_x + scale)
                 img_HR = image_HR.crop(box)
                 img_SR = image_SR.crop(box)
+                img_HR = img_HR.resize((scale, scale))
+                img_SR = img_SR.resize((scale, scale))
                 #print(np.max(img_SR),np.min(img_SR))
 
             else:
-                img_HR = image_HR.resize((self.r_res, self.r_res))
-                img_SR = image_SR.resize((self.r_res, self.r_res))
+                img_HR = image_HR.resize((scale, scale))
+                img_SR = image_SR.resize((scale, scale))
             if(np.max(img_SR) == 0):
-                height,weight,channel = np.shape(img_SR)
-                for i in range(40000):
-                    image = np.array(img_SR).copy()
-                    x = np.random.randint(0,height)
-                    y = np.random.randint(0,weight)
-                    #print(x,y)
-                    value = np.random.randint(0,255,size = [1,3])
-                    image[x,y,:] = value
-                    img_SR = Image.fromarray(image).convert('RGB')
-                print(np.max(img_SR), np.min(img_SR))
+                value = np.random.randint(0, 255, size=[scale, scale, 3])
+                img_SR = Image.fromarray(value).convert('RGB')
+                print("random:",np.max(img_SR), np.min(img_SR))
 
 
             # img_SR = Image.open(self.sr_path[index]).convert("RGB")
