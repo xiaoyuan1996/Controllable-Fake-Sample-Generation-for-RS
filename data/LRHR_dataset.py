@@ -40,7 +40,7 @@ class LRHRDataset(Dataset):
             self.dataset_len = len(self.hr_path)
             if self.data_len <= 0:
                 self.data_len = self.dataset_len
-        elif datatype == 'infer':
+        elif datatype == 'infer' or datatype == 'infer_to128' :
             self.sr_path = Util.get_paths_from_images(
                 '{}/labels'.format(dataroot))
             self.hr_path = Util.get_paths_from_images(
@@ -145,7 +145,13 @@ class LRHRDataset(Dataset):
                 # sample = {'SR': img_SR, 'HR': img_HR, 'LR': img_LR}
                 # sample = self.randomcrop(sample)
 
-                #img_LR = Image.open(self.lr_path[index]).convert("RGB")
+                #img_LR = Image.open(self.lr_path[index]).convert
+        elif self.datatype == 'infer_to128':
+            image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+            image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
+            img_HR = image_HR.resize((self.r_res, self.r_res))
+            img_SR = image_SR.resize((self.r_res, self.r_res))
+
         elif self.datatype == 'crop':
             image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
             image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
