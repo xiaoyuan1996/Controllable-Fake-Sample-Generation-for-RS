@@ -85,8 +85,8 @@ def remove_images(image_path):
 
 
 
-label_path = '/data/diffusion_data/val/images'
-image_path = '/data/diffusion_data/val/labels'
+label_path = '/data/diffusion_data/val/label_select'
+image_path = '/data/diffusion_data/val/images'
 list_path = "/data/diffusion_data/val/val.lst"
 # label_path = '/data/diffusion_data/infer/false_256_220830_020020/results/sr_save'
 # image_path = '/data/diffusion_data/infer/false_256_220830_020020/results/hr_save'
