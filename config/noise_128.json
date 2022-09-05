@@ -1,8 +1,8 @@
 {
-    "name": "test_256",
+    "name": "noise_multiple_128",
     "phase": "train", // train or val
     "gpu_ids": [
-        7
+        4,5
     ],
     "path": { //set the path
         "log": "logs",
@@ -10,28 +10,28 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-         "resume_state": "/data/diffusion_data/save_data/false_generate/I1000000_E4238" //pretrain model or training state
+         "resume_state": "/data/diffusion_data/experiments/false_generate_220824_072639/checkpoint/I830000_E3517" //pretrain model or training state
     },
     "datasets": {
         "train": {
-            "name": "test_256",
+            "name": "noise_multiple_128",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",
-            "datatype": "infer", //lmdb or img, path of img files
+            "datatype": "change", //lmdb or img, path of img files
             "l_resolution": 32, // low resolution need to super_resolution
-            "r_resolution": 256, // high resolution
-            "batch_size": 4,
-            "num_workers": 2,
+            "r_resolution": 128, // high resolution
+            "batch_size": 6,
+            "num_workers": 3,
             "use_shuffle": true,
             "data_len": -1 // -1 represents all data used in train
         },
         "val": {
-            "name": "test_256",
+            "name": "noise_multiple_128",
             "mode": "HR",
-            "dataroot": "/data/diffusion_data/val/test",
-            "datatype": "infer", //lmdb or img, path of img files
+            "dataroot": "/data/diffusion_data/dataset/false_generate",
+            "datatype": "change", //lmdb or img, path of img files
             "l_resolution": 32,
-            "r_resolution": 256,
+            "r_resolution": 128,
             "data_len": 500 // data length in validation
         }
     },
@@ -70,7 +70,7 @@
             }
         },
         "diffusion": {
-            "image_size": 256,
+            "image_size": 128,
             "channels": 3, //sample channel
             "conditional": true // unconditional generation or unconditional generation(super_resolution)
         }
