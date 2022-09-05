@@ -96,6 +96,8 @@ out_image = '/data/diffusion_data/val/test/images'
 # hr_path = Util.get_paths_from_images
 img_ids = [i_id.strip() for i_id in open(list_path)]
 files= []
+sr_path = []
+hr_path = []
 for name in img_ids:
     img_file = os.path.join(image_path, "%s.png" % name)
     label_file = os.path.join(label_path, "%s._instance_color_RGB.png" % name)
@@ -104,11 +106,13 @@ for name in img_ids:
         "label": label_file,
         "name": name
     })
+    sr_path.append(label_file)
+    hr_path.append(img_file)
 # main_process(sr_path,out_lable)
 # main_process(hr_path,out_image)
 # reszie_process(sr_path,out_lable)
 # reszie_process(hr_path,out_image)
-val_generate(files["label"],out_lable)
-val_generate(files["img"],out_image)
+val_generate(sr_path,out_lable)
+val_generate(hr_path,out_image)
 # remove_file(out_image)
 #remove_images(out_lable)
