@@ -14,7 +14,7 @@ import cv2
 #USE_SYSTEM_NCCL = 1
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/false_generate2.json',
+    parser.add_argument('-c', '--config', type=str, default='config/crop_generate.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['train', 'val'],
                         help='Run either train(training) or val(generation)', default='train')
@@ -161,7 +161,7 @@ if __name__ == "__main__":
 
                     if wandb_logger:
                         wandb_logger.log_metrics({
-                            'validation/val_psnr': avg_psnr,
+                            'validation/val_is': avg_is,
                             'validation/val_step': val_step
                         })
                         val_step += 1
@@ -180,7 +180,7 @@ if __name__ == "__main__":
         logger.info('End of training.')
     else:
         logger.info('Begin Model Evaluation.')
-        avg_psnr = 0.0
+        avg_is = 0.0
         avg_ssim = 0.0
         idx = 0
         result_path = '{}'.format(opt['path']['results'])
@@ -219,29 +219,29 @@ if __name__ == "__main__":
                 fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
 
             # generation
-            eval_psnr = Metrics.calculate_psnr(Metrics.tensor2img(visuals['SR'][-1]), hr_img)
+            eval_is = Metrics.calculate_psnr(Metrics.tensor2img(visuals['SR'][-1]), hr_img)
             eval_ssim = Metrics.calculate_ssim(Metrics.tensor2img(visuals['SR'][-1]), hr_img)
 
-            avg_psnr += eval_psnr
+            avg_is += eval_is
             avg_ssim += eval_ssim
 
             if wandb_logger and opt['log_eval']:
-                wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img, eval_psnr, eval_ssim)
+                wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img, eval_is, eval_ssim)
 
-        avg_psnr = avg_psnr / idx
+        avg_is = avg_is / idx
         avg_ssim = avg_ssim / idx
 
         # log
-        logger.info('# Validation # PSNR: {:.4e}'.format(avg_psnr))
+        logger.info('# Validation # PSNR: {:.4e}'.format(avg_is))
         logger.info('# Validation # SSIM: {:.4e}'.format(avg_ssim))
         logger_val = logging.getLogger('val')  # validation logger
         logger_val.info('<epoch:{:3d}, iter:{:8,d}> psnr: {:.4e}, ssim：{:.4e}'.format(
-            current_epoch, current_step, avg_psnr, avg_ssim))
+            current_epoch, current_step, avg_is, avg_ssim))
 
         if wandb_logger:
             if opt['log_eval']:
                 wandb_logger.log_eval_table()
             wandb_logger.log_metrics({
-                'PSNR': float(avg_psnr),
+                'PSNR': float(avg_is),
                 'SSIM': float(avg_ssim)
             })

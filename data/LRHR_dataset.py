@@ -51,7 +51,7 @@ class LRHRDataset(Dataset):
             self.dataset_len = len(self.hr_path)
             if self.data_len <= 0:
                 self.data_len = self.dataset_len
-        elif datatype == 'random' or datatype == 'change':
+        elif datatype == 'random' or datatype == 'change' or datatype == 'crop':
             # self.sr_path = Util.get_paths_from_images(
             #     '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
             # self.hr_path = Util.get_paths_from_images(
@@ -146,6 +146,26 @@ class LRHRDataset(Dataset):
                 # sample = self.randomcrop(sample)
 
                 #img_LR = Image.open(self.lr_path[index]).convert("RGB")
+        elif self.datatype == 'crop':
+            image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+            image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
+            H, W, C = np.shape(image_HR)
+            if H > 512 + 10 and W > 512 + 10:
+                start_x = np.random.randint(0, H - 512)
+                start_y = np.random.randint(0, W - 512)
+                box = (start_y, start_x, start_y + 512, start_x + 512)
+                img_HR = image_HR.crop(box)
+                img_SR = image_SR.crop(box)
+                img_HR = img_HR.resize((self.r_res, self.r_res))
+                img_SR = img_SR.resize((self.r_res, self.r_res))
+                # print(np.max(img_SR),np.min(img_SR))
+
+            else:
+                img_HR = image_HR.resize((self.r_res, self.r_res))
+                img_SR = image_SR.resize((self.r_res, self.r_res))
+            print(np.max(img_SR), np.min(img_SR))
+            if self.need_LR:
+                img_LR = Image.open(self.lr_path[index]).convert("RGB")
         elif self.datatype == 'change':
             # image_HR = cv2.imread(self.hr_path[index])
             # #print(self.hr_path[index])
