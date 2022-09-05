@@ -104,7 +104,8 @@ if __name__ == "__main__":
 
                 # validation
                 if current_step % opt['train']['val_freq'] == 0:
-                    avg_psnr = 0.0
+                    avg_is = 0.0
+                    avg_brisuqe =0.0
                     idx = 0
                     result_path = '{}/{}'.format(opt['path']['results'], current_epoch)
                     print(result_path)
