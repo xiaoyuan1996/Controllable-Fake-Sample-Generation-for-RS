@@ -28,8 +28,8 @@
         "val": {
             "name": "train_multiple_128",
             "mode": "HR",
-            "dataroot": "/data/diffusion_data/dataset/false_generate",
-            "datatype": "change", //lmdb or img, path of img files
+            "dataroot": "/data/diffusion_data/val/test",
+            "datatype": "infer", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 128,
             "data_len": 500 // data length in validation
