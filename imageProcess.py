@@ -100,7 +100,7 @@ sr_path = []
 hr_path = []
 for name in img_ids:
     img_file = os.path.join(image_path, "%s.png" % name)
-    label_file = os.path.join(label_path, "%s._instance_color_RGB.png" % name)
+    label_file = os.path.join(label_path, "%s_instance_color_RGB.png" % name)
     files.append({
         "img": img_file,
         "label": label_file,
