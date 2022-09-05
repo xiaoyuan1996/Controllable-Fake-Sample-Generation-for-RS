@@ -1,9 +1,11 @@
+
 from PIL import Image
 import os
 import random
 import cv2
 import data.util as Util
 import numpy as np
+
 def main_process(files,out_path):
     os.makedirs(out_path, exist_ok=True)
     for file in files:
@@ -85,17 +87,28 @@ def remove_images(image_path):
 
 label_path = '/data/diffusion_data/val/images'
 image_path = '/data/diffusion_data/val/labels'
+list_path = "/data/diffusion_data/val/val.lst"
 # label_path = '/data/diffusion_data/infer/false_256_220830_020020/results/sr_save'
 # image_path = '/data/diffusion_data/infer/false_256_220830_020020/results/hr_save'
-out_lable = '/data/diffusion_data/val/dataset/images'
-out_image = '/data/diffusion_data/val/dataset/labels'
-sr_path = Util.get_paths_from_images(label_path)
-hr_path = Util.get_paths_from_images(image_path)
+out_lable = '/data/diffusion_data/val/test/labels'
+out_image = '/data/diffusion_data/val/test/images'
+# sr_path = Util.get_paths_from_images(label_path)
+# hr_path = Util.get_paths_from_images
+img_ids = [i_id.strip() for i_id in open(list_path)]
+files= {}
+for name in img_ids:
+    img_file = os.path.join(image_path, "%s.png" % name)
+    label_file = os.path.join(label_path, "%s._instance_color_RGB.png" % name)
+    files.append({
+        "img": img_file,
+        "label": label_file,
+        "name": name
+    })
 # main_process(sr_path,out_lable)
 # main_process(hr_path,out_image)
 # reszie_process(sr_path,out_lable)
 # reszie_process(hr_path,out_image)
-#val_generate(sr_path,out_lable)
-# val_generate(hr_path,out_image)
+val_generate(files["label"],out_lable)
+val_generate(files["img"],out_image)
 # remove_file(out_image)
-remove_images(out_lable)
+#remove_images(out_lable)

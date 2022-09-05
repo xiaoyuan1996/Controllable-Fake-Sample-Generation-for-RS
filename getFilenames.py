@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-file_dir = '/data/diffusion_data/val/dataset/labels'
+file_dir = '/data/diffusion_data/val/label_select'
 def getFlist(path):
     for root, dirs, files in os.walk(file_dir):
         print('root_dir:', root)  
@@ -10,7 +10,7 @@ def getFlist(path):
     return files
 file_names = getFlist(file_dir)
 
-path = '/data/diffusion_data/val/dataset'
+path = '/data/diffusion_data/val'
 dirs = Path(path)
 if not dirs.is_dir():
     os.makedirs(path)
@@ -21,8 +21,9 @@ try:
 
     for file_name in file_names:
         file_name = file_name.split('.')[0]
-        print(file_name)
-        file.writelines(file_name+'\n')
+        name = file_name.split("_")[0]
+        print(name)
+        file.writelines(name+'\n')
 except IOError:
     print('error')
 file.close()
