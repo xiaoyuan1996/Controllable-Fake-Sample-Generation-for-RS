@@ -95,7 +95,7 @@ out_image = '/data/diffusion_data/val/test/images'
 # sr_path = Util.get_paths_from_images(label_path)
 # hr_path = Util.get_paths_from_images
 img_ids = [i_id.strip() for i_id in open(list_path)]
-files= {}
+files= []
 for name in img_ids:
     img_file = os.path.join(image_path, "%s.png" % name)
     label_file = os.path.join(label_path, "%s._instance_color_RGB.png" % name)
