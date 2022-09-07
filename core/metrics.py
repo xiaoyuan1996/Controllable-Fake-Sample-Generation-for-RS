@@ -94,7 +94,7 @@ def calculate_IS(img):
     print(np.shape(data), batch_size_i)
     preds[0:1] = get_pred(data)
     #print(preds)
-    scores =[]
+    split_scores =[]
     for k in range(1):
         part = preds[k: (k + 1), :]  # split the whole data into several parts
         #print(part)
@@ -103,7 +103,8 @@ def calculate_IS(img):
         for i in range(part.shape[0]):
             pyx = part[i, :]  # conditional probability
             scores.append(entropy(pyx, py))  # compute divergence
-    mean = np.exp(np.mean(scores))
+        split_scores.append(np.exp(np.mean(scores)))
+    mean = np.mean(split_scores)
     return mean
 
 

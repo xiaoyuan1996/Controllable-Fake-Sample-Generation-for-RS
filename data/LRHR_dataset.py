@@ -197,12 +197,14 @@ class LRHRDataset(Dataset):
                 #print(np.max(img_SR),np.min(img_SR))
 
             else:
-                img_HR = image_HR.resize((scale, scale))
-                img_SR = image_SR.resize((scale, scale))
+                img_HR = image_HR.resize((self.r_res, self.r_res))
+                img_SR = image_SR.resize((self.r_res, self.r_res))
             if(np.max(img_SR) == 0):
-                value = np.random.randint(0, 255, size=[self.r_res, self.r_res, 3])
-                img_SR = value
-                print("random:",np.max(img_SR), np.min(img_SR))
+                s = np.random.randint(0,10)
+                if s>=5 :
+                    value = np.random.randint(0, 128, size=[self.r_res, self.r_res, 3])
+                    img_SR = value
+                    print("random:",np.mean(img_SR))
 
 
             # img_SR = Image.open(self.sr_path[index]).convert("RGB")
