@@ -202,7 +202,7 @@ class LRHRDataset(Dataset):
             if(np.max(img_SR) == 0):
                 s = np.random.randint(0,10)
                 if s>=5 :
-                    value = np.random.randint(0, 128, size=[self.r_res, self.r_res, 3])
+                    value = np.random.randint(0, 20, size=[self.r_res, self.r_res, 3])
                     img_SR = value
                     print("random:",np.mean(img_SR))
 
