@@ -35,6 +35,8 @@ def predict(img_path,new_path,name = "test",args = None):
     img_SR = Image.open(img_path).convert("RGB")
     [img_HR, img_SR] = Util.transform_augment(
         [img_HR, img_SR], split='val', min_max=(-1, 1))
+    img_HR = img_HR.unsqueeze(0)
+    img_SR = img_SR.unsqueeze(0)
     data = {'HR': img_HR, 'SR': img_SR}
     opt = Logger.parse(args)
     # Convert to NoneDict, which return None for missing key.
