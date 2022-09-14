@@ -235,9 +235,9 @@ class LRHRDataset(Dataset):
                 img_SR = image_SR.resize((self.r_res, self.r_res))
             if(np.max(img_SR) == 0):
                 img_SR = Util.add_noise(img_SR)
-                print(img_SR.dtype)
-                Hr_dtpye = np.array(img_HR)
-                print(Hr_dtpye.dtype)
+                # print(img_SR.dtype)
+                # Hr_dtpye = np.array(img_HR)
+                # print(Hr_dtpye.dtype)
             # img_SR = Image.open(self.sr_path[index]).convert("RGB")
             if self.need_LR:
                 img_LR = Image.open(self.lr_path[index]).convert("RGB")
