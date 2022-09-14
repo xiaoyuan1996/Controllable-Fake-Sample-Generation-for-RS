@@ -78,7 +78,8 @@ def convert():
     name = ff.filename.split(".")[0]
     file_path = predict(img_path=local_path,new_path=dst_dir,name=name,args =args)
     img_predict = Image.open(file_path).convert("RGB")
-    predict_list = np.array(img_predict)
+    predict_numpy = np.array(img_predict)
+    predict_list =predict_numpy.tolist()
     #print(file_path)
     try:
         send_name = os.path.basename(file_path)
