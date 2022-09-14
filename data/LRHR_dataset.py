@@ -285,5 +285,5 @@ class LRHRDataset(Dataset):
             [img_HR,img_SR] = Util.transform_augment(
                 [img_HR, img_SR], split=self.split, min_max=(-1, 1))
             #print(sample['HR'])
-            print(img_HR.shape)
+            print(img_HR.dtype,image_SR.dtype)
             return {'HR': img_HR, 'SR': img_SR, 'Index': index}

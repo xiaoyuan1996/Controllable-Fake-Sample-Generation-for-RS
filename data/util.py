@@ -31,7 +31,6 @@ def add_noise(img,mean =0 ,var = 1):
     noise = np.random.normal(mean,var,shape)
     out =  np.zeros(shape,dtype = np.uint8)
     out = out + image + noise
-    print(out.dtype)
     print("addNoise:",np.max(out),np.min(out))
     return out
 
