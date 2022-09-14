@@ -26,10 +26,10 @@ def add_noise(img,mean =0 ,var = 1):
     img = np.array(img)
     #print(img.dtype)
     shape = img.shape
-    image = np.ones(shape,dtype = np.unit8)
+    image = np.ones(shape,dtype = np.uint8)
     image = image*10
     noise = np.random.normal(mean,var,shape)
-    out =  np.zero(shape,dtype = np.unit8)
+    out =  np.zero(shape,dtype = np.uint8)
     out = out + image + noise
     print("addNoise:",np.max(out),np.min(out))
     return out
