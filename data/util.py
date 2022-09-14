@@ -29,9 +29,8 @@ def add_noise(img,mean =0 ,var = 1):
     image = np.ones(shape,dtype = np.uint8)
     image = image*10
     noise = np.random.normal(mean,var,shape)
-    noise = np.ceil(noise)
-    #out =  np.zeros(shape,dtype = np.uint8)
     out = image + noise
+    out = np.ceil(out).astype(np.uint8)
     print("addNoise:",np.max(out),np.min(out))
     return out
 
