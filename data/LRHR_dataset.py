@@ -235,6 +235,7 @@ class LRHRDataset(Dataset):
                 img_SR = image_SR.resize((self.r_res, self.r_res))
             if(np.max(img_SR) == 0):
                 img_SR = Util.add_noise(img_SR)
+                print(img_SR.dtype,img_HR.dtype)
             # img_SR = Image.open(self.sr_path[index]).convert("RGB")
             if self.need_LR:
                 img_LR = Image.open(self.lr_path[index]).convert("RGB")
@@ -285,5 +286,4 @@ class LRHRDataset(Dataset):
             [img_HR,img_SR] = Util.transform_augment(
                 [img_HR, img_SR], split=self.split, min_max=(-1, 1))
             #print(sample['HR'])
-            print(img_HR.dtype,image_SR.dtype)
             return {'HR': img_HR, 'SR': img_SR, 'Index': index}
