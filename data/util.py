@@ -22,14 +22,15 @@ def get_paths_from_images(path):
                 images.append(img_path)
     assert images, '{:s} has no valid image file'.format(path)
     return sorted(images)
-def add_noise(img,mean =0 ,var = 2):
+def add_noise(img,mean =0 ,var = 1):
     img = np.array(img)
-    print(img.dtype)
+    #print(img.dtype)
     shape = img.shape
-    image = np.ones(shape,dtype = np.uint16)
+    image = np.ones(shape,dtype = np.unit8)
     image = image*10
     noise = np.random.normal(mean,var,shape)
-    out = image + noise
+    out =  np.zero(shape,dtype = np.unit8)
+    out = out + image + noise
     print("addNoise:",np.max(out),np.min(out))
     return out
 
