@@ -24,6 +24,7 @@ def get_paths_from_images(path):
     return sorted(images)
 def add_noise(img,mean =0 ,var = 2):
     img = np.array(img)
+    print(img.dtype)
     shape = img.shape
     image = np.ones(shape,dtype = np.uint16)
     image = image*10
