@@ -25,7 +25,7 @@ def get_paths_from_images(path):
 def add_noise(img,mean =0 ,var = 2):
     img = np.array(img)
     shape = img.shape
-    image = np.ones(shape,dtype = np.uint8)
+    image = np.ones(shape,dtype = np.uint16)
     image = image*10
     noise = np.random.normal(mean,var,shape)
     out = image + noise
