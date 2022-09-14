@@ -22,7 +22,7 @@ def get_paths_from_images(path):
                 images.append(img_path)
     assert images, '{:s} has no valid image file'.format(path)
     return sorted(images)
-def add_noise(img,mean =0 ,var = 10):
+def add_noise(img,mean =0 ,var = 2):
     img = np.array(img)
     shape = img.shape
     image = np.ones(shape,dtype = np.uint8)
