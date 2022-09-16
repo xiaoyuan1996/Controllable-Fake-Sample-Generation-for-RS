@@ -184,7 +184,7 @@ class GaussianDiffusion(nn.Module):
         device = self.betas.device
         if condition_ddim:
             timesteps = 200
-            ddim_eta = 0.3
+            ddim_eta = 0.8
 
             sample_inter = (1 | (timesteps // 10))
 
