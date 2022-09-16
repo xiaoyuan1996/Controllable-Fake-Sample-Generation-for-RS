@@ -1,6 +1,6 @@
 import os
 from brisque import BRISQUE
-
+import argparse
 def eval_brisque(path, status):
     files = os.listdir(path)
 
@@ -20,7 +20,11 @@ def eval_brisque(path, status):
 
 
 if __name__ == "__main__":
-    path = "/data/diffusion_data/infer/new_infer_256_220916_054330/results/sr_save/"
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--path', type=str,
+                        default= '/data/diffusion_data/infer/new_infer_512_256_220916_085236/results/sr_save/',
+                        help='paths to images')
+    args = parser.parse_args()
     status = 'sr.'
-    brisque = eval_brisque(path, status)
+    brisque = eval_brisque(args.path, status)
     print("Ave: {}".format(brisque))
