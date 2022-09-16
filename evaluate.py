@@ -16,7 +16,7 @@ from torchvision.models.inception import inception_v3
 from PIL import Image
 import core.metrics as Metrics
 
-path = '/data/diffusion_data/infer/infer_512_256_220913_031555/results/sr_save/'
+path = '/data/diffusion_data/infer/new_infer_256_220916_054330/results/sr_save/'
 count = 0
 for root,dirs,files in os.walk(path):    #遍历统计
       for each in files:
