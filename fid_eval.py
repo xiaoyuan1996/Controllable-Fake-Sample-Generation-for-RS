@@ -112,6 +112,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args.path1 = r'/data/diffusion_data/infer/infer_512_256_220913_031555/results/sr_save/0_138_sr.png'
     args.path2 = r'/data/diffusion_data/infer/infer_512_256_220913_031555/results/hr_save/0_138_hr.png'
-    fid_value = calculate_fid_given_paths(args.path1 ,args.path2)
-    #fid_value = calculate_fid_given_dataset(args.paths, args.img_size, args.batch_size)
+    #fid_value = calculate_fid_given_paths(args.path1 ,args.path2)
+    fid_value = calculate_fid_given_dataset(args.paths, args.img_size, args.batch_size)
     print('FID: ', fid_value)

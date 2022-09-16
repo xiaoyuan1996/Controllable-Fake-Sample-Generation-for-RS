@@ -6,7 +6,7 @@ from inspect import isfunction
 from functools import partial
 import numpy as np
 from tqdm import tqdm
-
+import copy
 
 def _warmup_beta(linear_start, linear_end, n_timestep, warmup_frac):
     betas = linear_end * np.ones(n_timestep, dtype=np.float64)
@@ -176,26 +176,75 @@ class GaussianDiffusion(nn.Module):
     @torch.no_grad()
     def p_sample_loop(self, x_in, hr_in = None,continous=False):
         device = self.betas.device
-        sample_inter = (1 | (self.num_timesteps//10))
-        if not self.conditional:
-            shape = x_in
-            #print(shape)
-            img = torch.randn(shape, device=device)
-            ret_img = img
-            for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
-                img = self.p_sample(img, i)
-                if i % sample_inter == 0:
-                    ret_img = torch.cat([ret_img, img], dim=0)
-        else:
-            x = x_in
-            shape = x.shape
-            img = torch.randn(shape, device=device)
+        condition_ddim = True
+        if condition_ddim:
+            timesteps = 200
+            ddim_eta = 0
+
+            sample_inter = (1 | (timesteps // 10))
+
+            x = copy.deepcopy(x_in)
             ret_img = hr_in
-            ret_img = torch.cat([ret_img, x], dim=0)
-            for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
-                img = self.p_sample(img, i, condition_x=x)
+            ret_img = torch.cat([ret_img, x_in], dim=0)
+
+            #depth_info = pred_batch_tensor(x)
+            # x = torch.cat([ret_img, depth_info], dim=1)
+
+            skip = self.num_timesteps // timesteps
+            seq = range(0, self.num_timesteps, skip)
+            seq_next = [-1] + list(seq[:-1])
+
+            batch_size = x.shape[0]
+
+            for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
+                t = (torch.ones(batch_size) * i).to(x.device)
+                next_t = (torch.ones(batch_size) * j).to(x.device)
+
+                at = self.compute_alpha(self.betas, t.long())
+                at_next = self.compute_alpha(self.betas, next_t.long())
+
+                noise_level = torch.FloatTensor([self.sqrt_alphas_cumprod_prev[i + 1]]).repeat(batch_size, 1).to(
+                    x.device)
+                et = self.denoise_fn(torch.cat([x_in, x], dim=1), noise_level)
+
+                x0_t = (x - et * (1 - at).sqrt()) / at.sqrt()
+
+                x0_t.clamp_(-1., 1.)
+
+                c1 = (
+                        ddim_eta * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
+                )
+                c2 = ((1 - at_next) - c1 ** 2).sqrt()
+                # print( at_next.sqrt(), c2)
+                xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et
+
+                # print(torch.max(xt_next),torch.min(xt_next),  at_next.sqrt(), c2)
+
+                x = xt_next
+
                 if i % sample_inter == 0:
-                    ret_img = torch.cat([ret_img, img], dim=0)
+                    ret_img = torch.cat([ret_img, xt_next], dim=0)
+        else:
+            sample_inter = (1 | (self.num_timesteps//10))
+            if not self.conditional:
+                shape = x_in
+                #print(shape)
+                img = torch.randn(shape, device=device)
+                ret_img = img
+                for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
+                    img = self.p_sample(img, i)
+                    if i % sample_inter == 0:
+                        ret_img = torch.cat([ret_img, img], dim=0)
+            else:
+                x = x_in
+                shape = x.shape
+                img = torch.randn(shape, device=device)
+                ret_img = hr_in
+                ret_img = torch.cat([ret_img, x], dim=0)
+                for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
+                    img = self.p_sample(img, i, condition_x=x)
+                    if i % sample_inter == 0:
+                        ret_img = torch.cat([ret_img, img], dim=0)
 
         if continous:
             return ret_img

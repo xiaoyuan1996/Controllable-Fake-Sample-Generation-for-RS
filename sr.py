@@ -10,6 +10,7 @@ from core.wandb_logger import WandbLogger
 import os
 import numpy as np
 import cv2
+from fid_eval import calculate_fid_given_paths
 #NCCL__DEBUG = info
 #USE_SYSTEM_NCCL = 1
 if __name__ == "__main__":
@@ -106,6 +107,7 @@ if __name__ == "__main__":
                 if current_step % opt['train']['val_freq'] == 0:
                     avg_is = 0.0
                     avg_brisuqe =0.0
+                    fid =0.0
                     idx = 0
                     result_path = '{}/{}'.format(opt['path']['results'], current_epoch)
                     print(result_path)
@@ -139,8 +141,9 @@ if __name__ == "__main__":
                             #idx)
                         avg_is += Metrics.calculate_IS(
                             sr_img)
-
-
+                        path1 = '{}/{}_{}_hr.png'.format(result_path, current_step, idx)
+                        path2 = '{}/{}_{}_sr.png'.format(result_path, current_step, idx)
+                        fid += calculate_fid_given_paths(path1,path2)
                         if wandb_logger:
                             wandb_logger.log_image(
                                 f'validation_{idx}', 
@@ -148,20 +151,22 @@ if __name__ == "__main__":
                             )
 
                     avg_is = avg_is / idx
+                    avg_fid = fid/idx
                     avg_brisuqe = Metrics.eval_brisque(result_path,"sr.")
                     diffusion.set_new_noise_schedule(
                         opt['model']['beta_schedule']['train'], schedule_phase='train')
                     # log
-                    logger.info('# Validation # IS: {:.4e} Brisque:{:.4e} '.format(avg_is,avg_brisuqe))
+                    logger.info('# Validation # FID: {:.4e} IS: {:.4e} Brisque:{:.4e} '.format(avg_fid,avg_is,avg_brisuqe))
                     logger_val = logging.getLogger('val')  # validation logger
-                    logger_val.info('<epoch:{:3d}, iter:{:8,d}> IS: {:.4e} brisque:{:.4e}'.format(
-                        current_epoch, current_step,avg_is,avg_brisuqe))
+                    logger_val.info('<epoch:{:3d}, iter:{:8,d}> FID: {:.4e} IS: {:.4e} brisque:{:.4e}'.format(
+                        current_epoch, current_step,avg_fid,avg_is,avg_brisuqe))
                     # tensorboard logger
                     #tb_logger.add_scalar('psnr', avg_psnr, current_step)
 
                     if wandb_logger:
                         wandb_logger.log_metrics({
                             'validation/val_is': avg_is,
+                            'validation/avg_fid': avg_fid,
                             'validation/val_step': val_step
                         })
                         val_step += 1
