@@ -87,17 +87,22 @@ def calculate_IS(img):
     print('cuda: ', cuda)
     tensor = torch.cuda.FloatTensor
     img = myTransform(img)
-    data = img.type(tensor)
-    data = data.unsqueeze(0)
-    batch_size_i = data.size()[0]
-    preds = np.zeros((1, 1000))
+    img = img.unsqueeze(0)
+    dataset = [img,img]
+    preds = np.zeros((2, 1000))
+    batch_size = 1
+    for i, data in enumerate(dataset):
+        data = data.type(tensor)
+        batch_size_i = data.size()[0]
+        print(np.shape(data))
+        preds[i * batch_size:i * batch_size + batch_size_i] = get_pred(data)
     print(np.shape(data), batch_size_i)
-    preds[0:1] = get_pred(data)
     #print(preds)
     split_scores =[]
-    for k in range(1):
-        part = preds[k: (k + 1), :]  # split the whole data into several parts
-        #print(part)
+    splits = 1
+    N = 2
+    for k in range(splits):
+        part = preds[k * (N // splits): (k + 1) * (N // splits), :]  # split the whole data into several parts
         py = np.mean(part, axis=0)  # marginal probability
         scores = []
         for i in range(part.shape[0]):
