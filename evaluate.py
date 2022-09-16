@@ -16,7 +16,7 @@ from scipy.stats import entropy
 from torchvision.models.inception import inception_v3
 from PIL import Image
 import core.metrics as Metrics
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', type=str,
