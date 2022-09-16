@@ -96,7 +96,6 @@ def calculate_IS(img):
         batch_size_i = data.size()[0]
         print(np.shape(data))
         preds[i * batch_size:i * batch_size + batch_size_i] = get_pred(data)
-    print(np.shape(data), batch_size_i)
     #print(preds)
     split_scores =[]
     splits = 1
