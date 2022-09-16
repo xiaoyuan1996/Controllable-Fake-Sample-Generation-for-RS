@@ -75,7 +75,8 @@ if __name__ == "__main__":
     for _,  val_data in enumerate(val_loader):
         idx += 1
         diffusion.feed_data(val_data)
-        diffusion.test(continous=True)
+        #diffusion.test(continous=True)
+        diffusion.test(continous=True,condition_ddim = True)
         visuals = diffusion.get_current_visuals(need_LR=False)
 
         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8

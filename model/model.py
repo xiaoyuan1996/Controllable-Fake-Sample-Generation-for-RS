@@ -59,15 +59,15 @@ class DDPM(BaseModel):
         # set log
         self.log_dict['l_pix'] = l_pix.item()
 
-    def test(self, continous=False):
+    def test(self, continous=False,condition_ddim = False):
         self.netG.eval()
         with torch.no_grad():
             if isinstance(self.netG, nn.DataParallel):
                 self.SR = self.netG.module.super_resolution(
-                    self.data['SR'],self.data['HR'], continous)
+                    self.data['SR'],self.data['HR'], continous,condition_ddim)
             else:
                 self.SR = self.netG.super_resolution(
-                    self.data['SR'],self.data['HR'], continous)
+                    self.data['SR'],self.data['HR'], continous,condition_ddim)
         self.netG.train()
 
     def sample(self, batch_size=1, continous=False):
