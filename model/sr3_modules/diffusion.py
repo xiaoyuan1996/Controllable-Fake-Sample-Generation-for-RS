@@ -183,7 +183,7 @@ class GaussianDiffusion(nn.Module):
     def p_sample_loop(self, x_in, hr_in = None,continous=False,condition_ddim = False):
         device = self.betas.device
         if condition_ddim:
-            timesteps = 200
+            timesteps = 10
             ddim_eta = 0.8
 
             sample_inter = (1 | (timesteps // 10))
