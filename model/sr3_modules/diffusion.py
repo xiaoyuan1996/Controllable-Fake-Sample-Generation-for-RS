@@ -184,7 +184,7 @@ class GaussianDiffusion(nn.Module):
         device = self.betas.device
         if condition_ddim:
             timesteps = 10
-            ddim_eta = 0.8
+            ddim_eta = 0
 
             sample_inter = (1 | (timesteps // 10))
 
@@ -192,14 +192,14 @@ class GaussianDiffusion(nn.Module):
             ret_img = hr_in
             ret_img = torch.cat([ret_img, x_in], dim=0)
 
-            #depth_info = pred_batch_tensor(x)
-            # x = torch.cat([ret_img, depth_info], dim=1)
-
             skip = self.num_timesteps // timesteps
             seq = range(0, self.num_timesteps, skip)
             seq_next = [-1] + list(seq[:-1])
 
             batch_size = x.shape[0]
+
+
+            x = torch.randn(x.shape, device=device)
 
             for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
                 t = (torch.ones(batch_size) * i).to(x.device)
@@ -214,7 +214,7 @@ class GaussianDiffusion(nn.Module):
 
                 x0_t = (x - et * (1 - at).sqrt()) / at.sqrt()
 
-                x0_t.clamp_(-1., 1.)
+                # x0_t.clamp_(-1., 1.)
 
                 c1 = (
                         ddim_eta * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
