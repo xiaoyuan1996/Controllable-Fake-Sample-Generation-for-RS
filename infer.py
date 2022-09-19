@@ -114,7 +114,8 @@ if __name__ == "__main__":
 
         if wandb_logger and opt['log_infer']:
             wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img)
-    brisque = eval_brisque(sr_path)
+    status = 'sr.'
+    brisque = eval_brisque(sr_path,status)
     IS = calculate_IS(sr_path)
     paths = [hr_path,sr_path]
     Fid = calculate_fid_given_dataset(paths)
