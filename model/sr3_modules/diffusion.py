@@ -180,11 +180,12 @@ class GaussianDiffusion(nn.Module):
         return model_mean + noise * (0.5 * model_log_variance).exp()
 
     @torch.no_grad()
-    def p_sample_loop(self, x_in, hr_in = None,continous=False,condition_ddim = False,steps = 2000,eta = 1):
+    def p_sample_loop(self, x_in, hr_in = None,continous=False,condition_ddim = False,steps = 2000,eta = 1.0):
         device = self.betas.device
         if condition_ddim:
             timesteps = steps
             ddim_eta = eta
+            print(timesteps,ddim_eta)
 
             sample_inter = (1 | (timesteps // 10))
 
