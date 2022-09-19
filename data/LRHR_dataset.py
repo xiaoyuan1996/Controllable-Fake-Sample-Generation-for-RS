@@ -51,6 +51,17 @@ class LRHRDataset(Dataset):
             self.dataset_len = len(self.hr_path)
             if self.data_len <= 0:
                 self.data_len = self.dataset_len
+        elif datatype == 'test_infer':
+            self.sr_path = Util.get_paths_from_images(
+                '{}/sr_save'.format(dataroot))
+            self.hr_path = Util.get_paths_from_images(
+                '{}/hr_save'.format(dataroot))
+            if self.need_LR:
+                self.lr_path = Util.get_paths_from_images(
+                    '{}/lr_save'.format(dataroot))
+            self.dataset_len = len(self.hr_path)
+            if self.data_len <= 0:
+                self.data_len = self.dataset_len
         elif datatype == 'random' or datatype == 'change' or datatype == 'crop' or datatype == 'multiple' or datatype == 'noise':
             # self.sr_path = Util.get_paths_from_images(
             #     '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
