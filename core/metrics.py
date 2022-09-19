@@ -10,6 +10,9 @@ from torch.nn import functional as F
 import torch.nn as nn
 import torchvision.transforms as transforms
 from brisque import BRISQUE
+from torch.utils.data import DataLoader
+from data.IS_dataset import ISImageDataset
+
 
 def tensor2img(tensor, out_type=np.uint8, min_max=(-1, 1)):
     '''
@@ -76,30 +79,52 @@ def get_pred(x):
         x = up(x)
     x = inception_model(x)
     return F.softmax(x, dim=1).data.cpu().numpy()
-def calculate_IS(img):
+def calculate_IS(imgpath):
+    path = imgpath
+    count = 0
+    for root, dirs, files in os.walk(path):  # 遍历统计
+        for each in files:
+            count += 1  # 统计文件夹下文件个数
+    print(count)
+    batch_size = 1
     transforms_ = [
         # transforms.Resize((256, 256), Image.BICUBIC),
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ]
-    myTransform = transforms.Compose(transforms_)
+
+    val_dataloader = DataLoader(
+        ISImageDataset(path, transforms_=transforms_),
+        batch_size=batch_size,
+    )
+
     cuda = True if torch.cuda.is_available() else False
     print('cuda: ', cuda)
     tensor = torch.cuda.FloatTensor
-    img = myTransform(img)
-    img = img.unsqueeze(0)
-    dataset = [img,img]
-    preds = np.zeros((2, 1000))
-    batch_size = 1
-    for i, data in enumerate(dataset):
+
+    inception_model = inception_v3(pretrained=True, transform_input=False).cuda()
+    inception_model.eval()
+    up = nn.Upsample(size=(299, 299), mode='bilinear', align_corners=False).cuda()
+
+    def get_pred(x):
+        if True:
+            x = up(x)
+        x = inception_model(x)
+        return F.softmax(x, dim=1).data.cpu().numpy()
+
+    print('Computing predictions using inception v3 model')
+    preds = np.zeros((count, 1000))
+
+    for i, data in enumerate(val_dataloader):
         data = data.type(tensor)
-        batch_size_i = data.size()[0]
         print(np.shape(data))
+        batch_size_i = data.size()[0]
         preds[i * batch_size:i * batch_size + batch_size_i] = get_pred(data)
-    #print(preds)
-    split_scores =[]
+
+    print('Computing KL Divergence')
+    split_scores = []
     splits = 1
-    N = 2
+    N = count
     for k in range(splits):
         part = preds[k * (N // splits): (k + 1) * (N // splits), :]  # split the whole data into several parts
         py = np.mean(part, axis=0)  # marginal probability
@@ -108,6 +133,8 @@ def calculate_IS(img):
             pyx = part[i, :]  # conditional probability
             scores.append(entropy(pyx, py))  # compute divergence
         split_scores.append(np.exp(np.mean(scores)))
+    # path = "/data/diffusion_data/infer/infer_128_220901_030446/results/hr_save/0_100_hr.png"
+    # img = Image.open(path).convert('RGB')
     mean = np.mean(split_scores)
     return mean
 

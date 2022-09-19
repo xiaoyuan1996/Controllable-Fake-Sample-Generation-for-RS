@@ -6,6 +6,9 @@ import logging
 import core.logger as Logger
 import core.metrics as Metrics
 from core.wandb_logger import WandbLogger
+from core.metrics import calculate_IS
+from fid_eval import calculate_fid_given_dataset
+from brisque_eval import eval_brisque
 #from tensorboardX import SummaryWriter
 import os
 
@@ -19,6 +22,8 @@ if __name__ == "__main__":
     parser.add_argument('-infer', '-i', action='store_true')
     parser.add_argument('-enable_wandb', action='store_true')
     parser.add_argument('-log_infer', action='store_true')
+    parser.add_argument('-steps', '--steps', type=int, default=2000)
+    parser.add_argument('-eta', '--eta', type=float, default=1.0)
     
     # parse configs
     args = parser.parse_args()
@@ -29,10 +34,12 @@ if __name__ == "__main__":
     # logging
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = True
+    val_path = "/data/diffusion_data/infer"
 
     Logger.setup_logger(None, opt['path']['log'],
                         'train', level=logging.INFO, screen=True)
-    Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
+    #Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
+    Logger.setup_logger('val', val_path, 'infer_val', level=logging.INFO)
     logger = logging.getLogger('base')
     logger.info(Logger.dict2str(opt))
     #tb_logger = SummaryWriter(log_dir=opt['path']['tb_logger'])
@@ -76,7 +83,9 @@ if __name__ == "__main__":
         idx += 1
         diffusion.feed_data(val_data)
         #diffusion.test(continous=True)
-        diffusion.test(continous=True,condition_ddim = True)
+        steps = opt['steps']
+        eta = opt['eta']
+        diffusion.test(continous=True,condition_ddim = True,steps = steps,eta = eta)
         visuals = diffusion.get_current_visuals(need_LR=False)
 
         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
@@ -105,6 +114,15 @@ if __name__ == "__main__":
 
         if wandb_logger and opt['log_infer']:
             wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img)
+    brisque = eval_brisque(sr_path)
+    IS = calculate_IS(sr_path)
+    paths = [hr_path,sr_path]
+    Fid = calculate_fid_given_dataset(paths)
+    print("infer: steps = ",steps,",eta = ",eta,";IS: ",IS,",brisque: ",brisque,",Fid: ",Fid)
+    logger_val = logging.getLogger('val')  # validation logger
+    logger_val.info('<steps:{:4d}, eta:{:.2e}> FID: {:.4e} IS: {:.4e} brisque:{:.4e}'.format(
+        steps, eta, Fid, IS, brisque))
+
 
     if wandb_logger and opt['log_infer']:
         wandb_logger.log_eval_table(commit=True)

@@ -135,7 +135,7 @@ def setup_logger(logger_name, root, phase, level=logging.INFO, screen=False):
     formatter = logging.Formatter(
         '%(asctime)s.%(msecs)03d - %(levelname)s: %(message)s', datefmt='%y-%m-%d %H:%M:%S')
     log_file = os.path.join(root, '{}.log'.format(phase))
-    fh = logging.FileHandler(log_file, mode='w')
+    fh = logging.FileHandler(log_file, mode='a+')
     fh.setFormatter(formatter)
     l.setLevel(level)
     l.addHandler(fh)
