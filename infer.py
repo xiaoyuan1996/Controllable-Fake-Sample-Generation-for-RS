@@ -69,8 +69,8 @@ if __name__ == "__main__":
     current_step = 0
     current_epoch = 0
     idx = 0
-    steps = opt['steps']
-    eta = opt['eta']
+    steps = args.steps
+    eta = args.eta
     print(steps,eta)
     result_path = '{}'.format(opt['path']['results'])
     fake_path = os.path.join(result_path,'lr_save')
