@@ -33,7 +33,7 @@
             "datatype": "test_infer", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 256,
-            "data_len": 500 // data length in validation
+            "data_len": -1 // data length in validation
         }
     },
     "model": {
