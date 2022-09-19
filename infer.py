@@ -69,7 +69,9 @@ if __name__ == "__main__":
     current_step = 0
     current_epoch = 0
     idx = 0
-
+    steps = opt['steps']
+    eta = opt['eta']
+    print(steps,eta)
     result_path = '{}'.format(opt['path']['results'])
     fake_path = os.path.join(result_path,'lr_save')
     sr_path = os.path.join(result_path,'sr_save')
@@ -83,8 +85,6 @@ if __name__ == "__main__":
         idx += 1
         diffusion.feed_data(val_data)
         #diffusion.test(continous=True)
-        steps = opt['steps']
-        eta = opt['eta']
         diffusion.test(continous=True,condition_ddim = True,steps = steps,eta = eta)
         visuals = diffusion.get_current_visuals(need_LR=False)
 
