@@ -144,6 +144,13 @@ class GaussianDiffusion(nn.Module):
         a = (1 - beta).cumprod(dim=0).index_select(0, t + 1).view(-1, 1, 1, 1)
         return a
 
+    def slerp(self, z1, z2, alpha):
+        theta = torch.acos(torch.sum(z1 * z2) / (torch.norm(z1) * torch.norm(z2)))
+        return (
+                torch.sin((1 - alpha) * theta) / torch.sin(theta) * z1
+                + torch.sin(alpha * theta) / torch.sin(theta) * z2
+        )
+
     def predict_start_from_noise(self, x_t, t, noise):
         return self.sqrt_recip_alphas_cumprod[t] * x_t - \
             self.sqrt_recipm1_alphas_cumprod[t] * noise
@@ -185,11 +192,12 @@ class GaussianDiffusion(nn.Module):
         if condition_ddim:
             timesteps = steps
             ddim_eta = eta
-            print(timesteps,ddim_eta)
+            alpha = 0.5
 
             sample_inter = (1 | (timesteps // 10))
 
             x = copy.deepcopy(x_in)
+
             ret_img = hr_in
             ret_img = torch.cat([ret_img, x_in], dim=0)
 
@@ -199,8 +207,11 @@ class GaussianDiffusion(nn.Module):
 
             batch_size = x.shape[0]
 
-
-            x = torch.randn(x.shape, device=device)
+            # 初始化噪声
+            shape = x.shape
+            z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
+            z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
+            x = self.slerp(z1, z2, alpha)
 
             for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
                 t = (torch.ones(batch_size) * i).to(x.device)
@@ -228,7 +239,7 @@ class GaussianDiffusion(nn.Module):
 
                 x = xt_next
 
-                if i % sample_inter == 0:
+                if i % sample_inter == 0 or (i == len(seq) - 1):
                     ret_img = torch.cat([ret_img, xt_next], dim=0)
         else:
             sample_inter = (1 | (self.num_timesteps//10))

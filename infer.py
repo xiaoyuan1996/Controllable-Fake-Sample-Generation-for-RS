@@ -22,8 +22,8 @@ if __name__ == "__main__":
     parser.add_argument('-infer', '-i', action='store_true')
     parser.add_argument('-enable_wandb', action='store_true')
     parser.add_argument('-log_infer', action='store_true')
-    parser.add_argument('-steps', '--steps', type=int, default=2000)
-    parser.add_argument('-eta', '--eta', type=float, default=1.0)
+    parser.add_argument('-steps', '--steps', type=int, default=20)
+    parser.add_argument('-eta', '--eta', type=float, default=0.05)
     
     # parse configs
     args = parser.parse_args()
