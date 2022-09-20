@@ -4,6 +4,7 @@ import data.util as Util
 from torch.utils.data import Dataset
 from PIL import Image
 import torchvision.transforms as transforms
+import math
 def csv_read(path,dataroot = ""):
     df = pd.DataFrame(pd.read_csv(path,header=0))           	#读取csv文件
     print(df.shape)
@@ -26,10 +27,17 @@ def concat_csv(path1,path2,newpath):
     data2 = pd.read_csv(path2,header=0)
     data1.to_csv(newpath, encoding="utf_8_sig", index=False, header=False, mode='a+')
     data2.to_csv(newpath, encoding="utf_8_sig", index=False, header=False, mode='a+')
+def FFT_value(A = 1,B = 1,t = 0):
+    value = A*math.cos(0.5*t) + B*math.cos(2*t)
+    return value
 
-
+transforms_ = [
+        #transforms.Resize((256, 256), Image.BICUBIC),
+        transforms.ToTensor(),
+        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    ]
 class CSVDataset(Dataset):
-    def __init__(self, path , root , transforms_=None):
+    def __init__(self,path,root):
         df = pd.DataFrame(pd.read_csv(path, header=0))
         self.file_list = df['file_name']
         self.path_list = []
@@ -39,13 +47,20 @@ class CSVDataset(Dataset):
         self.hour_list = df['hour']
         self.minute_list = df['minute']
         self.bbox_list = df['bbox_det']
-        self.collection_list = (self.hour_list - 1) * 60 + self.minute_list
+        #self.collection_list = (self.hour_list - 1) * 60 + self.minute_list
         self.transform = transforms.Compose(transforms_)
 
     def __getitem__(self, index):
         img = Image.open(self.path_list[index % len(self.files)]).convert('RGB')
+        hour = self.hour_list[index]
+        minute = self.minute_list[index]
+        value_list = []
+        x_list = list(range(120))
+        for i in range(120):
+            value = FFT_value(hour,minute,i)
+            value_list.append(value)
         item_image = self.transform(img)
-        return item_image
+        return item_image,value_list
 
     def __len__(self):
         return len(self.file_list)

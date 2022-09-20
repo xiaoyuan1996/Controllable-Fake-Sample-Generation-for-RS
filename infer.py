@@ -14,7 +14,7 @@ import os
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/crop_generate.json',
+    parser.add_argument('-c', '--config', type=str, default='config/noise_256.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['val'], help='val(generation)', default='val')
     parser.add_argument('-gpu', '--gpu_ids', type=str, default=None)
@@ -38,8 +38,8 @@ if __name__ == "__main__":
 
     Logger.setup_logger(None, opt['path']['log'],
                         'train', level=logging.INFO, screen=True)
-    #Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
-    Logger.setup_logger('val', val_path, 'infer_val', level=logging.INFO)
+    Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
+    #Logger.setup_logger('val', val_path, 'infer_val', level=logging.INFO)
     logger = logging.getLogger('base')
     logger.info(Logger.dict2str(opt))
     #tb_logger = SummaryWriter(log_dir=opt['path']['tb_logger'])

@@ -1,8 +1,8 @@
 {
-    "name": "noise_multiple_256",
+    "name": "test_noise_multiple_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        4,5
+        7
     ],
     "path": { //set the path
         "log": "logs",
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/noise_multiple_256_220909_015531/checkpoint/I760000_E3221" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/experiments/noise_multiple_256_220916_085224/checkpoint/I1000000_E4238" //pretrain model or training state
     },
     "datasets": {
         "train": {
@@ -28,11 +28,11 @@
         "val": {
             "name": "noise_multiple_256",
             "mode": "HR",
-            "dataroot": "/data/diffusion_data/dataset/false_generate",
-            "datatype": "change", //lmdb or img, path of img files
+            "dataroot": "/data/diffusion_data/val/test",
+            "datatype": "infer", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 256,
-            "data_len": 500 // data length in validation
+            "data_len": -1 // data length in validation
         }
     },
     "model": {
