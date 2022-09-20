@@ -314,6 +314,12 @@ class GaussianDiffusion(nn.Module):
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
 
         loss = self.loss_func(noise, x_recon)
+
+
+
+
+
+
         return loss
 
     def forward(self, x, *args, **kwargs):
