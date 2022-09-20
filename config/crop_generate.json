@@ -1,5 +1,5 @@
 {
-    "name": "lasted_infer_512_256",
+    "name": "test_infer",
     "phase": "train", // train or val
     "gpu_ids": [
         7
