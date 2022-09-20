@@ -139,8 +139,7 @@ if __name__ == "__main__":
                             #np.transpose(np.concatenate(
                                 #(fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
                             #idx)
-                        avg_is += Metrics.calculate_IS(
-                            sr_img)
+                        #avg_is += Metrics.calculate_IS(sr_img)
                         path1 = '{}/{}_{}_hr.png'.format(result_path, current_step, idx)
                         path2 = '{}/{}_{}_sr.png'.format(result_path, current_step, idx)
                         fid += calculate_fid_given_paths(path1,path2)
@@ -150,7 +149,7 @@ if __name__ == "__main__":
                                 np.concatenate((fake_img, sr_img, hr_img), axis=1)
                             )
 
-                    avg_is = avg_is / idx
+                    avg_is = 1.0
                     avg_fid = fid/idx
                     avg_brisuqe = Metrics.eval_brisque(result_path,"sr.")
                     diffusion.set_new_noise_schedule(
