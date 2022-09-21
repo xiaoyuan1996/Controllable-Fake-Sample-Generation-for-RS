@@ -84,6 +84,8 @@ class GaussianDiffusion(nn.Module):
         self.dis = Discriminator().to(self.device)
         # 交叉熵损失函数
         self.loss_fn = torch.nn.BCELoss()
+        # 训练分类器的优化器
+        self.d_optim = torch.optim.Adam(self.dis.parameters(), lr=0.0001)
         if schedule_opt is not None:
             pass
             # self.set_new_noise_schedule(schedule_opt)
@@ -331,11 +333,7 @@ class GaussianDiffusion(nn.Module):
         # loss = self.loss_func(noise, x_recon) + optim_loss
         loss = self.loss_func(noise, x_recon)
 
-
-        # 训练分类器的优化器
-        d_optim = torch.optim.Adam(dis.parameters(), lr=0.0001)
-
-        d_optim.zero_grad()  # 梯度归零
+        self.d_optim.zero_grad()  # 梯度归零
         # 判别器对于真实图片产生的损失
         real_output = self.dis(x_start)  # 判别器输入真实的图片，real_output对真实图片的预测结果
         d_real_loss = self.loss_fn(real_output,
@@ -351,7 +349,7 @@ class GaussianDiffusion(nn.Module):
         # 判别器损失
         d_loss = d_real_loss + d_fake_loss
         # 判别器优化
-        d_optim.step()
+        self.d_optim.step()
 
         loss = loss + d_loss
 
