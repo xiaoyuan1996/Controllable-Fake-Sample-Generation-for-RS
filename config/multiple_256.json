@@ -5,7 +5,7 @@
         4,7
     ],
     "change_sizes":{
-        "0.0": 32,
+        "0.0": 64,
         "0.1": 64,
         "0.2": 96,
         "0.3": 112,
@@ -28,7 +28,7 @@
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             "datatype": "multiple", //lmdb or img, path of img files
             "l_resolution": 32, // low resolution need to super_resolution
-            "r_resolution": 32, // high resolution
+            "r_resolution": 64, // high resolution
             "batch_size": 4,
             "num_workers": 2,
             "use_shuffle": true,
