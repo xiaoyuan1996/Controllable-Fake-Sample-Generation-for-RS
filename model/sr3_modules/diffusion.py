@@ -326,7 +326,9 @@ class GaussianDiffusion(nn.Module):
         #
         # loss = self.loss_func(noise, x_recon) + optim_loss
         loss = self.loss_func(noise, x_recon)
-        dis = Discriminator().to(device)
+
+        device_now = self.betas.device
+        dis = Discriminator().to(device_now)
         # 交叉熵损失函数
         loss_fn = torch.nn.BCELoss()
         # 训练分类器的优化器
@@ -338,8 +340,6 @@ class GaussianDiffusion(nn.Module):
         d_real_loss = loss_fn(real_output,
                               torch.ones_like(real_output))
         d_real_loss.backward()  # 计算梯度
-
-        g_optim = torch.optim.Adam(dis.parameters(), lr=0.0001)
 
         fake_output = dis(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
         # 判别器在生成图像上产生的损失
@@ -353,7 +353,7 @@ class GaussianDiffusion(nn.Module):
         d_optim.step()
 
         loss = loss + d_loss
-        
+
 
         return loss
 
