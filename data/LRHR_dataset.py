@@ -96,6 +96,7 @@ class LRHRDataset(Dataset):
     def __getitem__(self, index):
         img_HR = None
         img_LR = None
+        background = None
 
         if self.datatype == 'lmdb':
             with self.env.begin(write=False) as txn:
@@ -134,6 +135,7 @@ class LRHRDataset(Dataset):
                     img_LR = Image.open(BytesIO(lr_img_bytes)).convert("RGB")
         elif self.datatype == 'random':
             image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+            image_F = Image.open(self.hr_path[index % self.dataset_len]).convert("L")
             image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
             H, W, C = np.shape(image_HR)
             if H > self.r_res + 10 and W > self.r_res + 10:
@@ -141,7 +143,9 @@ class LRHRDataset(Dataset):
                 start_y = np.random.randint(0, W - self.r_res)
                 box = (start_y, start_x, start_y + self.r_res, start_x + self.r_res)
                 img_HR = image_HR.crop(box)
+                img_F = image_F.crop(box)
                 img_SR = image_SR.crop(box)
+                background = background_compute(img_F)
                 # print(np.max(img_SR),np.min(img_SR))
 
             else:
@@ -298,5 +302,7 @@ class LRHRDataset(Dataset):
         else:
             [img_HR,img_SR] = Util.transform_augment(
                 [img_HR, img_SR], split=self.split, min_max=(-1, 1))
+            # if not background:
+            #     img_SR = np.concatenate(img_SR,background)
             #print(sample['HR'])
             return {'HR': img_HR, 'SR': img_SR, 'Index': index}

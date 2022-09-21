@@ -8,6 +8,9 @@ import numpy as np
 from tqdm import tqdm
 import copy
 
+from model.sr3_modules.discriminator import Discriminator
+
+
 def _warmup_beta(linear_start, linear_end, n_timestep, warmup_frac):
     betas = linear_end * np.ones(n_timestep, dtype=np.float64)
     warmup_time = int(n_timestep * warmup_frac)
@@ -323,11 +326,34 @@ class GaussianDiffusion(nn.Module):
         #
         # loss = self.loss_func(noise, x_recon) + optim_loss
         loss = self.loss_func(noise, x_recon)
+        dis = Discriminator().to(device)
+        # 交叉熵损失函数
+        loss_fn = torch.nn.BCELoss()
+        # 训练分类器的优化器
+        d_optim = torch.optim.Adam(dis.parameters(), lr=0.0001)
 
+        d_optim.zero_grad()  # 梯度归零
+        # 判别器对于真实图片产生的损失
+        real_output = dis(x_start)  # 判别器输入真实的图片，real_output对真实图片的预测结果
+        d_real_loss = loss_fn(real_output,
+                              torch.ones_like(real_output))
+        d_real_loss.backward()  # 计算梯度
 
+        g_optim = torch.optim.Adam(dis.parameters(), lr=0.0001)
 
+        fake_output = dis(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
+        # 判别器在生成图像上产生的损失
+        d_fake_loss = loss_fn(fake_output,
+                              torch.zeros_like(fake_output))
+        d_fake_loss.backward()
 
+        # 判别器损失
+        d_loss = d_real_loss + d_fake_loss
+        # 判别器优化
+        d_optim.step()
 
+        loss = loss + d_loss
+        
 
         return loss
 
