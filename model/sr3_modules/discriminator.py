@@ -29,6 +29,7 @@ class Discriminator(nn.Module):
         # label = label.unsqueeze(2).unsqueeze(3)
         # label = label.repeat(1, 1, x.size(2), x.size(3))
         # data = torch.cat(tensors=(x, label), dim=1)
+        print(x.shape)
         out = self.discriminator(x)
         out = out.view(x.size(0), -1)
         return out

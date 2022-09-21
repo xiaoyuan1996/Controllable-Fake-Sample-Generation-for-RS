@@ -1,5 +1,5 @@
 {
-    "name": "multiple_256",
+    "name": "cri_multiple_256",
     "phase": "train", // train or val
     "gpu_ids": [
         4,7
