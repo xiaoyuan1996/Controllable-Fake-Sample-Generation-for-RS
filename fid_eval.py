@@ -108,7 +108,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--paths', type=str, nargs=2, help='paths to real and fake images')
     parser.add_argument('--img_size', type=int, default=256, help='image resolution')
-    parser.add_argument('--batch_size', type=int, default=64, help='batch size to use')
+    parser.add_argument('--batch_size', type=int, default=50, help='batch size to use')
     args = parser.parse_args()
     args.path1 = r'/data/diffusion_data/infer/infer_512_256_220913_031555/results/sr_save/0_138_sr.png'
     args.path2 = r'/data/diffusion_data/infer/infer_512_256_220913_031555/results/hr_save/0_138_hr.png'

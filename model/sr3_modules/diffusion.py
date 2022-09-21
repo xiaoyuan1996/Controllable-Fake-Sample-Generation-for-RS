@@ -313,6 +313,15 @@ class GaussianDiffusion(nn.Module):
             x_recon = self.denoise_fn(
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
 
+        # optim loss
+        t = t - 1
+        x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
+        model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
+        noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
+        next_x = model_mean + noise_ * (0.5 * posterior).exp()
+        # optim_loss = self.optim_loss(next_x, x_in['HR'])
+        #
+        # loss = self.loss_func(noise, x_recon) + optim_loss
         loss = self.loss_func(noise, x_recon)
 
 
