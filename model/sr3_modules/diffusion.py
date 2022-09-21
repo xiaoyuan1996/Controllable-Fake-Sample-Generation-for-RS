@@ -338,7 +338,7 @@ class GaussianDiffusion(nn.Module):
         real_output = self.dis(x_start)  # 判别器输入真实的图片，real_output对真实图片的预测结果
         d_real_loss = self.loss_fn(real_output,
                               torch.ones_like(real_output))
-        d_real_loss.backward()  # 计算梯度
+        d_real_loss.backward(retain_graph=True )  # 计算梯度
 
         fake_output = self.dis(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
         # 判别器在生成图像上产生的损失
