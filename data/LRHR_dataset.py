@@ -145,7 +145,7 @@ class LRHRDataset(Dataset):
                 img_HR = image_HR.crop(box)
                 img_F = image_F.crop(box)
                 img_SR = image_SR.crop(box)
-                background = background_compute(img_F)
+                #background = background_compute(img_F)
                 # print(np.max(img_SR),np.min(img_SR))
 
             else:
