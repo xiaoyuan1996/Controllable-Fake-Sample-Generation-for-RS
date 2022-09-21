@@ -53,7 +53,7 @@ class DDPM(BaseModel):
         #print("1")
         #print(torch.min(self.data['HR'][0]))
         l_pix = l_pix.sum()/int(b*c*h*w)
-        l_pix.backward()
+        l_pix.backward(retain_graph=True)
         self.optG.step()
 
         # set log
