@@ -311,8 +311,7 @@ class GaussianDiffusion(nn.Module):
         if not self.conditional:
             x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod,clock_data)
         else:
-            x_recon = self.denoise_fn(
-               x_noisy, continuous_sqrt_alpha_cumprod,clock_data)
+            x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod,clock_data)
 
         # optim loss
         # t = t - 1
