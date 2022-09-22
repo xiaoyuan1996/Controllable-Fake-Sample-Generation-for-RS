@@ -23,7 +23,7 @@ def func_FFT(A,B,t):
     else:
         a = A/(A+B)
         b = 1-a
-    #print(a,b)
+    print(a,b)
     value = a*math.cos(t)+b*math.cos(0.5*(t+3))
     value = (value + 1)/2
     return value
@@ -56,6 +56,7 @@ class PositionalEncoding(nn.Module):
             1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
         encoding = torch.cat(
             [torch.sin(encoding), torch.cos(encoding)], dim=-1)
+        print("encoding:",encoding)
         return encoding
 
 
