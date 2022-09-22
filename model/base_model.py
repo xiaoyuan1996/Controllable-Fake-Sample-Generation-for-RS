@@ -31,7 +31,7 @@ class BaseModel():
             for key, item in x.items():
                 if item is not None:
                     if key != "clock_data":
-                        print(key)
+                        #print(key)
                         x[key] = item.to(self.device)
         elif isinstance(x, list):
             for item in x:
