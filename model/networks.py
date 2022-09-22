@@ -88,6 +88,8 @@ def define_G(opt):
         from .sr3_modules import diffusion, unet
     elif model_opt['which_model_G'] == 'clock':
         from .clock_modules import diffusion, unet
+    elif model_opt['which_model_G'] == 'discri':
+        from .discri_modules import diffusion, unet
     if ('norm_groups' not in model_opt['unet']) or model_opt['unet']['norm_groups'] is None:
         model_opt['unet']['norm_groups']=32
     model = unet.UNet(
