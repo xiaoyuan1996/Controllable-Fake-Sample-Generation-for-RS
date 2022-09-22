@@ -56,9 +56,15 @@ class PositionalEncoding(nn.Module):
             1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
         encoding = torch.cat(
             [torch.sin(encoding), torch.cos(encoding)], dim=-1)
-        print(noise_level.device)
+        # print(noise_level.device)
         clock_data.to(noise_level.device)
         clock = endcoder(clock_data, self.dim)
+
+        print(clock)
+        print("============")
+        print(encoding)
+        print("============")
+
         encoding = encoding + clock
         #print("encoding:",encoding)
         return encoding
