@@ -62,7 +62,7 @@ class CSVDataset(Dataset):
         img_HR = img.resize((self.r_res, self.r_res))
         hour = self.hour_list[index]
         minute = self.minute_list[index]
-        value_list = [hour,minute]
+        value_list = transforms.ToTensor([hour,minute])
         item_image = self.transform(img_HR)
 
         return {'HR': item_image, 'SR': value_list, 'Index': index}
