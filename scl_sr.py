@@ -112,7 +112,7 @@ if __name__ == "__main__":
                     for _,  val_data in enumerate(val_loader):
                         idx += 1
                         diffusion.feed_data(val_data)
-                        diffusion.test(continous=True,condition_ddim = True,steps = 20,eta = 0.0)
+                        diffusion.test(continous=False,condition_ddim = True,steps = 20,eta = 0.0)
                         visuals = diffusion.get_current_visuals()
                         sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
                         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
@@ -124,9 +124,6 @@ if __name__ == "__main__":
                             hr_img, '{}/{}_{}_hr.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
                             sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
-                        Metrics.save_img(
-                            Metrics.tensor2img(visuals['SR'][-1]),
-                            '{}/{}_{}_sr.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
                             fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
                         # tb_logger.add_image(
