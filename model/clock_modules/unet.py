@@ -57,7 +57,7 @@ class PositionalEncoding(nn.Module):
         encoding = torch.cat(
             [torch.sin(encoding), torch.cos(encoding)], dim=-1)
         clock_data.to(noise_level.device)
-        clock = endcoder(clock_data, self.inner_channel)
+        clock = endcoder(clock_data, self.dim)
         encoding = encoding + clock
         #print("encoding:",encoding)
         return encoding
@@ -207,11 +207,11 @@ class UNet(nn.Module):
     ):
         super().__init__()
         self.inner_channel =inner_channel
+        self.encoding = PositionalEncoding(inner_channel)
 
         if with_noise_level_emb:
             noise_level_channel = inner_channel
             self.noise_level_mlp = nn.Sequential(
-                PositionalEncoding(inner_channel),
                 nn.Linear(inner_channel, inner_channel * 4),
                 Swish(),
                 nn.Linear(inner_channel * 4, inner_channel)
@@ -267,8 +267,9 @@ class UNet(nn.Module):
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
 
     def forward(self, x, time , clock_data):
-        t = self.noise_level_mlp(time,clock_data) if exists(
-            self.noise_level_mlp) else None
+        t = self.encoding(time,clock_data) if exists(
+            self.encoding) else None
+        t = self.noise_level_mlp(t)
 
 
         # t = t + clock
