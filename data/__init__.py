@@ -24,16 +24,27 @@ def create_dataloader(dataset, dataset_opt, phase):
 def create_dataset(dataset_opt, phase):
     '''create dataset'''
     mode = dataset_opt['mode']
-    from data.LRHR_dataset import LRHRDataset as D
-    dataset = D(dataroot=dataset_opt['dataroot'],
-                datatype=dataset_opt['datatype'],
-                l_resolution=dataset_opt['l_resolution'],
-                r_resolution=dataset_opt['r_resolution'],
-                split=phase,
-                data_len=dataset_opt['data_len'],
-                need_LR=(mode == 'LRHR')
-                )
-    logger = logging.getLogger('base')
-    logger.info('Dataset [{:s} - {:s}] is created.'.format(dataset.__class__.__name__,
-                                                           dataset_opt['name']))
+    if mode == 'clock':
+        from data.CSV_dataset import CSVDataset as CSV
+        dataset = CSV(dataroot=dataset_opt['dataroot'],
+                      path=dataset_opt['csv_path'],
+                      r_resolution=dataset_opt['r_resolution'],
+                      data_len=dataset_opt['data_len']
+                    )
+        logger = logging.getLogger('base')
+        logger.info('Dataset [{:s} - {:s}] is created.'.format(dataset.__class__.__name__,dataset_opt['name']))
+
+    else:
+        from data.LRHR_dataset import LRHRDataset as D
+        dataset = D(dataroot=dataset_opt['dataroot'],
+                    datatype=dataset_opt['datatype'],
+                    l_resolution=dataset_opt['l_resolution'],
+                    r_resolution=dataset_opt['r_resolution'],
+                    split=phase,
+                    data_len=dataset_opt['data_len'],
+                    need_LR=(mode == 'LRHR')
+                    )
+        logger = logging.getLogger('base')
+        logger.info('Dataset [{:s} - {:s}] is created.'.format(dataset.__class__.__name__,
+                                                               dataset_opt['name']))
     return dataset

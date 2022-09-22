@@ -37,33 +37,38 @@ transforms_ = [
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ]
 class CSVDataset(Dataset):
-    def __init__(self,path,root):
+    def __init__(self,path,dataroot, r_resolution=128,data_len = -1):
         df = pd.DataFrame(pd.read_csv(path, header=0))
         self.file_list = df['file_name']
+        self.r_res = r_resolution
         self.path_list = []
+        self.data_len = data_len
         for file in self.file_list:
-            file_path = os.path.join(root, file)
+            file_path = os.path.join(dataroot, file)
             self.path_list.append(file_path)
         self.hour_list = df['hour']
         self.minute_list = df['minute']
         self.bbox_list = df['bbox_det']
+        self.dataset_len = len(self.file_list)
         #self.collection_list = (self.hour_list - 1) * 60 + self.minute_list
+        if self.data_len <= 0:
+            self.data_len = self.dataset_len
+        else:
+            self.data_len = min(self.data_len, self.dataset_len)
         self.transform = transforms.Compose(transforms_)
 
     def __getitem__(self, index):
         img = Image.open(self.path_list[index % len(self.files)]).convert('RGB')
+        img_HR = img.resize((self.r_res, self.r_res))
         hour = self.hour_list[index]
         minute = self.minute_list[index]
-        value_list = []
-        x_list = list(range(120))
-        for i in range(120):
-            value = FFT_value(hour,minute,i)
-            value_list.append(value)
-        item_image = self.transform(img)
-        return item_image,value_list
+        value_list = [hour,minute]
+        item_image = self.transform(img_HR)
+
+        return {'HR': item_image, 'SR': value_list, 'Index': index}
 
     def __len__(self):
-        return len(self.file_list)
+        return self.data_len
 path = '/data/diffusion_data/dataset/all_final.csv'
 # path2 = 'D:\workapp\download\coco\coco_final.csv'
 # newpath = 'D:\workapp\download\all_final.csv'

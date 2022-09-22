@@ -110,6 +110,15 @@ class DDPM(BaseModel):
             else:
                 out_dict['LR'] = out_dict['INF']
         return out_dict
+    def get_clock_visuals(self, sample=False):
+        out_dict = OrderedDict()
+        if sample:
+            out_dict['SAM'] = self.SR.detach().float().cpu()
+        else:
+            out_dict['SR'] = self.SR.detach().float().cpu()
+            #out_dict['INF'] = self.data['SR'].detach().float().cpu()
+            out_dict['HR'] = self.data['HR'].detach().float().cpu()
+        return out_dict
 
     def print_network(self):
         s, n = self.get_network_description(self.netG)
