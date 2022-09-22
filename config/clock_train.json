@@ -21,7 +21,7 @@
             "l_resolution": 32, // low resolution need to super_resolution
             "r_resolution": 256, // high resolution
             "batch_size": 4,
-            "num_workers": 1,
+            "num_workers": 8,
             "use_shuffle": true,
             "data_len": -1 // -1 represents all data used in train
         },
@@ -40,7 +40,7 @@
         "which_model_G": "clock", // use the ddpm or sr3 network structure
         "finetune_norm": false,
         "unet": {
-            "in_channel": 6,
+            "in_channel": 3,
             "out_channel": 3,
             "inner_channel": 64,
             "channel_multiplier": [

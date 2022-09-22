@@ -23,7 +23,7 @@ def func_FFT(A,B,t):
     else:
         a = A/(A+B)
         b = 1-a
-    print(a,b)
+    # print(a,b)
     value = a*math.cos(t)+b*math.cos(0.5*(t+3))
     value = (value + 1)/2
     return value
@@ -39,7 +39,7 @@ def endcoder(list,dim):
         encoder.append(em)
     result = torch.tensor(encoder)
     result = result.unsqueeze(1)
-    print("result.shape:",result.shape)
+    # print("result.shape:",result.shape)
     return result
 
 # PositionalEncoding Source： https://github.com/lmnt-com/wavegrad/blob/master/src/wavegrad/model.py
@@ -62,10 +62,10 @@ class PositionalEncoding(nn.Module):
         clock = clock.to(noise_level.device)
 
 
-        print(clock)
-        print("============")
-        print(encoding)
-        print("============")
+        # print(clock)
+        # print("============")
+        # print(encoding)
+        # print("============")
 
         encoding = encoding + clock
         #print("encoding:",encoding)
