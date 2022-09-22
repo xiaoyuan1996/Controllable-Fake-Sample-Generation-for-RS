@@ -23,7 +23,7 @@ def func_FFT(A,B,t):
     else:
         a = A/(A+B)
         b = 1-a
-    print(a,b)
+    #print(a,b)
     value = a*math.cos(t)+b*math.cos(0.5*(t+3))
     value = (value + 1)/2
     return value
@@ -48,7 +48,7 @@ class PositionalEncoding(nn.Module):
         super().__init__()
         self.dim = dim
 
-    def forward(self, noise_level):
+    def forward(self, noise_level,clock_data):
         count = self.dim // 2
         step = torch.arange(count, dtype=noise_level.dtype,
                             device=noise_level.device) / count
@@ -56,7 +56,10 @@ class PositionalEncoding(nn.Module):
             1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
         encoding = torch.cat(
             [torch.sin(encoding), torch.cos(encoding)], dim=-1)
-        print("encoding:",encoding)
+        clock_data.to(noise_level.device)
+        clock = endcoder(clock_data, self.inner_channel)
+        encoding = encoding + clock
+        #print("encoding:",encoding)
         return encoding
 
 
@@ -266,9 +269,9 @@ class UNet(nn.Module):
     def forward(self, x, time , clock_data):
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
-        clock = endcoder(clock_data,self.inner_channel)
 
-        t = t + clock
+
+        # t = t + clock
         print("t.shape:", t.shape)
 
         feats = []
