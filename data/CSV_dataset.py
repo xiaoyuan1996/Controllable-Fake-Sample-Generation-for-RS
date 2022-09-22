@@ -3,6 +3,7 @@ import os
 import data.util as Util
 from torch.utils.data import Dataset
 from PIL import Image
+import torch
 import torchvision.transforms as transforms
 import math
 def csv_read(path,dataroot = ""):
@@ -62,7 +63,7 @@ class CSVDataset(Dataset):
         img_HR = img.resize((self.r_res, self.r_res))
         hour = self.hour_list[index]
         minute = self.minute_list[index]
-        value_list = transforms.ToTensor([hour,minute])
+        value_list = torch.tensor([hour,minute])
         item_image = self.transform(img_HR)
 
         return {'HR': item_image, 'SR': value_list, 'Index': index}
