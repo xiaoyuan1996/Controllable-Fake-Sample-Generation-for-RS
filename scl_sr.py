@@ -123,16 +123,17 @@ if __name__ == "__main__":
                         Metrics.save_img(
                             hr_img, '{}/{}_{}_hr.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
-                            sr_img, '{}/{}_{}_sr.png'.format(result_path, current_step, idx))
+                            sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
-                            lr_img, '{}/{}_{}_lr.png'.format(result_path, current_step, idx))
+                            Metrics.tensor2img(visuals['SR'][-1]),
+                            '{}/{}_{}_sr.png'.format(result_path, current_step, idx))
                         Metrics.save_img(
                             fake_img, '{}/{}_{}_inf.png'.format(result_path, current_step, idx))
-                        tb_logger.add_image(
-                            'Iter_{}'.format(current_step),
-                            np.transpose(np.concatenate(
-                                (fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
-                            idx)
+                        # tb_logger.add_image(
+                        #     'Iter_{}'.format(current_step),
+                        #     np.transpose(np.concatenate(
+                        #         (fake_img, sr_img, hr_img), axis=1), [2, 0, 1]),
+                        #     idx)
                         avg_psnr += Metrics.calculate_psnr(
                             sr_img, hr_img)
 
