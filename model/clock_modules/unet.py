@@ -59,6 +59,8 @@ class PositionalEncoding(nn.Module):
         # print(noise_level.device)
         clock_data.to(noise_level.device)
         clock = endcoder(clock_data, self.dim)
+        clock.to(noise_level.device)
+
 
         print(clock)
         print("============")
