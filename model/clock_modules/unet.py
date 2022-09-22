@@ -29,7 +29,7 @@ def func_FFT(A,B,t):
     return value
 
 def endcoder(list,dim):
-    num = list.size(0)
+    num = len(list)
     encoder = []
     for i in range(num):
         em = []
