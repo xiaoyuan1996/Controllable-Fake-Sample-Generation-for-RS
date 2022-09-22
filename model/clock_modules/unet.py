@@ -23,7 +23,7 @@ def func_FFT(A,B,t):
     else:
         a = A/(A+B)
         b = 1-a
-    print(a,b)
+    #print(a,b)
     value = a*math.cos(t)+b*math.cos(0.5*(t+3))
     value = (value + 1)/2
     return value
