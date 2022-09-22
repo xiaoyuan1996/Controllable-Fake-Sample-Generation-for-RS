@@ -268,6 +268,7 @@ class UNet(nn.Module):
         clock = endcoder(clock_data,self.inner_channel)
 
         t = t + clock
+        print("t.shape:", t.shape)
 
         feats = []
         for layer in self.downs:
