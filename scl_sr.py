@@ -6,7 +6,7 @@ import logging
 import core.logger as Logger
 import core.metrics as Metrics
 from core.wandb_logger import WandbLogger
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 import os
 import numpy as np
 
@@ -93,7 +93,7 @@ if __name__ == "__main__":
                         current_epoch, current_step)
                     for k, v in logs.items():
                         message += '{:s}: {:.4e} '.format(k, v)
-                        tb_logger.add_scalar(k, v, current_step)
+                        #tb_logger.add_scalar(k, v, current_step)
                     logger.info(message)
 
                     if wandb_logger:
