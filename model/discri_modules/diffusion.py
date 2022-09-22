@@ -301,9 +301,9 @@ class GaussianDiffusion(nn.Module):
                 print(torch.max(Mask_img), torch.min(Mask_img))
 
 
-                depth_info = pred_batch_tensor(x_in)
+                #depth_info = pred_batch_tensor(x_in)
                 ret_img = x_in
-                x = torch.cat([ret_img, depth_info], dim=1)
+                x = torch.cat([ret_img], dim=1)
 
                 # self.start_step = 200
                 # sample_inter = self.start_step // 9
@@ -353,7 +353,7 @@ class GaussianDiffusion(nn.Module):
         x_start = x_in['HR']
 
         x_sr = x_in['SR']
-        depth_info = pred_batch_tensor(x_sr)
+        #depth_info = pred_batch_tensor(x_sr)
 
         # # visual
         # import os
@@ -388,7 +388,7 @@ class GaussianDiffusion(nn.Module):
 
         else:
             x_recon = self.denoise_fn(
-                torch.cat([x_sr, depth_info, x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
+                torch.cat([x_sr, x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
 
             # optim loss
             t = t - 1
