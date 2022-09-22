@@ -193,7 +193,7 @@ class ResnetBlocWithAttn(nn.Module):
         if with_attn:
             self.attn = SelfAttention(dim_out, norm_groups=norm_groups)
 
-    def forward(self, x, time_emb , clock):
+    def forward(self, x, time_emb):
         x = self.res_block(x, time_emb)
         if(self.with_attn):
             x = self.attn(x)
