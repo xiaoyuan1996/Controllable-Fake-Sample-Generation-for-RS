@@ -2,7 +2,7 @@
     "name": "cri_multiple_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        4,7
+        1,4
     ],
     "change_sizes":{
         "0.0": 64,
@@ -45,7 +45,7 @@
         }
     },
     "model": {
-        "which_model_G": "sr3", // use the ddpm or sr3 network structure
+        "which_model_G": "discri", // use the ddpm or sr3 network structure
         "finetune_norm": false,
         "unet": {
             "in_channel": 6,
