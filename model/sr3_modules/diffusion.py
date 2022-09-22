@@ -323,35 +323,35 @@ class GaussianDiffusion(nn.Module):
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
 
         # optim loss
-        t = t - 1
-        x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
-        model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
-        noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
-        next_x = model_mean + noise_ * (0.5 * posterior).exp()
-        # optim_loss = self.optim_loss(next_x, x_in['HR'])
-        #
-        # loss = self.loss_func(noise, x_recon) + optim_loss
+        # t = t - 1
+        # x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
+        # model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
+        # noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
+        # next_x = model_mean + noise_ * (0.5 * posterior).exp()
+        # # optim_loss = self.optim_loss(next_x, x_in['HR'])
+        # #
+        # # loss = self.loss_func(noise, x_recon) + optim_loss
         loss = self.loss_func(noise, x_recon)
-
-        self.d_optim.zero_grad()  # 梯度归零
-        # 判别器对于真实图片产生的损失
-        real_output = self.dis(x_start)  # 判别器输入真实的图片，real_output对真实图片的预测结果
-        d_real_loss = self.loss_fn(real_output,
-                              torch.ones_like(real_output))
-        d_real_loss.backward(retain_graph=True )  # 计算梯度
-
-        fake_output = self.dis(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
-        # 判别器在生成图像上产生的损失
-        d_fake_loss = self.loss_fn(fake_output,
-                              torch.zeros_like(fake_output))
-        d_fake_loss.backward(retain_graph=True )
-
-        # 判别器损失
-        d_loss = d_real_loss + d_fake_loss
-        # 判别器优化
-        self.d_optim.step()
-
-        loss = loss + d_loss
+        #
+        # self.d_optim.zero_grad()  # 梯度归零
+        # # 判别器对于真实图片产生的损失
+        # real_output = self.dis(x_start)  # 判别器输入真实的图片，real_output对真实图片的预测结果
+        # d_real_loss = self.loss_fn(real_output,
+        #                       torch.ones_like(real_output))
+        # d_real_loss.backward(retain_graph=True )  # 计算梯度
+        #
+        # fake_output = self.dis(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
+        # # 判别器在生成图像上产生的损失
+        # d_fake_loss = self.loss_fn(fake_output,
+        #                       torch.zeros_like(fake_output))
+        # d_fake_loss.backward(retain_graph=True )
+        #
+        # # 判别器损失
+        # d_loss = d_real_loss + d_fake_loss
+        # # 判别器优化
+        # self.d_optim.step()
+        #
+        # loss = loss + d_loss
 
 
         return loss
