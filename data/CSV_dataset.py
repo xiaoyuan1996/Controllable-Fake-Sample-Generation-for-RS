@@ -67,7 +67,7 @@ class CSVDataset(Dataset):
         value_list = [hour, minute]
         item_image = self.transform(img_HR)
 
-        return {'HR': item_image, 'SR': value_list, 'Index': index}
+        return {'HR': item_image, 'clock_data': value_list, 'Index': index}
 
     def __len__(self):
         return self.data_len

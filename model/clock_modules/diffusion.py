@@ -289,7 +289,7 @@ class GaussianDiffusion(nn.Module):
 
     def p_losses(self, x_in, noise=None):
         x_start = x_in['HR']
-        clock_data = x_in['SR']
+        clock_data = x_in['clock_data']
         #print(x_start.shape)
         #print(torch.max(x_start[0]),torch.min(x_start[0]))
         [b, c, h, w] = x_start.shape

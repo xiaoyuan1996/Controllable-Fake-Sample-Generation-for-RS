@@ -175,9 +175,8 @@ if __name__ == "__main__":
                     message = '<epoch:{:3d}, iter:{:8,d}> '.format(
                         current_epoch, current_step)
                     for k, v in logs.items():
-                        ave_loss.update(v)
-                        message += '{:s}: {:.4e} ({:.4e})'.format(k, v, ave_loss.avg)
-                        #tb_logger.add_scalar(k, v, current_step)
+                        message += '{:s}: {:.4e} '.format(k, v)
+                        # tb_logger.add_scalar(k, v, current_step)
                     logger.info(message)
 
                     if wandb_logger:
@@ -205,7 +204,7 @@ if __name__ == "__main__":
                     for _, val_data in enumerate(val_loader):
                         idx += 1
                         diffusion.feed_data(val_data)
-                        diffusion.test(continous=False)
+                        diffusion.test(continous=True,condition_ddim = True,steps = 20,eta = 0.0)
                         visuals = diffusion.get_current_visuals()
                         sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
                         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8

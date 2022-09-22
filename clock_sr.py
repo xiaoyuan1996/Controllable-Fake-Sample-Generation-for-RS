@@ -118,7 +118,7 @@ if __name__ == "__main__":
                     for _,  val_data in enumerate(val_loader):
                         idx += 1
                         diffusion.feed_data(val_data)
-                        diffusion.test(continous=False)
+                        diffusion.test(continous=True,condition_ddim = True,steps = 20,eta = 0.0)
                         visuals = diffusion.get_current_visuals()
                         sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
                         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
@@ -143,11 +143,11 @@ if __name__ == "__main__":
                         path1 = '{}/{}_{}_hr.png'.format(result_path, current_step, idx)
                         path2 = '{}/{}_{}_sr.png'.format(result_path, current_step, idx)
                         fid += calculate_fid_given_paths(path1,path2)
-                        if wandb_logger:
-                            wandb_logger.log_image(
-                                f'validation_{idx}',
-                                np.concatenate((fake_img, sr_img, hr_img), axis=1)
-                            )
+                        # if wandb_logger:
+                        #     wandb_logger.log_image(
+                        #         f'validation_{idx}',
+                        #         np.concatenate((fake_img, sr_img, hr_img), axis=1)
+                        #     )
 
                     avg_is = 1.0
                     avg_fid = fid/idx
