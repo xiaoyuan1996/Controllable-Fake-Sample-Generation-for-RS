@@ -58,7 +58,7 @@ class CSVDataset(Dataset):
         self.transform = transforms.Compose(transforms_)
 
     def __getitem__(self, index):
-        img = Image.open(self.path_list[index % len(self.files)]).convert('RGB')
+        img = Image.open(self.path_list[index % self.dataset_len]).convert('RGB')
         img_HR = img.resize((self.r_res, self.r_res))
         hour = self.hour_list[index]
         minute = self.minute_list[index]

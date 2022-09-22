@@ -39,6 +39,7 @@ def endcoder(list,dim):
         encoder.append(em)
     result = torch.tensor(encoder)
     result = result.unsqueeze(1)
+    print("result.shape:",result.shape)
     return result
 
 # PositionalEncoding Source： https://github.com/lmnt-com/wavegrad/blob/master/src/wavegrad/model.py
