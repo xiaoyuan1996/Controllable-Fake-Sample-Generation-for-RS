@@ -208,7 +208,7 @@ class GaussianDiffusion(nn.Module):
             batch_size = x_in.shape[0]
 
             # 初始化噪声
-            shape = (batch_size,3,256,256)
+            shape = (batch_size,3,128,128)
             z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
             z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
             x = self.slerp(z1, z2, alpha)
@@ -238,6 +238,7 @@ class GaussianDiffusion(nn.Module):
                 # print(torch.max(xt_next),torch.min(xt_next),  at_next.sqrt(), c2)
 
                 x = xt_next
+                print(xt_next.shape)
 
                 if i % sample_inter == 0 or (i == len(seq) - 1):
                     ret_img = torch.cat([ret_img, xt_next], dim=0)
