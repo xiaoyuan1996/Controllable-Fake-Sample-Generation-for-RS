@@ -8,7 +8,7 @@ import numpy as np
 from tqdm import tqdm
 
 # distance
-from mono_depth.simple_pridect import pred_batch_tensor
+#from mono_depth.simple_pridect import pred_batch_tensor
 import copy
 
 # netD
@@ -216,7 +216,7 @@ class GaussianDiffusion(nn.Module):
             x = copy.deepcopy(x_in)
             ret_img = x_in
 
-            depth_info = pred_batch_tensor(x)
+            #depth_info = pred_batch_tensor(x)
             # x = torch.cat([ret_img, depth_info], dim=1)
 
             skip = self.num_timesteps // timesteps
@@ -240,7 +240,7 @@ class GaussianDiffusion(nn.Module):
                 at_next = self.compute_alpha(self.betas, next_t.long())
 
                 noise_level = torch.FloatTensor([self.sqrt_alphas_cumprod_prev[i+1]]).repeat(batch_size, 1).to(x.device)
-                et = self.denoise_fn(torch.cat([x_in, depth_info, x], dim=1), noise_level)
+                et = self.denoise_fn(torch.cat([x_in, x], dim=1), noise_level)
 
                 x0_t = (x - et * (1 - at).sqrt()) / at.sqrt()
 
