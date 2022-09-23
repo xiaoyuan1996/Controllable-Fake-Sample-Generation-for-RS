@@ -12,9 +12,7 @@ import torch.nn.functional as F
 # netD
 from .discriminator import Discriminator
 netD = Discriminator().to('cuda')
-netD = nn.parallel.DistributedDataParallel(netD,
-                                          broadcast_buffers = False,
-                                          find_unused_parameters = True)
+netD = nn.DataParallel(netD)
 lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.0001)
 
 
