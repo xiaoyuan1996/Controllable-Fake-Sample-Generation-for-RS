@@ -318,72 +318,74 @@ class GaussianDiffusion(nn.Module):
 
         if not self.conditional:
             x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
+            loss = self.loss_func(noise, x_recon)
+            return loss
         else:
             x_recon = self.denoise_fn(
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
 
-        # optim loss
-        t = t - 1
-        x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
-        model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
-        noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
-        next_x = model_mean + noise_ * (0.5 * posterior).exp()
-        # # optim_loss = self.optim_loss(next_x, x_in['HR'])
-        # #
-        # # loss = self.loss_func(noise, x_recon) + optim_loss
-        loss = self.loss_func(noise, x_recon)
-        # GAN
-        if t - 2 >= 0:
-            continuous_sqrt_alpha_cumprod = torch.FloatTensor(
-                np.random.uniform(
-                    self.sqrt_alphas_cumprod_prev[t - 2],
-                    self.sqrt_alphas_cumprod_prev[t - 1],
-                    size=b
-                )
-            ).to(x_start.device)
-        else:
-            continuous_sqrt_alpha_cumprod = torch.FloatTensor(
-                np.random.uniform(
-                    self.sqrt_alphas_cumprod_prev[t - 1],
-                    self.sqrt_alphas_cumprod_prev[t],
-                    size=b
-                )
-            ).to(x_start.device)
+            # optim loss
+            t = t - 1
+            x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
+            model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
+            noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
+            next_x = model_mean + noise_ * (0.5 * posterior).exp()
+            # # optim_loss = self.optim_loss(next_x, x_in['HR'])
+            # #
+            # # loss = self.loss_func(noise, x_recon) + optim_loss
+            loss = self.loss_func(noise, x_recon)
+            # GAN
+            if t - 2 >= 0:
+                continuous_sqrt_alpha_cumprod = torch.FloatTensor(
+                    np.random.uniform(
+                        self.sqrt_alphas_cumprod_prev[t - 2],
+                        self.sqrt_alphas_cumprod_prev[t - 1],
+                        size=b
+                    )
+                ).to(x_start.device)
+            else:
+                continuous_sqrt_alpha_cumprod = torch.FloatTensor(
+                    np.random.uniform(
+                        self.sqrt_alphas_cumprod_prev[t - 1],
+                        self.sqrt_alphas_cumprod_prev[t],
+                        size=b
+                    )
+                ).to(x_start.device)
 
-        continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
-            b, -1)
-        x_noisy = self.q_sample(
-            x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1),
-            noise=noise)
+            continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
+                b, -1)
+            x_noisy = self.q_sample(
+                x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1),
+                noise=noise)
 
-        lossD_optimizer.zero_grad()  # 梯度归零
-        # 判别器对于真实图片产生的损失
-        real_output = netD(x_noisy)  # 判别器输入真实的图片，real_output对真实图片的预测结果
-        fake_output = netD(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
+            lossD_optimizer.zero_grad()  # 梯度归零
+            # 判别器对于真实图片产生的损失
+            real_output = netD(x_noisy)  # 判别器输入真实的图片，real_output对真实图片的预测结果
+            fake_output = netD(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
 
-        d_real_loss = F.binary_cross_entropy(real_output, torch.ones_like(real_output).float())
-        d_fake_loss = F.binary_cross_entropy(fake_output, torch.zeros_like(fake_output).float())
-        d_loss = d_real_loss + d_fake_loss
+            d_real_loss = F.binary_cross_entropy(real_output, torch.ones_like(real_output).float())
+            d_fake_loss = F.binary_cross_entropy(fake_output, torch.zeros_like(fake_output).float())
+            d_loss = d_real_loss + d_fake_loss
 
-        # 判别器在生成图像上产生的损失
-        d_loss.backward(retain_graph=True)
-        # 判别器优化
-        lossD_optimizer.step()
+            # 判别器在生成图像上产生的损失
+            d_loss.backward(retain_graph=True)
+            # 判别器优化
+            lossD_optimizer.step()
 
-        g_real_loss = F.binary_cross_entropy(real_output, torch.zeros_like(real_output).float())
-        g_fake_loss = F.binary_cross_entropy(fake_output, torch.ones_like(fake_output).float())
+            g_real_loss = F.binary_cross_entropy(real_output, torch.zeros_like(real_output).float())
+            g_fake_loss = F.binary_cross_entropy(fake_output, torch.ones_like(fake_output).float())
 
-        # 判别器损失
-        # print("loss:")
-        # print(loss)
-        # print("d_real_loss:")
-        # print(d_real_loss)
-        # print("d_fake_loss:")
-        # print(d_fake_loss)
+            # 判别器损失
+            # print("loss:")
+            # print(loss)
+            # print("d_real_loss:")
+            # print(d_real_loss)
+            # print("d_fake_loss:")
+            # print(d_fake_loss)
 
-        d_loss = loss + 0.5 * (g_fake_loss.to(loss.device) + g_real_loss.to(loss.device))
+            d_loss = loss + 0.5 * (g_fake_loss.to(loss.device) + g_real_loss.to(loss.device))
 
-        return d_loss
+            return d_loss
 
 
     def forward(self, x, *args, **kwargs):

@@ -40,7 +40,7 @@ class LRHRDataset(Dataset):
             self.dataset_len = len(self.hr_path)
             if self.data_len <= 0:
                 self.data_len = self.dataset_len
-        elif datatype == 'infer' or datatype == 'infer_to128' :
+        elif datatype == 'infer' or datatype == 'infer_to128'or datatype == 'infer_noise':
             self.sr_path = Util.get_paths_from_images(
                 '{}/labels'.format(dataroot))
             self.hr_path = Util.get_paths_from_images(
@@ -166,6 +166,13 @@ class LRHRDataset(Dataset):
             image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
             img_HR = image_HR.resize((self.r_res, self.r_res))
             img_SR = image_SR.resize((self.r_res, self.r_res))
+        elif self.datatype == 'infer_noise':
+            image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+            image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
+            img_HR = image_HR.resize((self.r_res, self.r_res))
+            img_SR = image_SR.resize((self.r_res, self.r_res))
+            if (np.max(img_SR) == 0):
+                img_SR = Util.add_noise(img_SR)
 
         elif self.datatype == 'crop':
             image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
