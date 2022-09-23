@@ -13,6 +13,7 @@ import cv2
 from fid_eval import calculate_fid_given_paths
 #NCCL__DEBUG = info
 #USE_SYSTEM_NCCL = 1
+torch.autograd.set_detect_anomaly(True)
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config', type=str, default='config/SARoption.json',
