@@ -2,7 +2,7 @@
     "name": "cri_multiple_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        1,6
+        5,1
     ],
     "change_sizes":{
         "0.0": 64,
