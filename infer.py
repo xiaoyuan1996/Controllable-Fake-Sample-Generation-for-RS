@@ -34,12 +34,12 @@ if __name__ == "__main__":
     # logging
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = True
-    val_path = "/data/diffusion_data/infer"
+    #val_path = "/data/diffusion_data/infer"
 
     Logger.setup_logger(None, opt['path']['log'],
                         'train', level=logging.INFO, screen=True)
-    #Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
-    Logger.setup_logger('val', val_path, 'infer_val_new', level=logging.INFO)
+    Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
+    # Logger.setup_logger('val', val_path, 'infer_val_new', level=logging.INFO)
     logger = logging.getLogger('base')
     logger.info(Logger.dict2str(opt))
     #tb_logger = SummaryWriter(log_dir=opt['path']['tb_logger'])
