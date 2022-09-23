@@ -12,7 +12,7 @@ import numpy as np
 import copy
 
 from fid_eval import calculate_fid_given_paths
-
+torch.autograd.set_detect_anomaly(True)
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
