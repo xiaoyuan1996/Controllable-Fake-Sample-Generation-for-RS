@@ -214,6 +214,7 @@ class GaussianDiffusion(nn.Module):
             shape = x.shape
             z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
             z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
+
             x = self.slerp(z1, z2, alpha)
 
             for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
