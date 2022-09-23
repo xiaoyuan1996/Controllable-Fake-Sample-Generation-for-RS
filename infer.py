@@ -23,7 +23,7 @@ if __name__ == "__main__":
     parser.add_argument('-enable_wandb', action='store_true')
     parser.add_argument('-log_infer', action='store_true')
     parser.add_argument('-steps', '--steps', type=int, default=20)
-    parser.add_argument('-eta', '--eta', type=float, default=0.05)
+    parser.add_argument('-eta', '--eta', type=float, default=0.0)
     
     # parse configs
     args = parser.parse_args()
