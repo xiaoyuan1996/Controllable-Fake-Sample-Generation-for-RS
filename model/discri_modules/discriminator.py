@@ -30,7 +30,7 @@ class Discriminator(nn.Module):
         tmp = f4.shape[0]
         feature = f4.view(tmp, 512, -1)
         mean_f = torch.mean(feature,dim=-1)
-        print(mean_f.shape)
+        #print(mean_f.shape)
         solo_feature = self.linear(mean_f)
 
         # torch.Size([10, 192, 64, 64])
