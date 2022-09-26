@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import os
 import torch.nn.functional as F
-import model.networks as networks
+import model_train.networks as networks
 from .base_model import BaseModel
 logger = logging.getLogger('base')
 
