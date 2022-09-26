@@ -280,7 +280,15 @@ class GaussianDiffusion(nn.Module):
                 x = xt_next
 
                 if i % sample_inter == 0 or (i == len(seq) - 1):
-                    ret_img = torch.cat([ret_img, xt_next], dim=0)
+
+                    if x.shape[-1] != W:
+                        im_resize = Resize([H, W])
+                        x_ = im_resize(x)
+                    else:
+                        x_ = x
+
+                    ret_img = torch.cat([ret_img, x_], dim=0)
+
         else:
             sample_inter = (1 | (self.num_timesteps//10))
             if not self.conditional:
