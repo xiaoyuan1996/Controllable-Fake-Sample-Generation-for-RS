@@ -106,6 +106,8 @@ if __name__ == "__main__":
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
             for t in range(8):
+                now_path = '{}/{}'.format(sr_path,index[t])
+                os.makedirs(now_path, exist_ok=True)
                 Metrics.save_img(
                     Metrics.tensor2img(visuals['SR'][t+2]), '{}/{}/{}_{}_sr.png'.format(sr_path,index[t],current_step, idx))
 
