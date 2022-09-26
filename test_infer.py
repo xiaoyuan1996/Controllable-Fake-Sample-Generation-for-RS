@@ -34,12 +34,12 @@ if __name__ == "__main__":
     # logging
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = True
-    # val_path = "/data/diffusion_data/infer"
+    val_path = "/data/diffusion_data/infer"
 
     Logger.setup_logger(None, opt['path']['log'],
                         'train', level=logging.INFO, screen=True)
-    Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
-    # Logger.setup_logger('val', val_path, 'infer_val_new', level=logging.INFO)
+    #Logger.setup_logger('val', opt['path']['log'], 'val', level=logging.INFO)
+    Logger.setup_logger('val', val_path, 'infer_alphaTest', level=logging.INFO)
     logger = logging.getLogger('base')
     logger.info(Logger.dict2str(opt))
     # tb_logger = SummaryWriter(log_dir=opt['path']['tb_logger'])
@@ -81,6 +81,7 @@ if __name__ == "__main__":
     os.makedirs(sr_path, exist_ok=True)
     os.makedirs(hr_path, exist_ok=True)
     os.makedirs(fake_path, exist_ok=True)
+    index = [0, 1, 2, 3, 5, 7, 9, 10]
     for _, val_data in enumerate(val_loader):
         idx += 1
         diffusion.feed_data(val_data)
@@ -104,22 +105,9 @@ if __name__ == "__main__":
             sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_sr_0.png'.format(sr_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][3]), '{}/{}_{}_sr_1.png'.format(sr_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][4]), '{}/{}_{}_sr_2.png'.format(sr_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][5]), '{}/{}_{}_sr_3.png'.format(sr_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][6]), '{}/{}_{}_sr_5.png'.format(sr_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][7]), '{}/{}_{}_sr_7.png'.format(sr_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][8]), '{}/{}_{}_sr_9.png'.format(sr_path, current_step, idx))
-            Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][9]), '{}/{}_{}_sr_10.png'.format(sr_path, current_step, idx))
+            for t in range(8):
+                Metrics.save_img(
+                    Metrics.tensor2img(visuals['SR'][t+2]), '{}/{}/{}_{}_sr.png'.format(sr_path,index[t],current_step, idx))
 
 
         Metrics.save_img(
@@ -129,15 +117,17 @@ if __name__ == "__main__":
 
         if wandb_logger and opt['log_infer']:
             wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img)
-    status = 'sr_1.'
-    brisque = eval_brisque(sr_path, status)
-    IS = calculate_IS(sr_path)
-    paths = [hr_path, sr_path]
-    Fid = calculate_fid_given_dataset(paths)
-    print("infer: steps = ", steps, ",eta = ", eta, ";IS: ", IS, ",brisque: ", brisque, ",Fid: ", Fid)
-    logger_val = logging.getLogger('val')  # validation logger
-    logger_val.info('<steps:{:4d}, eta:{:.2e}> FID: {:.4e} IS: {:.4e} brisque:{:.4e}'.format(
-        steps, eta, Fid, IS, brisque))
+    for t in range(8):
+        sr_path = os.path.join(sr_path,str(index[t]))
+        status = 'sr.'
+        brisque = eval_brisque(sr_path, status)
+        IS = calculate_IS(sr_path)
+        paths = [hr_path, sr_path]
+        Fid = calculate_fid_given_dataset(paths)
+        print("infer: steps = ", steps, ",eta = ", eta, ";IS: ", IS, ",brisque: ", brisque, ",Fid: ", Fid)
+        logger_val = logging.getLogger('val')  # validation logger
+        logger_val.info('<steps:{:4d}, eta:{:.2e}> FID: {:.4e} IS: {:.4e} brisque:{:.4e}'.format(
+            steps, eta, Fid, IS, brisque))
 
     if wandb_logger and opt['log_infer']:
         wandb_logger.log_eval_table(commit=True)
