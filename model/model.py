@@ -9,7 +9,7 @@ import model.networks as networks
 from .base_model import BaseModel
 logger = logging.getLogger('base')
 
-from .discriminator import Discriminator
+from .discri_modules.discriminator import Discriminator
 netD = Discriminator().to('cuda')
 netD = nn.DataParallel(netD)
 
