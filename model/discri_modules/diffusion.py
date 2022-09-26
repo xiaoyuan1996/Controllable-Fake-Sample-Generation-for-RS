@@ -10,10 +10,10 @@ import torch.nn.functional as F
 # from model.discri_modules.discriminator import Discriminator
 
 # netD
-from .discriminator import Discriminator
-netD = Discriminator().to('cuda')
-netD = nn.DataParallel(netD)
-lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.0001)
+# from .discriminator import Discriminator
+# netD = Discriminator().to('cuda')
+# netD = nn.DataParallel(netD)
+# lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.0001)
 
 
 def _warmup_beta(linear_start, linear_end, n_timestep, warmup_frac):
@@ -358,25 +358,8 @@ class GaussianDiffusion(nn.Module):
                 x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1),
                 noise=noise)
 
-            lossD_optimizer.zero_grad()  # 梯度归零
-            # 判别器对于真实图片产生的损失
-            real_output = netD(x_noisy)  # 判别器输入真实的图片，real_output对真实图片的预测结果
-            fake_output = netD(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
+           # lossD_optimizer.zero_grad()  # 梯度归零
 
-
-            g_real_loss = F.binary_cross_entropy(real_output, torch.zeros_like(real_output).float())
-            g_fake_loss = F.binary_cross_entropy(fake_output, torch.ones_like(fake_output).float())
-
-            g_loss = loss + 0.5 * (g_fake_loss.to(loss.device) + g_real_loss.to(loss.device))
-
-
-            d_real_loss = F.binary_cross_entropy(real_output, torch.ones_like(real_output).float())
-            d_fake_loss = F.binary_cross_entropy(fake_output, torch.zeros_like(fake_output).float())
-            d_loss = d_real_loss + d_fake_loss
-            # 判别器在生成图像上产生的损失
-            d_loss.backward(retain_graph=True)
-            # 判别器优化
-            lossD_optimizer.step()
             # 判别器损失
             # print("loss:")
             # print(loss)
@@ -387,7 +370,7 @@ class GaussianDiffusion(nn.Module):
 
 
 
-            return g_loss
+            return loss,x_noisy,next_x
 
 
     def forward(self, x, *args, **kwargs):

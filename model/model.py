@@ -4,9 +4,14 @@ from collections import OrderedDict
 import torch
 import torch.nn as nn
 import os
+import torch.nn.functional as F
 import model.networks as networks
 from .base_model import BaseModel
 logger = logging.getLogger('base')
+
+from .discriminator import Discriminator
+netD = Discriminator().to('cuda')
+netD = nn.DataParallel(netD)
 
 
 class DDPM(BaseModel):
@@ -14,6 +19,7 @@ class DDPM(BaseModel):
         super(DDPM, self).__init__(opt)
         # define network and load pretrained models
         self.netG = self.set_device(networks.define_G(opt))
+        self.netD = self.set_device(netD)
         self.schedule_phase = None
 
         # set loss and load resume state
@@ -38,6 +44,7 @@ class DDPM(BaseModel):
 
             self.optG = torch.optim.Adam(
                 optim_params, lr=opt['train']["optimizer"]["lr"])
+            self.lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.0001)
             self.log_dict = OrderedDict()
         self.load_network()
         self.print_network()
@@ -45,14 +52,45 @@ class DDPM(BaseModel):
     def feed_data(self, data):
         self.data = self.set_device(data)
 
+    # def optimize_parameters(self):
+    #     self.optG.zero_grad()
+    #     l_pix = self.netG(self.data)
+    #     # need to average in multi-gpu
+    #     b, c, h, w = self.data['HR'].shape
+    #     #print("1")
+    #     #print(torch.min(self.data['HR'][0]))
+    #     l_pix = l_pix.sum()/int(b*c*h*w)
+    #     l_pix.backward(retain_graph=True)
+    #     self.optG.step()
+    #
+    #     # set log
+    #     self.log_dict['l_pix'] = l_pix.item()
+
     def optimize_parameters(self):
         self.optG.zero_grad()
-        l_pix = self.netG(self.data)
+        self.lossD_optimizer.zero_grad()
+        loss,x_noisy,next_x = self.netG(self.data)
+        # 判别器对于真实图片产生的损失
+        real_output = netD(x_noisy)  # 判别器输入真实的图片，real_output对真实图片的预测结果
+        fake_output = netD(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
+
+        g_real_loss = F.binary_cross_entropy(real_output, torch.zeros_like(real_output).float())
+        g_fake_loss = F.binary_cross_entropy(fake_output, torch.ones_like(fake_output).float())
+
+        g_loss = loss + 0.5 * (g_fake_loss.to(loss.device) + g_real_loss.to(loss.device))
+
+        d_real_loss = F.binary_cross_entropy(real_output, torch.ones_like(real_output).float())
+        d_fake_loss = F.binary_cross_entropy(fake_output, torch.zeros_like(fake_output).float())
+        d_loss = d_real_loss + d_fake_loss
+        # 判别器在生成图像上产生的损失
+        d_loss.backward(retain_graph=True)
+        # 判别器优化
+        self.lossD_optimizer.step()
         # need to average in multi-gpu
         b, c, h, w = self.data['HR'].shape
         #print("1")
         #print(torch.min(self.data['HR'][0]))
-        l_pix = l_pix.sum()/int(b*c*h*w)
+        l_pix = g_loss.sum()/int(b*c*h*w)
         l_pix.backward(retain_graph=True)
         self.optG.step()
 
