@@ -195,7 +195,7 @@ class GaussianDiffusion(nn.Module):
         if condition_ddim:
             timesteps = steps
             ddim_eta = eta
-            alpha = 0.5
+            alpha = 1.0
 
             alpha_scale = [0.0,0.1,0.2,0.3,0.5,0.7,0.9,1.0]
 
@@ -214,39 +214,39 @@ class GaussianDiffusion(nn.Module):
 
             # 初始化噪声
             shape = x.shape
-            z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
-            z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
+            z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device) + torch.ones([shape[0], 3, shape[2], shape[3]], device=device)*0.1
+            z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device) + torch.ones([shape[0], 3, shape[2], shape[3]], device=device)*0.1
 
-            for alpha in alpha_scale:
-                x = self.slerp(z1, z2, alpha)
-                for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
-                    t = (torch.ones(batch_size) * i).to(x.device)
-                    next_t = (torch.ones(batch_size) * j).to(x.device)
+            # for alpha in alpha_scale:
+            x = self.slerp(z1, z2, alpha)
+            for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
+                t = (torch.ones(batch_size) * i).to(x.device)
+                next_t = (torch.ones(batch_size) * j).to(x.device)
 
-                    at = self.compute_alpha(self.betas, t.long())
-                    at_next = self.compute_alpha(self.betas, next_t.long())
+                at = self.compute_alpha(self.betas, t.long())
+                at_next = self.compute_alpha(self.betas, next_t.long())
 
-                    noise_level = torch.FloatTensor([self.sqrt_alphas_cumprod_prev[i + 1]]).repeat(batch_size, 1).to(
-                        x.device)
-                    et = self.denoise_fn(torch.cat([x_in, x], dim=1), noise_level)
+                noise_level = torch.FloatTensor([self.sqrt_alphas_cumprod_prev[i + 1]]).repeat(batch_size, 1).to(
+                    x.device)
+                et = self.denoise_fn(torch.cat([x_in, x], dim=1), noise_level)
 
-                    x0_t = (x - et * (1 - at).sqrt()) / at.sqrt()
+                x0_t = (x - et * (1 - at).sqrt()) / at.sqrt()
 
-                    # x0_t.clamp_(-1., 1.)
+                # x0_t.clamp_(-1., 1.)
 
-                    c1 = (
-                            ddim_eta * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
-                    )
-                    c2 = ((1 - at_next) - c1 ** 2).sqrt()
-                    # print( at_next.sqrt(), c2)
-                    xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et
+                c1 = (
+                        ddim_eta * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
+                )
+                c2 = ((1 - at_next) - c1 ** 2).sqrt()
+                # print( at_next.sqrt(), c2)
+                xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et
 
-                    # print(torch.max(xt_next),torch.min(xt_next),  at_next.sqrt(), c2)
+                # print(torch.max(xt_next),torch.min(xt_next),  at_next.sqrt(), c2)
 
-                    x = xt_next
+                x = xt_next
 
-                    if i == 0:
-                        ret_img = torch.cat([ret_img, xt_next], dim=0)
+                if i % sample_inter == 0 or (i == len(seq) - 1):
+                    ret_img = torch.cat([ret_img, xt_next], dim=0)
         else:
             sample_inter = (1 | (self.num_timesteps//10))
             if not self.conditional:
