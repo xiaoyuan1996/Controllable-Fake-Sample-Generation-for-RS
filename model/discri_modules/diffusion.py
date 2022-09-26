@@ -374,7 +374,7 @@ class GaussianDiffusion(nn.Module):
             d_fake_loss = F.binary_cross_entropy(fake_output, torch.zeros_like(fake_output).float())
             d_loss = d_real_loss + d_fake_loss
             # 判别器在生成图像上产生的损失
-            d_loss.backward()
+            d_loss.backward(retain_graph=True)
             # 判别器优化
             lossD_optimizer.step()
             # 判别器损失
