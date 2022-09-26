@@ -178,10 +178,10 @@ class LRHRDataset(Dataset):
             image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
             image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
             H, W, C = np.shape(image_HR)
-            if H > 512 + 10 and W > 512 + 10:
-                start_x = np.random.randint(0, H - 512)
-                start_y = np.random.randint(0, W - 512)
-                box = (start_y, start_x, start_y + 512, start_x + 512)
+            if H > 256 + 10 and W > 256 + 10:
+                start_x = np.random.randint(0, H - 256)
+                start_y = np.random.randint(0, W - 256)
+                box = (start_y, start_x, start_y + 256, start_x + 256)
                 img_HR = image_HR.crop(box)
                 img_SR = image_SR.crop(box)
                 img_HR = img_HR.resize((self.r_res, self.r_res))
