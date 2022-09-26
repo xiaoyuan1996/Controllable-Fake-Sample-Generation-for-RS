@@ -215,7 +215,7 @@ class GaussianDiffusion(nn.Module):
             skip = self.num_timesteps // timesteps
             seq = range(0, self.num_timesteps, skip)
             seq_next = [-1] + list(seq[:-1])
-            print(seq_next)
+            #print(seq_next)
 
             batch_size, C, H, W = x.shape
 
@@ -226,7 +226,7 @@ class GaussianDiffusion(nn.Module):
             x = self.slerp(z1, z2, alpha)
 
             # reshape strategy
-            reshape = False
+            reshape = True
             reshape_stage = 3
             h_gap, w_gap = H // reshape_stage, W // reshape_stage
             hs = [self.neibor_16_mul(h) for h in range(h_gap, H, h_gap)] + [H]
