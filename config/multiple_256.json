@@ -2,7 +2,7 @@
     "name": "cri_multiple_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        7
+        6,7
     ],
     "change_sizes":{
         "0.0": 64,
@@ -29,7 +29,7 @@
             "datatype": "multiple", //lmdb or img, path of img files
             "l_resolution": 32, // low resolution need to super_resolution
             "r_resolution": 64, // high resolution
-            "batch_size": 2,
+            "batch_size": 4,
             "num_workers": 2,
             "use_shuffle": true,
             "data_len": -1 // -1 represents all data used in train
