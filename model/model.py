@@ -84,14 +84,14 @@ class DDPM(BaseModel):
         d_loss = d_real_loss + d_fake_loss
         # 判别器在生成图像上产生的损失
         d_loss.backward(retain_graph=True)
-        # 判别器优化
-        self.lossD_optimizer.step()
         # need to average in multi-gpu
         b, c, h, w = self.data['HR'].shape
         #print("1")
         #print(torch.min(self.data['HR'][0]))
         l_pix = g_loss.sum()/int(b*c*h*w)
         l_pix.backward(retain_graph=True)
+        # 判别器优化
+        self.lossD_optimizer.step()
         self.optG.step()
 
         # set log
