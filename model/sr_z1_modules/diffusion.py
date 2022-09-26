@@ -227,7 +227,7 @@ class GaussianDiffusion(nn.Module):
 
             # reshape strategy
             reshape = True
-            reshape_stage = 3
+            reshape_stage = 2
             # h_gap, w_gap = H // reshape_stage, W // reshape_stage
             # hs = [self.neibor_16_mul(h)*2 for h in range(h_gap, H, h_gap)] + [H]
             # ws = [self.neibor_16_mul(w)*2 for w in range(w_gap, W, w_gap)] + [W]
