@@ -120,11 +120,11 @@ if __name__ == "__main__":
         if wandb_logger and opt['log_infer']:
             wandb_logger.log_eval_data(fake_img, Metrics.tensor2img(visuals['SR'][-1]), hr_img)
     for t in range(8):
-        sr_path = os.path.join(sr_path,str(index[t]))
+        the_path = os.path.join(sr_path,str(index[t]))
         status = 'sr.'
-        brisque = eval_brisque(sr_path, status)
-        IS = calculate_IS(sr_path)
-        paths = [hr_path, sr_path]
+        brisque = eval_brisque(the_path, status)
+        IS = calculate_IS(the_path)
+        paths = [hr_path, the_path]
         Fid = calculate_fid_given_dataset(paths)
         print("infer: steps = ", steps, ",eta = ", eta, ";IS: ", IS, ",brisque: ", brisque, ",Fid: ", Fid)
         logger_val = logging.getLogger('val')  # validation logger
