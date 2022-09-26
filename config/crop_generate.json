@@ -1,5 +1,5 @@
 {
-    "name": "infer_crop",
+    "name": "infer_crop_alphaTest",
     "phase": "train", // train or val
     "gpu_ids": [
         5
