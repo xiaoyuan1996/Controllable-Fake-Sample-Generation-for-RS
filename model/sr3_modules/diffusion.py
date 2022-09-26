@@ -209,6 +209,7 @@ class GaussianDiffusion(nn.Module):
             skip = self.num_timesteps // timesteps
             seq = range(0, self.num_timesteps, skip)
             seq_next = [-1] + list(seq[:-1])
+            print(seq_next)
 
             batch_size = x.shape[0]
 
@@ -216,10 +217,8 @@ class GaussianDiffusion(nn.Module):
             shape = x.shape
             z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
             z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
-
-            x = self.slerp(z1, z2, alpha)
-
             for alpha in alpha_scale:
+                x = self.slerp(z1, z2, alpha)
 
                 for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
                     t = (torch.ones(batch_size) * i).to(x.device)
@@ -247,7 +246,7 @@ class GaussianDiffusion(nn.Module):
 
                     x = xt_next
 
-                    if i == len(seq) - 1:
+                    if i == 0:
                         ret_img = torch.cat([ret_img, xt_next], dim=0)
         else:
             sample_inter = (1 | (self.num_timesteps//10))

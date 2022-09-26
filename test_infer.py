@@ -105,21 +105,21 @@ if __name__ == "__main__":
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][3]), '{}/{}_{}_sr_0.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_sr_0.png'.format(sr_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][4]), '{}/{}_{}_sr_1.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][3]), '{}/{}_{}_sr_1.png'.format(sr_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][5]), '{}/{}_{}_sr_2.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][4]), '{}/{}_{}_sr_2.png'.format(sr_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][6]), '{}/{}_{}_sr_3.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][5]), '{}/{}_{}_sr_3.png'.format(sr_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][7]), '{}/{}_{}_sr_5.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][6]), '{}/{}_{}_sr_5.png'.format(sr_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][8]), '{}/{}_{}_sr_7.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][7]), '{}/{}_{}_sr_7.png'.format(sr_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][9]), '{}/{}_{}_sr_9.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][8]), '{}/{}_{}_sr_9.png'.format(sr_path, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][10]), '{}/{}_{}_sr_10.png'.format(sr_path, current_step, idx))
+                Metrics.tensor2img(visuals['SR'][9]), '{}/{}_{}_sr_10.png'.format(sr_path, current_step, idx))
 
 
         Metrics.save_img(
