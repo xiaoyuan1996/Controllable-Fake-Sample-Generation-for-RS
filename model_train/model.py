@@ -9,9 +9,6 @@ import model_train.networks as networks
 from .base_model import BaseModel
 logger = logging.getLogger('base')
 
-# from .discri_modules.discriminator import Discriminator
-# netD = Discriminator().to('cuda')
-# netD = nn.DataParallel(netD)
 
 
 class DDPM(BaseModel):
@@ -19,7 +16,6 @@ class DDPM(BaseModel):
         super(DDPM, self).__init__(opt)
         # define network and load pretrained models
         self.netG = self.set_device(networks.define_G(opt))
-        #self.netD = self.set_device(netD)
         self.schedule_phase = None
 
         # set loss and load resume state
@@ -60,7 +56,7 @@ class DDPM(BaseModel):
         #print("1")
         #print(torch.min(self.data['HR'][0]))
         l_pix = l_pix.sum()/int(b*c*h*w)
-        l_pix.backward(retain_graph=True)
+        l_pix.backward()
         self.optG.step()
 
         # set log

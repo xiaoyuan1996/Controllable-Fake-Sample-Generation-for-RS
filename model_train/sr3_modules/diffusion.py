@@ -7,7 +7,6 @@ import numpy as np
 from tqdm import tqdm
 import copy
 
-# from model.discri_modules.discriminator import Discriminator
 
 
 def _warmup_beta(linear_start, linear_end, n_timestep, warmup_frac):
@@ -197,7 +196,6 @@ class GaussianDiffusion(nn.Module):
             ddim_eta = eta
             alpha = 1.0
 
-            alpha_scale = [0.0,0.1,0.2,0.3,0.5,0.7,0.9,1.0]
 
             sample_inter = (1 | (timesteps // 10))
 
