@@ -213,8 +213,8 @@ class GaussianDiffusion(nn.Module):
             ret_img = torch.cat([ret_img, x_in], dim=0)
 
             skip = self.num_timesteps // timesteps
-            seq = range(0, self.num_timesteps, skip)+[1999]
-            seq_next = [-1] + list(seq[:-1])
+            seq = list(range(0, self.num_timesteps, skip))+[1999]
+            seq_next = [-1] + seq[:-1]
             print(seq)
 
             batch_size, C, H, W = x.shape
