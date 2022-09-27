@@ -206,6 +206,7 @@ class GaussianDiffusion(nn.Module):
             alpha = 0.5
 
             sample_inter = (1 | (timesteps // 10))
+            print(sample_inter)
 
             x = copy.deepcopy(x_in)
 
@@ -213,7 +214,7 @@ class GaussianDiffusion(nn.Module):
             ret_img = torch.cat([ret_img, x_in], dim=0)
 
             skip = self.num_timesteps // timesteps
-            seq = list(range(0, self.num_timesteps, skip))+[1999]
+            seq = list(range(0, self.num_timesteps, skip))+[1998]
             seq_next = [-1] + seq[:-1]
             print(seq)
 
@@ -279,7 +280,7 @@ class GaussianDiffusion(nn.Module):
 
                 x = xt_next
 
-                if i % sample_inter == 0 or (i == 1999):
+                if i % sample_inter == 0 or (i == 1998):
 
                     if x.shape[-1] != W:
                         im_resize = Resize([H, W])
