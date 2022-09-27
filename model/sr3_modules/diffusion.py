@@ -197,7 +197,7 @@ class GaussianDiffusion(nn.Module):
             ddim_eta = eta
             alpha = 1.0
 
-            alpha_scale = [0.0,0.1,0.2,0.3,0.5,0.7,0.9,1.0]
+            #alpha_scale = [0.0,0.1,0.2,0.3,0.5,0.7,0.9,1.0]
 
             sample_inter = (1 | (timesteps // 10))
 
@@ -214,9 +214,9 @@ class GaussianDiffusion(nn.Module):
 
             # 初始化噪声
             shape = x.shape
-            z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device) + torch.ones([shape[0], 1, shape[2], shape[3]], device=device)*0.02
-            z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device) + torch.ones([shape[0], 1, shape[2], shape[3]], device=device)*0.02
-
+            #+ torch.ones([shape[0], 1, shape[2], shape[3]], device=device)*0.02
+            z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
+            z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
             # for alpha in alpha_scale:
             x = self.slerp(z1, z2, alpha)
             for i, j in tqdm(zip(reversed(seq), reversed(seq_next)), desc='sampling loop time step', total=len(seq)):
