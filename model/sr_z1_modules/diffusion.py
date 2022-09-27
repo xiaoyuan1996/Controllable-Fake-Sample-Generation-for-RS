@@ -206,7 +206,7 @@ class GaussianDiffusion(nn.Module):
             alpha = 0.5
 
             sample_inter = 10*timesteps
-            print(sample_inter)
+            #print(sample_inter)
 
             x = copy.deepcopy(x_in)
 
@@ -214,7 +214,7 @@ class GaussianDiffusion(nn.Module):
             ret_img = torch.cat([ret_img, x_in], dim=0)
 
             skip = self.num_timesteps // timesteps
-            seq = list(range(1, self.num_timesteps, skip))+[2000]
+            seq = list(range(0, self.num_timesteps, skip))+[2000]
             seq_next = [-1] + seq[:-1]
             print(seq)
 
