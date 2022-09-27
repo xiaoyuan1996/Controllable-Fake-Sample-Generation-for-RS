@@ -28,11 +28,11 @@
         "val": {
             "name": "SAR_option_train",
             "mode": "HR",
-            "dataroot": "/data/diffusion_data/dataset/scl/val",
+            "dataroot": "/data/diffusion_data/dataset/scl/train",
             "datatype": "infer", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 256,
-            "data_len": -1 // data length in validation
+            "data_len": 100 // data length in validation
         }
     },
     "model": {
