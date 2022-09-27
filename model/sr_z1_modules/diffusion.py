@@ -205,7 +205,7 @@ class GaussianDiffusion(nn.Module):
             ddim_eta = eta
             alpha = 0.5
 
-            sample_inter = (1 | (timesteps // 10))
+            sample_inter = 10*timesteps
             print(sample_inter)
 
             x = copy.deepcopy(x_in)
@@ -214,7 +214,7 @@ class GaussianDiffusion(nn.Module):
             ret_img = torch.cat([ret_img, x_in], dim=0)
 
             skip = self.num_timesteps // timesteps
-            seq = list(range(0, self.num_timesteps, skip))+[1998]
+            seq = list(range(1, self.num_timesteps, skip))+[2000]
             seq_next = [-1] + seq[:-1]
             print(seq)
 
@@ -246,7 +246,7 @@ class GaussianDiffusion(nn.Module):
                 at = self.compute_alpha(self.betas, t.long())
                 at_next = self.compute_alpha(self.betas, next_t.long())
 
-                noise_level = torch.FloatTensor([self.sqrt_alphas_cumprod_prev[i + 1]]).repeat(batch_size, 1).to(
+                noise_level = torch.FloatTensor([self.sqrt_alphas_cumprod_prev[i]]).repeat(batch_size, 1).to(
                     x.device)
                 if reshape:
                     cur_idx = int(idx / int(len_seq / reshape_stage))
@@ -280,7 +280,7 @@ class GaussianDiffusion(nn.Module):
 
                 x = xt_next
 
-                if i % sample_inter == 0 or (i == 1998):
+                if i % sample_inter == 0 or (i == seq[len(seq)-1]):
 
                     if x.shape[-1] != W:
                         im_resize = Resize([H, W])
