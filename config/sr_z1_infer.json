@@ -37,7 +37,7 @@
         }
     },
     "model": {
-        "which_model_G": "sr_z1_1", // use the ddpm or sr3 network structure
+        "which_model_G": "sr_z1_1999", // use the ddpm or sr3 network structure
         "finetune_norm": false,
         "unet": {
             "in_channel": 6,
