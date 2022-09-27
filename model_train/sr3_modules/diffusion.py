@@ -211,8 +211,8 @@ class GaussianDiffusion(nn.Module):
 
             # 初始化噪声
             shape = x.shape
-            z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device) + torch.ones([shape[0], 3, shape[2], shape[3]], device=device)*0.02
-            z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device) + torch.ones([shape[0], 3, shape[2], shape[3]], device=device)*0.02
+            z1 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
+            z2 = torch.randn([shape[0], 3, shape[2], shape[3]], device=device)
 
             # for alpha in alpha_scale:
             x = self.slerp(z1, z2, alpha)
