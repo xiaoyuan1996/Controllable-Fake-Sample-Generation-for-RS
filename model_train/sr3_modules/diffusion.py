@@ -196,7 +196,6 @@ class GaussianDiffusion(nn.Module):
             ddim_eta = eta
             alpha = 1.0
 
-
             sample_inter = (1 | (timesteps // 10))
 
             x = copy.deepcopy(x_in)
