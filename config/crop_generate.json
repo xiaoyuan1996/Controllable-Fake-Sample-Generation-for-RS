@@ -1,5 +1,5 @@
 {
-    "name": "crop_change_train",
+    "name": "random_change_train",
     "phase": "train", // train or val
     "gpu_ids": [
         5
@@ -25,7 +25,7 @@
             "name": "train_256_change",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",
-            "datatype": "crop", //lmdb or img, path of img files
+            "datatype": "random", //lmdb or img, path of img files
             "l_resolution": 32, // low resolution need to super_resolution
             "r_resolution": 64, // high resolution
             "batch_size": 2,
@@ -38,7 +38,7 @@
             "mode": "HR",
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             //"dataroot": "/data/diffusion_data/infer/new_infer_256_220916_054052/results",
-            "datatype": "crop", //lmdb or img, path of img files
+            "datatype": "random", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 256,
             "data_len": -1 // data length in validation
