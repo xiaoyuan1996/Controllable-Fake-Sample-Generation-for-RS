@@ -107,7 +107,7 @@ if __name__ == "__main__":
         diffusion.test(continous=True,condition_ddim = True,steps = steps,eta = eta)
         visuals = diffusion.get_current_visuals(need_LR=False)
 
-        visuals['SR'] = torch.cat([visuals['SR'], visuals['HR']], dim=0)
+        #visuals['SR'] = torch.cat([visuals['SR'], visuals['HR']], dim=0)
 
         hr_img = Metrics.tensor2img(visuals['HR'])  # uint8
         fake_img = Metrics.tensor2img(visuals['INF'])  # uint8
