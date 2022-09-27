@@ -1,8 +1,8 @@
 {
-    "name": "new20_infer_256",
+    "name": "color_add_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        5
+       4
     ],
     "path": { //set the path
         "log": "logs",
