@@ -203,7 +203,7 @@ class GaussianDiffusion(nn.Module):
         if condition_ddim:
             timesteps = steps
             ddim_eta = eta
-            alpha = 0.5
+            alpha = 1.0
 
             sample_inter = 10*timesteps
             #print(sample_inter)
