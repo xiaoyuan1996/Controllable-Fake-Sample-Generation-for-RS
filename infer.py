@@ -24,12 +24,15 @@ if __name__ == "__main__":
     parser.add_argument('-log_infer', action='store_true')
     parser.add_argument('-steps', '--steps', type=int, default=20)
     parser.add_argument('-eta', '--eta', type=float, default=0.0)
+    parser.add_argument('-resume', '--resume', type=str, default=None)
     
     # parse configs
     args = parser.parse_args()
     opt = Logger.parse(args)
     # Convert to NoneDict, which return None for missing key.
     opt = Logger.dict_to_nonedict(opt)
+    if args.resume != "" and args.resume != None:
+        opt['path']['resume_state'] = "/data/diffusion_data/experiments/cri_multiple_256_220926_060957/checkpoint/"+args.resume
 
     # logging
     torch.backends.cudnn.enabled = True

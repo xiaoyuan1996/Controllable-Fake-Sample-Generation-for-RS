@@ -281,8 +281,8 @@ class GaussianDiffusion(nn.Module):
                 ret_img = hr_in
                 ret_img = torch.cat([ret_img, x], dim=0)
                 for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
-                    #img = self.p_sample(img, i, condition_x=x)
-                    img = self.compute_x_next(img, i, condition_x=x)
+                    img = self.p_sample(img, i, condition_x=x)
+                    #img = self.compute_x_next(img, i, condition_x=x)
                     if i % sample_inter == 0:
                         ret_img = torch.cat([ret_img, img], dim=0)
 
