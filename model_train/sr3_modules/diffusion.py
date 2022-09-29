@@ -179,7 +179,7 @@ class GaussianDiffusion(nn.Module):
             x_recon = self.predict_start_from_noise(
                 x, t=t, noise=self.denoise_fn(x, noise_level))
 
-        x_next =x*self.test_sqrt_recip_alphas[t]+x_recon*self.test_sqrt_recipm1_alphas[t]
+        x_next =x*self.test_sqrt_recip_alphas[t]-x_recon*self.test_sqrt_recipm1_alphas[t]
         return x_next
 
     def p_mean_variance(self, x, t, clip_denoised: bool, condition_x=None):
