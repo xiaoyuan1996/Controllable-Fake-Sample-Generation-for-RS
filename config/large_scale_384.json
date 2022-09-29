@@ -2,7 +2,7 @@
     "name": "large_scale_384",
     "phase": "train", // train or val
     "gpu_ids": [
-        7
+        4
     ],
     "change_sizes":{
         "0.0": 384,
