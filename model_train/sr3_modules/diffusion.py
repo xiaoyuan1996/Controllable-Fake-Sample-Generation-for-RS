@@ -125,6 +125,10 @@ class GaussianDiffusion(nn.Module):
                              to_torch(np.sqrt(1. / alphas_cumprod)))
         self.register_buffer('sqrt_recipm1_alphas_cumprod',
                              to_torch(np.sqrt(1. / alphas_cumprod - 1)))
+        self.register_buffer('test_sqrt_recip_alphas', to_torch(
+            np.sqrt(1. / alphas)))
+        self.register_buffer('test_sqrt_recipm1_alphas',
+                             to_torch(np.sqrt(1. / alphas - 1)))
 
         # calculations for posterior q(x_{t-1} | x_t, x_0)
         posterior_variance = betas * \
@@ -139,6 +143,7 @@ class GaussianDiffusion(nn.Module):
             betas * np.sqrt(alphas_cumprod_prev) / (1. - alphas_cumprod)))
         self.register_buffer('posterior_mean_coef2', to_torch(
             (1. - alphas_cumprod_prev) * np.sqrt(alphas) / (1. - alphas_cumprod)))
+
 
     # calc ddim alpha
     def compute_alpha(self, beta, t):
@@ -162,6 +167,20 @@ class GaussianDiffusion(nn.Module):
             x_start + self.posterior_mean_coef2[t] * x_t
         posterior_log_variance_clipped = self.posterior_log_variance_clipped[t]
         return posterior_mean, posterior_log_variance_clipped
+
+    def compute_x_next(self, x, t, condition_x=None):
+        batch_size = x.shape[0]
+        noise_level = torch.FloatTensor(
+            [self.sqrt_alphas_cumprod_prev[t+1]]).repeat(batch_size, 1).to(x.device)
+        if condition_x is not None:
+            x_recon = self.predict_start_from_noise(
+                x, t=t, noise=self.denoise_fn(torch.cat([condition_x, x], dim=1), noise_level))
+        else:
+            x_recon = self.predict_start_from_noise(
+                x, t=t, noise=self.denoise_fn(x, noise_level))
+
+        x_next =x*self.test_sqrt_recip_alphas[t]+x_recon*self.test_sqrt_recipm1_alphas[t]
+        return x_next
 
     def p_mean_variance(self, x, t, clip_denoised: bool, condition_x=None):
         batch_size = x.shape[0]
@@ -262,7 +281,8 @@ class GaussianDiffusion(nn.Module):
                 ret_img = hr_in
                 ret_img = torch.cat([ret_img, x], dim=0)
                 for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
-                    img = self.p_sample(img, i, condition_x=x)
+                    #img = self.p_sample(img, i, condition_x=x)
+                    img = self.compute_x_next(img, i, condition_x=x)
                     if i % sample_inter == 0:
                         ret_img = torch.cat([ret_img, img], dim=0)
 
