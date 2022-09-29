@@ -62,7 +62,7 @@ class LRHRDataset(Dataset):
             self.dataset_len = len(self.hr_path)
             if self.data_len <= 0:
                 self.data_len = self.dataset_len
-        elif datatype == 'random' or datatype == 'change' or datatype == 'crop' or datatype == 'multiple' or datatype == 'noise':
+        elif datatype == 'random' or datatype == 'change' or datatype == 'crop' or datatype == 'multiple' or datatype == 'noise' or datatype == 'large_scale':
             # self.sr_path = Util.get_paths_from_images(
             #     '{}/sr_{}_{}'.format(dataroot, l_resolution, r_resolution))
             # self.hr_path = Util.get_paths_from_images(
@@ -173,6 +173,26 @@ class LRHRDataset(Dataset):
             img_SR = image_SR.resize((self.r_res, self.r_res))
             if (np.max(img_SR) == 0):
                 img_SR = Util.add_noise(img_SR)
+        elif self.datatype == 'large_scale':
+            image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")
+            image_SR = Image.open(self.sr_path[index % self.dataset_len]).convert("RGB")
+            H, W, C = np.shape(image_HR)
+            if H > self.l_res + 10 and W > self.l_res + 10:
+                start_x = np.random.randint(0, H - self.l_res)
+                start_y = np.random.randint(0, W - self.l_res)
+                box = (start_y, start_x, start_y + 512, start_x + 512)
+                img_HR = image_HR.crop(box)
+                img_SR = image_SR.crop(box)
+                img_HR = img_HR.resize((self.r_res, self.r_res))
+                img_SR = img_SR.resize((self.r_res, self.r_res))
+                # print(np.max(img_SR),np.min(img_SR))
+
+            else:
+                img_HR = image_HR.resize((self.r_res, self.r_res))
+                img_SR = image_SR.resize((self.r_res, self.r_res))
+            # print(np.max(img_SR), np.min(img_SR))
+            if self.need_LR:
+                img_LR = Image.open(self.lr_path[index]).convert("RGB")
 
         elif self.datatype == 'crop':
             image_HR = Image.open(self.hr_path[index % self.dataset_len]).convert("RGB")

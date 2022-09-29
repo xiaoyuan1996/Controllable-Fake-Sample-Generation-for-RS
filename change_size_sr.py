@@ -49,7 +49,7 @@ class AverageMeter(object):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/crop_generate.json',
+    parser.add_argument('-c', '--config', type=str, default='config/large_scale_384.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['train', 'val'],
                         help='Run either train(training) or val(generation)', default='train')
@@ -147,7 +147,7 @@ if __name__ == "__main__":
                 train_dataset_opt = copy.deepcopy(opt['datasets']['train'])
                 # print("src: {},{},{}".format(train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"], train_dataset_opt["batch_size"]))
 
-                train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"] = resize_resolu, resize_resolu
+                train_dataset_opt["l_resolution"] = resize_resolu
 
                 # train_dataset_opt["batch_size"] = int(train_dataset_opt["batch_size"] * (change_sizes[list(change_sizes.keys())[-1]] / resize_resolu))
 
