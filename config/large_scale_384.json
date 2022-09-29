@@ -2,7 +2,7 @@
     "name": "large_scale_384",
     "phase": "train", // train or val
     "gpu_ids": [
-        4
+        2,3,4
     ],
     "change_sizes":{
         "0.0": 384,
@@ -28,7 +28,7 @@
             "datatype": "large_scale", //lmdb or img, path of img files
             "l_resolution": 384, // low resolution need to super_resolution
             "r_resolution": 384, // high resolution
-            "batch_size": 2,
+            "batch_size": 4,
             "num_workers": 2,
             "use_shuffle": true,
             "data_len": -1 // -1 represents all data used in train
