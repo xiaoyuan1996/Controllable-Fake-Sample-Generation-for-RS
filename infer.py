@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # Convert to NoneDict, which return None for missing key.
     opt = Logger.dict_to_nonedict(opt)
     if args.resume != "" and args.resume != None:
-        opt['path']['resume_state'] = "/data/diffusion_data/experiments/cri_multiple_256_220926_060957/checkpoint/"+args.resume
+        opt['path']['resume_state'] = "/data/diffusion_data/experiments/discri_trian_220928_031050/checkpoint/"+args.resume
 
     # logging
     torch.backends.cudnn.enabled = True
