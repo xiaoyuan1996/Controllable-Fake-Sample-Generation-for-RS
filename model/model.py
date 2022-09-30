@@ -69,9 +69,9 @@ class DDPM(BaseModel):
     def optimize_parameters(self):
         self.optG.zero_grad()
         self.lossD_optimizer.zero_grad()
-        loss,x_noisy,next_x = self.netG(self.data)
+        loss,x_start,next_x = self.netG(self.data)
         # 判别器对于真实图片产生的损失
-        real_output = netD(x_noisy)  # 判别器输入真实的图片，real_output对真实图片的预测结果
+        real_output = netD(x_start)  # 判别器输入真实的图片，real_output对真实图片的预测结果
         fake_output = netD(next_x.detach())  # 判别器输入生成的图片，fake_output对生成图片的预测;detach会截断梯度，梯度就不会再传递到gen模型中了
 
         g_real_loss = F.binary_cross_entropy(real_output, torch.zeros_like(real_output).float())

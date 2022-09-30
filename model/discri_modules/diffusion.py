@@ -196,7 +196,7 @@ class GaussianDiffusion(nn.Module):
         return model_mean + noise * (0.5 * model_log_variance).exp()
 
     @torch.no_grad()
-    def p_sample_loop(self, x_in, hr_in = None,continous=False,condition_ddim = False,steps = 20,eta = 0.0):
+    def p_sample_loop(self, x_in, hr_in = None,continous=False,condition_ddim = False,steps = 20,eta = 0.0,num_timesteps = 2000):
         device = self.betas.device
         if condition_ddim:
             timesteps = steps
@@ -210,8 +210,8 @@ class GaussianDiffusion(nn.Module):
             ret_img = hr_in
             ret_img = torch.cat([ret_img, x_in], dim=0)
 
-            skip = self.num_timesteps // timesteps
-            seq = range(0, self.num_timesteps, skip)
+            skip = num_timesteps // timesteps
+            seq = range(0, num_timesteps, skip)
             seq_next = [-1] + list(seq[:-1])
 
             batch_size = x.shape[0]
@@ -251,13 +251,13 @@ class GaussianDiffusion(nn.Module):
                 if i % sample_inter == 0 or (i == len(seq) - 1):
                     ret_img = torch.cat([ret_img, xt_next], dim=0)
         else:
-            sample_inter = (1 | (self.num_timesteps//10))
+            sample_inter = (1 | (num_timesteps//10))
             if not self.conditional:
                 shape = x_in
                 #print(shape)
                 img = torch.randn(shape, device=device)
                 ret_img = img
-                for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
+                for i in tqdm(reversed(range(0, num_timesteps)), desc='sampling loop time step', total=num_timesteps):
                     img = self.p_sample(img, i)
                     if i % sample_inter == 0:
                         ret_img = torch.cat([ret_img, img], dim=0)
@@ -267,7 +267,7 @@ class GaussianDiffusion(nn.Module):
                 img = torch.randn(shape, device=device)
                 ret_img = hr_in
                 ret_img = torch.cat([ret_img, x], dim=0)
-                for i in tqdm(reversed(range(0, self.num_timesteps)), desc='sampling loop time step', total=self.num_timesteps):
+                for i in tqdm(reversed(range(0, num_timesteps)), desc='sampling loop time step', total=num_timesteps):
                     img = self.p_sample(img, i, condition_x=x)
                     if i % sample_inter == 0:
                         ret_img = torch.cat([ret_img, img], dim=0)
@@ -325,52 +325,47 @@ class GaussianDiffusion(nn.Module):
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
 
             # optim loss
-            t = t - 1
-            x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
-            model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
-            noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
-            next_x = model_mean + noise_ * (0.5 * posterior).exp()
+            # t = t - 1
+            # x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
+            # model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
+            # noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
+            # next_x = model_mean + noise_ * (0.5 * posterior).exp()
+            if t>20:
+                xt_0 = self.p_sample_loop(x_noisy,x_start,continous=False,condition_ddim = True,steps = 20,eta = 0.0,num_timesteps = t)
+            else:
+                xt_0 = self.p_sample_loop(x_noisy, x_start, continous=False, condition_ddim=False, steps=20, eta=0.0,
+                                          num_timesteps=t)
             # # optim_loss = self.optim_loss(next_x, x_in['HR'])
             # #
             # # loss = self.loss_func(noise, x_recon) + optim_loss
             loss = self.loss_func(noise, x_recon)
-            # GAN
-            if t - 2 >= 0:
-                continuous_sqrt_alpha_cumprod = torch.FloatTensor(
-                    np.random.uniform(
-                        self.sqrt_alphas_cumprod_prev[t - 2],
-                        self.sqrt_alphas_cumprod_prev[t - 1],
-                        size=b
-                    )
-                ).to(x_start.device)
-            else:
-                continuous_sqrt_alpha_cumprod = torch.FloatTensor(
-                    np.random.uniform(
-                        self.sqrt_alphas_cumprod_prev[t - 1],
-                        self.sqrt_alphas_cumprod_prev[t],
-                        size=b
-                    )
-                ).to(x_start.device)
-
-            continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
-                b, -1)
-            x_noisy = self.q_sample(
-                x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1),
-                noise=noise)
-
-           # lossD_optimizer.zero_grad()  # 梯度归零
-
-            # 判别器损失
-            # print("loss:")
-            # print(loss)
-            # print("d_real_loss:")
-            # print(d_real_loss)
-            # print("d_fake_loss:")
-            # print(d_fake_loss)
+            # # GAN
+            # if t - 2 >= 0:
+            #     continuous_sqrt_alpha_cumprod = torch.FloatTensor(
+            #         np.random.uniform(
+            #             self.sqrt_alphas_cumprod_prev[t - 2],
+            #             self.sqrt_alphas_cumprod_prev[t - 1],
+            #             size=b
+            #         )
+            #     ).to(x_start.device)
+            # else:
+            #     continuous_sqrt_alpha_cumprod = torch.FloatTensor(
+            #         np.random.uniform(
+            #             self.sqrt_alphas_cumprod_prev[t - 1],
+            #             self.sqrt_alphas_cumprod_prev[t],
+            #             size=b
+            #         )
+            #     ).to(x_start.device)
+            #
+            # continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
+            #     b, -1)
+            # x_noisy = self.q_sample(
+            #     x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1),
+            #     noise=noise)
 
 
 
-            return loss,x_noisy,next_x
+            return loss,x_start,xt_0
 
 
     def forward(self, x, *args, **kwargs):
