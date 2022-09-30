@@ -176,7 +176,16 @@ class DDPM(BaseModel):
             self.opt['path']['checkpoint'], 'I{}_E{}_gen.pth'.format(iter_step, epoch))
         opt_path = os.path.join(
             self.opt['path']['checkpoint'], 'I{}_E{}_opt.pth'.format(iter_step, epoch))
+        D_path = os.path.join(
+            self.opt['path']['checkpoint'], 'I{}_E{}_dicri.pth'.format(iter_step, epoch))
         # gen
+        D_network = self.netG
+        if isinstance(self.netG, nn.DataParallel):
+            D_network = D_network.module
+        D_state_dict = D_network.state_dict()
+        for key, param in D_state_dict.items():
+            D_state_dict[key] = param.cpu()
+        torch.save(D_state_dict, D_path)
         network = self.netG
         if isinstance(self.netG, nn.DataParallel):
             network = network.module
