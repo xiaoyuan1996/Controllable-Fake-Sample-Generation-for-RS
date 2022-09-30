@@ -1,8 +1,8 @@
 {
-    "name": "discri_infer",
+    "name": "new_discri_train",
     "phase": "train", // train or val
     "gpu_ids": [
-        4
+        5
     ],
     "path": { //set the path
         "log": "logs",
@@ -14,7 +14,7 @@
     },
     "datasets": {
         "train": {
-            "name": "discri_infer",
+            "name": "new_discri_train",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             "datatype": "crop", //lmdb or img, path of img files
