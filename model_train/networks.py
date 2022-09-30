@@ -82,6 +82,7 @@ def init_weights(net, init_type='kaiming', scale=1, std=0.02):
 # Generator
 def define_G(opt):
     model_opt = opt['model']
+    loss_type ='l1'
     # if model_opt['which_model_G'] == 'ddpm':
     #     from .ddpm_modules import diffusion, unet
     if model_opt['which_model_G'] == 'sr3':
@@ -92,6 +93,8 @@ def define_G(opt):
     #     from .discri_modules import diffusion, unet
     # elif model_opt['which_model_G'] == 'sr_z1':
     #     from .sr_z1_modules import diffusion, unet
+    if model_opt['diffusion']['loss_type'] == None and model_opt['diffusion']['loss_type'] == '':
+        loss_type = model_opt['diffusion']['loss_type']
     if ('norm_groups' not in model_opt['unet']) or model_opt['unet']['norm_groups'] is None:
         model_opt['unet']['norm_groups']=32
     model = unet.UNet(
@@ -109,7 +112,7 @@ def define_G(opt):
         model,
         image_size=model_opt['diffusion']['image_size'],
         channels=model_opt['diffusion']['channels'],
-        loss_type='l1',    # L1 or L2
+        loss_type= loss_type,    # L1 or L2
         conditional=model_opt['diffusion']['conditional'],
         schedule_opt=model_opt['beta_schedule']['train']
     )
