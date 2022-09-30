@@ -96,6 +96,7 @@ class DDPM(BaseModel):
 
         # set log
         self.log_dict['l_pix'] = l_pix.item()
+        self.log_dict['d_loss'] = d_loss.item()
 
     def test(self, continous=False,condition_ddim = False,steps = 2000,eta = 1):
         self.netG.eval()
