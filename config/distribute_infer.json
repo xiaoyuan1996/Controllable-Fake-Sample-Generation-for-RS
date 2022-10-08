@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
 //        "resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/dirtribute_train_220927_084652/checkpoint/I100000_E400" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/experiments/dirtribute_train_220927_084652/checkpoint/I1000000_E4000" //pretrain model or training state
     },
     "datasets": {
         "train": {
