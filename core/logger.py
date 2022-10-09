@@ -75,7 +75,7 @@ def parse(args):
 
     # validation in train phase
     if phase == 'train':
-        opt['datasets']['val']['data_len'] = 5
+        opt['datasets']['val']['data_len'] = 10
 
     # W&B Logging
     try:
