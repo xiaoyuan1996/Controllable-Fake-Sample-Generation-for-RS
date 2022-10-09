@@ -9,8 +9,8 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        "resume_state": null
-        //"resume_state": "/data/diffusion_data/save_data/false_generate/I1000000_E4238" //pretrain model or training state
+        //"resume_state": null
+        "resume_state": "/data/diffusion_data/experiments/cosine_diffusion_220930_031850/checkpoint/I740000_E1480" //pretrain model or training state
     },
     "datasets": {
         "train": {
