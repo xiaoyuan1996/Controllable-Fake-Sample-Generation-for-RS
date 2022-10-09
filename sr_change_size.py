@@ -1,6 +1,6 @@
 import torch
 import data as Data
-import model as Model
+import model_train as Model
 import argparse
 import logging
 import core.logger as Logger
