@@ -1,5 +1,5 @@
 {
-    "name": "random_change_train",
+    "name": "random_change_train_new",
     "phase": "train", // train or val
     "gpu_ids": [
         6,7
@@ -17,8 +17,8 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        //"resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/random_change_train_220927_094920/checkpoint/I140000_E148" //pretrain model or training state
+        "resume_state": null
+        //"resume_state": "/data/diffusion_data/experiments/random_change_train_220927_094920/checkpoint/I140000_E148" //pretrain model or training state
     },
     "datasets": {
         "train": {
@@ -31,14 +31,14 @@
             "batch_size": 4,
             "num_workers": 2,
             "use_shuffle": true,
-            "data_len": 1900 // -1 represents all data used in train
+            "data_len": 1000 // -1 represents all data used in train
         },
         "val": {
             "name": "train_256_change",
             "mode": "HR",
-            "dataroot": "/data/diffusion_data/dataset/false_generate",
+            "dataroot": "/data/diffusion_data/val/test",
             //"dataroot": "/data/diffusion_data/infer/new_infer_256_220916_054052/results",
-            "datatype": "random", //lmdb or img, path of img files
+            "datatype": "infer", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 256,
             "data_len": -1 // data length in validation
