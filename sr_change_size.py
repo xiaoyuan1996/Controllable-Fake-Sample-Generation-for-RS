@@ -137,28 +137,6 @@ if __name__ == "__main__":
             change_size_idx -= 1
 
         while current_step < n_iter:
-
-            # reset train_loader
-            if current_step >= int(float(list(change_sizes.keys())[change_size_idx]) * n_iter) and change_size_idx < len(list(change_sizes.keys())):
-
-                # print("current step: {}".format(current_step))
-                logger.info('reset train_loader')
-                resize_resolu =  change_sizes[list(change_sizes.keys())[change_size_idx]]
-                train_dataset_opt = copy.deepcopy(opt['datasets']['train'])
-                # print("src: {},{},{}".format(train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"], train_dataset_opt["batch_size"]))
-
-                train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"] = resize_resolu, resize_resolu
-
-                # train_dataset_opt["batch_size"] = int(train_dataset_opt["batch_size"] * (change_sizes[list(change_sizes.keys())[-1]] / resize_resolu))
-
-                logger.info('reset train_loader: l_resolution:{}, r_resolution:{}, batch_size:{}'.format(train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"], train_dataset_opt["batch_size"]))
-
-                train_set = Data.create_dataset(train_dataset_opt, 'train')
-                train_loader = Data.create_dataloader(train_set, train_dataset_opt, 'train')
-
-                logger.info('reset train_loader finished .')
-                change_size_idx += 1
-
             # current_step += 1
             # continue
 
@@ -185,6 +163,30 @@ if __name__ == "__main__":
                 if current_step % opt['train']['save_checkpoint_freq'] == 0:
                     logger.info('Saving models and training states.')
                     diffusion.save_network(current_epoch, current_step)
+                    # reset train_loader
+                    if current_step >= int(
+                            float(list(change_sizes.keys())[change_size_idx]) * n_iter) and change_size_idx < len(
+                            list(change_sizes.keys())):
+                        # print("current step: {}".format(current_step))
+                        logger.info('reset train_loader')
+                        resize_resolu = change_sizes[list(change_sizes.keys())[change_size_idx]]
+                        train_dataset_opt = copy.deepcopy(opt['datasets']['train'])
+                        # print("src: {},{},{}".format(train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"], train_dataset_opt["batch_size"]))
+
+                        train_dataset_opt["l_resolution"], train_dataset_opt[
+                            "r_resolution"] = resize_resolu, resize_resolu
+
+                        # train_dataset_opt["batch_size"] = int(train_dataset_opt["batch_size"] * (change_sizes[list(change_sizes.keys())[-1]] / resize_resolu))
+
+                        logger.info('reset train_loader: l_resolution:{}, r_resolution:{}, batch_size:{}'.format(
+                            train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"],
+                            train_dataset_opt["batch_size"]))
+
+                        train_set = Data.create_dataset(train_dataset_opt, 'train')
+                        train_loader = Data.create_dataloader(train_set, train_dataset_opt, 'train')
+
+                        logger.info('reset train_loader finished .')
+                        change_size_idx += 1
 
                     if wandb_logger and opt['log_wandb_ckpt']:
                         wandb_logger.log_checkpoint(current_epoch, current_step)
