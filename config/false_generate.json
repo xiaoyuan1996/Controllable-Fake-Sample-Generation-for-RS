@@ -72,6 +72,7 @@
         "diffusion": {
             "image_size": 256,
             "channels": 3, //sample channel
+            "loss_type": "l2",
             "conditional": true // unconditional generation or unconditional generation(super_resolution)
         }
     },
