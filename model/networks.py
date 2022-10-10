@@ -90,6 +90,8 @@ def define_G(opt):
         from .clock_modules import diffusion, unet
     elif model_opt['which_model_G'] == 'discri':
         from .discri_modules import diffusion, unet
+    elif model_opt['which_model_G'] == 'discri_first':
+        from .discri_first_modules import diffusion, unet
     elif model_opt['which_model_G'] == 'sr_z1':
         from .sr_z1_modules import diffusion, unet
     if ('norm_groups' not in model_opt['unet']) or model_opt['unet']['norm_groups'] is None:
