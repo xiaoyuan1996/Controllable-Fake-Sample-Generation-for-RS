@@ -312,17 +312,17 @@ class GaussianDiffusion(nn.Module):
 
     def p_losses(self, x_in, noise=None):
         x_start = x_in['HR']
+        [b, c, h, w] = x_start.shape
         x_start_128 = copy.deepcopy(x_start)
-        x_start_128 = x_start_128.resize((128,128))
+        x_start_128 = x_start_128.resize((b, c,128,128))
         x_sr_128 = copy.deepcopy(x_in['SR'])
-        x_sr_128 = x_sr_128.resize((128, 128))
+        x_sr_128 = x_sr_128.resize((b, c,128, 128))
         x_sr_64 = copy.deepcopy(x_in['SR'])
-        x_sr_64 = x_sr_64.resize((64, 64))
+        x_sr_64 = x_sr_64.resize((b, c,64, 64))
         x_start_64 = copy.deepcopy(x_start)
-        x_start_64 = x_start_64.resize((64, 64))
+        x_start_64 = x_start_64.resize((b, c,64, 64))
         #print(x_start.shape)
         #print(torch.max(x_start[0]),torch.min(x_start[0]))
-        [b, c, h, w] = x_start.shape
         t = np.random.randint(1, self.num_timesteps + 1)
         continuous_sqrt_alpha_cumprod = torch.FloatTensor(
             np.random.uniform(
