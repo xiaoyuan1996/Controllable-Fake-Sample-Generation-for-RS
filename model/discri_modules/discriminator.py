@@ -9,7 +9,7 @@ class Discriminator(nn.Module):
         super(Discriminator, self).__init__()
 
 
-        self.resnet = resnet18(pretrained=False)
+        self.resnet = resnet18(pretrained=True)
 
         self.sigmoid = nn.Sigmoid()
 

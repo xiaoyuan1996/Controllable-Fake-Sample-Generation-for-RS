@@ -44,7 +44,7 @@ class DDPM(BaseModel):
 
             self.optG = torch.optim.Adam(
                 optim_params, lr=opt['train']["optimizer"]["lr"])
-            self.lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.01)
+            self.lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.001)
             self.log_dict = OrderedDict()
         self.load_network()
         self.print_network()
