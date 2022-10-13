@@ -262,6 +262,7 @@ class UNet(nn.Module):
                 x = layer(x)
         b = Date.time()
         c = b-a
+        print("Unet运行所需:",c)
         self.time_sum = self.time_sum + c
         self.forward_count = self.forward_count + 1
         if(self.forward_count % 200 == 0):
