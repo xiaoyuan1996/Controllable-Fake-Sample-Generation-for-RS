@@ -2,7 +2,7 @@
     "name": "discri_pretrain",
     "phase": "train", // train or val
     "gpu_ids": [
-        6
+        4
     ],
     "path": { //set the path
         "log": "logs",
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/crop_512_256_220905_015518/checkpoint/I1000000_E2834" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/save_data/false_generate/I1000000_E4238" //pretrain model or training state
     },
     "datasets": {
         "train": {
