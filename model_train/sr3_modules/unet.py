@@ -1,5 +1,6 @@
 import math
 import torch
+import time as Date
 from torch import nn
 import torch.nn.functional as F
 from inspect import isfunction
@@ -234,6 +235,7 @@ class UNet(nn.Module):
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
 
     def forward(self, x, time):
+        a = Date.time()
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
 
@@ -256,5 +258,6 @@ class UNet(nn.Module):
                 x = layer(torch.cat((x, feats.pop()), dim=1), t)
             else:
                 x = layer(x)
-
+        b = Date.time()
+        print("Unet加载时间:",b-a)
         return self.final_conv(x)
