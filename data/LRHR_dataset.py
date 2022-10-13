@@ -7,6 +7,7 @@ import cv2
 import data.util as Util
 import numpy as np
 from data.transform import RandomCrop
+import time as Date
 IMG_MEAN = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)
 class LRHRDataset(Dataset):
     def __init__(self, dataroot, datatype, l_resolution=16, r_resolution=128, split='train', data_len=-1, need_LR=False):
@@ -97,6 +98,7 @@ class LRHRDataset(Dataset):
         img_HR = None
         img_LR = None
         background = None
+        begin = Date.time()
 
         if self.datatype == 'lmdb':
             with self.env.begin(write=False) as txn:
@@ -329,6 +331,8 @@ class LRHRDataset(Dataset):
         else:
             [img_HR,img_SR] = Util.transform_augment(
                 [img_HR, img_SR], split=self.split, min_max=(-1, 1))
+            end = Date.time()
+            print(self.r_res,"尺寸数据裁剪所需时间:",begin-end)
             # if not background:
             #     img_SR = np.concatenate(img_SR,background)
             #print(sample['HR'])
