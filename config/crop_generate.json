@@ -1,8 +1,8 @@
 {
-    "name": "change_train_size_2",
+    "name": "change_train_size_third",
     "phase": "train", // train or val
     "gpu_ids": [
-        0
+        2
     ],
     "change_sizes":{
         "0.1": 64,

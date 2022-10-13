@@ -2,7 +2,7 @@
     "name": "base_generate_2",
     "phase": "train", // train or val
     "gpu_ids": [
-        1
+        3
     ],
     "path": { //set the path
         "log": "logs",
