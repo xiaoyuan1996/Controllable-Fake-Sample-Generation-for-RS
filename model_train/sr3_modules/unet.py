@@ -233,6 +233,8 @@ class UNet(nn.Module):
         self.ups = nn.ModuleList(ups)
 
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
+        self.time_sum = 0.0
+        self.forward_count = 0
 
     def forward(self, x, time):
         a = Date.time()
@@ -259,5 +261,11 @@ class UNet(nn.Module):
             else:
                 x = layer(x)
         b = Date.time()
-        print("Unet加载时间:",b-a)
+        c = b-a
+        self.time_sum = self.time_sum + c
+        self.forward_count = self.forward_count + 1
+        if(self.forward_count % 200 == 0):
+            print(self.forward_count,"次所需时间:",self.time_sum)
+
+
         return self.final_conv(x)
