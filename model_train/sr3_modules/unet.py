@@ -265,7 +265,8 @@ class UNet(nn.Module):
         self.time_sum = self.time_sum + c
         self.forward_count = self.forward_count + 1
         if(self.forward_count % 200 == 0):
-            print(self.forward_count,"次所需时间:",self.time_sum)
+            shape = x.shape
+            print(shape,self.forward_count,"次所需时间:",self.time_sum)
 
 
         return self.final_conv(x)
