@@ -9,15 +9,16 @@
         "0.2": 96,
         "0.3": 112,
         "0.5": 128,
-        "0.8": 256
+        "0.8": 256,
+        "1.0": 256
     },
     "path": { //set the path
         "log": "logs",
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        "resume_state": null
-        //"resume_state": "/data/diffusion_data/experiments/random_change_train_220927_094920/checkpoint/I140000_E148" //pretrain model or training state
+        //"resume_state": null
+        "resume_state": "/data/diffusion_data/experiments/change_train_size_2_221010_111057/checkpoint/I810000_E1148" //pretrain model or training state
     },
     "datasets": {
         "train": {
