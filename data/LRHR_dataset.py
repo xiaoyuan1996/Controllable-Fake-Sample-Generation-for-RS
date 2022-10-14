@@ -332,7 +332,7 @@ class LRHRDataset(Dataset):
             [img_HR,img_SR] = Util.transform_augment(
                 [img_HR, img_SR], split=self.split, min_max=(-1, 1))
             end = Date.time()
-            print(self.r_res,"尺寸数据裁剪所需时间:",end - begin)
+            #print(self.r_res,"尺寸数据裁剪所需时间:",end - begin)
             # if not background:
             #     img_SR = np.concatenate(img_SR,background)
             #print(sample['HR'])
