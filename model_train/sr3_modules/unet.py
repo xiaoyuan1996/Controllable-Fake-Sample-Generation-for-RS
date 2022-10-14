@@ -165,14 +165,14 @@ class UNet(nn.Module):
         self,
         in_channel=6,
         out_channel=3,
-        inner_channel=32,
+        inner_channel=64,
         norm_groups=32,
         channel_mults=(1, 2, 4, 8, 8),
-        attn_res=(8),
-        res_blocks=3,
-        dropout=0,
+        attn_res=(32),
+        res_blocks=2,
+        dropout=0.2,
         with_noise_level_emb=True,
-        image_size=128
+        image_size=256
     ):
         super().__init__()
 
