@@ -265,9 +265,22 @@ class UNet(nn.Module):
         print("Unet运行所需:",c)
         self.time_sum = self.time_sum + c
         self.forward_count = self.forward_count + 1
-        if(self.forward_count % 200 == 0):
-            shape = x.shape
-            print(shape,self.forward_count,"次所需时间:",self.time_sum)
+        # if(self.forward_count % 200 == 0):
+        #     shape = x.shape
+        #     print(shape,self.forward_count,"次所需时间:",self.time_sum)
 
 
         return self.final_conv(x)
+
+if __name__=="__main__":
+    model = UNet()
+    print(model)
+    x = torch.randn((2, 6, 32*2, 32*2))
+    t = torch.tensor([10, 11]).view(2, -1)
+    begin = Date.time()
+    for i in range(5000):
+        x_ = model(x, t)
+        if i+1 % 500 ==0:
+            end = Date.time()
+            print(i+1,"次所需时间:",end - begin)
+    print(x.shape)
