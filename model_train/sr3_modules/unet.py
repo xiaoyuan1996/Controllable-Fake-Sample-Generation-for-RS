@@ -168,7 +168,7 @@ class UNet(nn.Module):
         inner_channel=64,
         norm_groups=32,
         channel_mults=(1, 2, 4, 8, 8),
-        attn_res=(32),
+        attn_res=[32],
         res_blocks=2,
         dropout=0.2,
         with_noise_level_emb=True,
