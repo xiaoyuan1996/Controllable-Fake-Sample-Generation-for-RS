@@ -1,8 +1,8 @@
 {
-    "name": "test_time_64",
+    "name": "test_time_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        2
+        3
     ],
     "path": { //set the path
         "log": "logs",
@@ -14,7 +14,7 @@
     },
     "datasets": {
         "train": {
-            "name": "test_time_64",
+            "name": "test_time_256",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             "datatype": "random", //lmdb or img, path of img files
@@ -26,7 +26,7 @@
             "data_len": -1 // -1 represents all data used in train
         },
         "val": {
-            "name": "test_time_64",
+            "name": "test_time_256",
             "mode": "HR",
             "dataroot": "/data/diffusion_data/val/test",
             "datatype": "infer", //lmdb or img, path of img files
