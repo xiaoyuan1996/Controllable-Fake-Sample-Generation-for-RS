@@ -2,7 +2,7 @@
     "name": "test_time_256",
     "phase": "train", // train or val
     "gpu_ids": [
-        3
+        6
     ],
     "path": { //set the path
         "log": "logs",
