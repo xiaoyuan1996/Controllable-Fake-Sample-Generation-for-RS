@@ -279,7 +279,7 @@ if __name__=="__main__":
     t = torch.tensor([10, 11]).view(2, -1)
     device = torch.device('cuda')
     x = x.to(device)
-    t = t.to(device)
+    #t = t.to(device)
     begin = Date.time()
     for i in range(5000):
         x_ = model(x, t)
