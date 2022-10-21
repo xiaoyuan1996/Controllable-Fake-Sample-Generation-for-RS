@@ -9,6 +9,10 @@ import light_model.networks as networks
 from .base_model import BaseModel
 logger = logging.getLogger('base')
 leader_opt = {
+"phase": "train",
+"gpu_ids": [
+        2
+    ],
 "model": {
         "which_model_G": "sr3",
         "finetune_norm": False,

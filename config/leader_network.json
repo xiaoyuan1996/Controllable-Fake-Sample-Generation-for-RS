@@ -2,7 +2,7 @@
     "name": "leader_network",
     "phase": "train", // train or val
     "gpu_ids": [
-        4
+        2
     ],
     "path": { //set the path
         "log": "logs",
