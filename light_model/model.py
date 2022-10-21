@@ -35,13 +35,7 @@ leader_opt = {
             "dropout": 0.2
         },
         "beta_schedule": {
-            "train": {
-                "schedule": "linear",
-                "n_timestep": 2000,
-                "linear_start": 1e-6,
-                "linear_end": 1e-2
-            },
-            "val": {
+             {
                 "schedule": "linear",
                 "n_timestep": 2000,
                 "linear_start": 1e-6,
@@ -108,6 +102,7 @@ class DDPM(BaseModel):
             self.log_dict = OrderedDict()
         self.load_network()
         self.print_network()
+        self.set_leader_schedule()
 
     def feed_data(self, data):
         self.data = self.set_device(data)
@@ -183,6 +178,13 @@ class DDPM(BaseModel):
             self.netG.module.set_loss(self.device)
         else:
             self.netG.set_loss(self.device)
+    def set_leader_schedule(self):
+        schedule_opt = leader_opt['model']['beta_schedule']
+        if isinstance(self.net_leader, nn.DataParallel):
+            self.netG.module.set_new_noise_schedule(
+                schedule_opt, self.device)
+        else:
+            self.net_leader.set_new_noise_schedule(schedule_opt, self.device)
 
     def set_new_noise_schedule(self, schedule_opt, schedule_phase='train'):
         if self.schedule_phase is None or self.schedule_phase != schedule_phase:
@@ -192,7 +194,6 @@ class DDPM(BaseModel):
                     schedule_opt, self.device)
             else:
                 self.netG.set_new_noise_schedule(schedule_opt, self.device)
-
     def get_current_log(self):
         return self.log_dict
 
