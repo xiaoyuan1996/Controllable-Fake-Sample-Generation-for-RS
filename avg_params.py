@@ -12,20 +12,20 @@ if __name__ == "__main__":
                      'scheduler': None, 'optimizer': None}
     if args.path1 is not None:
         opt1 = torch.load(args.path1)
-        state_dict1 = opt1['optimizer']
+        #state_dict1 = opt1['optimizer']
     if args.path2 is not None:
         opt2 = torch.load(args.path2)
-        state_dict2 = opt1['optimizer']
+        #state_dict2 = opt1['optimizer']
     if args.path3 is not None:
         opt3 = torch.load(args.path3)
-        state_dict3 = opt1['optimizer']
-    new_dict = state_dict1
-    for key,value in state_dict1.items():
+        #state_dict3 = opt1['optimizer']
+    new_dict = opt1
+    for key,value in opt1.items():
         print(key)
-        new_dict[key] = (state_dict1[key] + state_dict2[key] + state_dict3[key])/3
-    new_state['optimizer'] = new_dict
+        new_dict[key] = (opt1[key] + opt2[key] + opt3[key])/3
+    #new_state['optimizer'] = new_dict
     save_path = os.path.join(args.save_dir,'new_gen.pth')
-    torch.save(new_state,save_path)
+    torch.save(new_dict,save_path)
 
 
 
