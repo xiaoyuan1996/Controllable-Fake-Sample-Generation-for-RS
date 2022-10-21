@@ -23,6 +23,7 @@ if __name__ == "__main__":
     for key,value in opt1.items():
         print(key)
         new_dict[key] = (opt1[key] + opt2[key] + opt3[key])/3
+        print(value)
     #new_state['optimizer'] = new_dict
     save_path = os.path.join(args.save_dir,'new_gen.pth')
     torch.save(new_dict,save_path)
