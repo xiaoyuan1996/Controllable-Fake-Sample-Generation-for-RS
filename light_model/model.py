@@ -59,18 +59,8 @@ class DDPM(BaseModel):
         # define network and load pretrained models
         self.netG = self.set_device(networks.define_G(opt))
         self.net_leader = self.set_device(networks.define_G(leader_opt))
+        self.set_leader_schedule()
         # gen
-        network = self.net_leader
-        if isinstance(self.net_leader, nn.DataParallel):
-            network = network.module
-        state_dict = network.state_dict()
-        for key, param in state_dict.items():
-            state_dict[key] = param.cpu()
-        torch.save(state_dict, leader_path)
-        network.load_state_dict(torch.load(
-            leader_path), strict=False)
-
-
         logger.info(
             'load leader model in [{:s}] ...'.format(leader_path))
         self.net_leader.eval()
@@ -100,9 +90,18 @@ class DDPM(BaseModel):
                 optim_params, lr=opt['train']["optimizer"]["lr"])
             # self.lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.0001)
             self.log_dict = OrderedDict()
+        network = self.net_leader
+        if isinstance(self.net_leader, nn.DataParallel):
+            network = network.module
+        state_dict = network.state_dict()
+        for key, param in state_dict.items():
+            state_dict[key] = param.cpu()
+        torch.save(state_dict, leader_path)
+        network.load_state_dict(torch.load(
+            leader_path), strict=False)
         self.load_network()
         self.print_network()
-        self.set_leader_schedule()
+
 
     def feed_data(self, data):
         self.data = self.set_device(data)
@@ -179,7 +178,7 @@ class DDPM(BaseModel):
         else:
             self.netG.set_loss(self.device)
     def set_leader_schedule(self):
-        schedule_opt = leader_opt['model']['beta_schedule']
+        schedule_opt = leader_opt['model']['beta_schedule']['train']
         if isinstance(self.net_leader, nn.DataParallel):
             self.netG.module.set_new_noise_schedule(
                 schedule_opt, self.device)
