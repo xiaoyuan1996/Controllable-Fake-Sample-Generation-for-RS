@@ -35,12 +35,10 @@ leader_opt = {
             "dropout": 0.2
         },
         "beta_schedule": {
-             {
                 "schedule": "linear",
                 "n_timestep": 2000,
                 "linear_start": 1e-6,
                 "linear_end": 1e-2
-            }
         },
         "diffusion": {
             "image_size": 256,
