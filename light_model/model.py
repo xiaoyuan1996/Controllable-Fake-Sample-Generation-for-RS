@@ -10,6 +10,7 @@ from .base_model import BaseModel
 logger = logging.getLogger('base')
 leader_opt = {
 "phase": "train",
+"distributed": False,
 "gpu_ids": [
         2
     ],
