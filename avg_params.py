@@ -6,7 +6,7 @@ if __name__ == "__main__":
     parser.add_argument('-path1', '--path1', type=str, default="/data/diffusion_data/experiments/large_scale_384_220929_020243/checkpoint/I1000000_E2124_gen.pth")
     parser.add_argument('-path2', '--path2', type=str, default="/data/diffusion_data/experiments/large_scale_384_220929_020243/checkpoint/I1010000_E2145_gen.pth")
     parser.add_argument('-path3', '--path3', type=str, default="/data/diffusion_data/experiments/large_scale_384_220929_020243/checkpoint/I1020000_E2166_gen.pth")
-    parser.add_argument('-save_dir', '--save_dir', type=str, default="diffusion_data/save_data/large_scale")
+    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/large_scale")
     args = parser.parse_args()
     new_state ={'epoch': 1, 'iter': 1000000,
                      'scheduler': None, 'optimizer': None}
