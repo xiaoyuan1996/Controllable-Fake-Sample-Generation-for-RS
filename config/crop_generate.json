@@ -2,7 +2,7 @@
     "name": "change_train_size_third",
     "phase": "train", // train or val
     "gpu_ids": [
-        0
+        2
     ],
     "change_sizes":{
         "0.1": 64,
@@ -18,7 +18,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/change_train_size_2_221010_111057/checkpoint/I810000_E1148" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/experiments/change_train_size_third_221014_020451/checkpoint/I920000_E1304" //pretrain model or training state
     },
     "datasets": {
         "train": {
