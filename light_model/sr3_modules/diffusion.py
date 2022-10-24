@@ -6,9 +6,9 @@ from functools import partial
 import numpy as np
 from tqdm import tqdm
 import copy
-
-
-
+import light_model.sr3_modules.perceptual as perceptual
+loss_func = nn.L1Loss(reduction='sum')
+layer_indexs = [8,12]
 def _warmup_beta(linear_start, linear_end, n_timestep, warmup_frac):
     betas = linear_end * np.ones(n_timestep, dtype=np.float64)
     warmup_time = int(n_timestep * warmup_frac)
@@ -81,6 +81,7 @@ class GaussianDiffusion(nn.Module):
         self.is_leader = is_leader
         self.conditional = conditional
         self.device = torch.device('cuda')
+        self.perceptual_loss = perceptual.PerceptualLoss(loss_func,layer_indexs,self.device)
         if schedule_opt is not None:
             pass
             # self.set_new_noise_schedule(schedule_opt)
@@ -370,7 +371,7 @@ class GaussianDiffusion(nn.Module):
         # #
         # # loss = self.loss_func(noise, x_recon) + optim_loss
 
-            loss = self.loss_func(noise, x_recon) + self.loss_func(x_leader,x_recon)
+            loss = self.loss_func(noise, x_recon)*0.8 + self.perceptual_loss(x_leader,x_recon)*0.2
 
 
             return loss
