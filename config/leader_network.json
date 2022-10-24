@@ -1,5 +1,5 @@
 {
-    "name": "leader_network",
+    "name": "leader_network_perceptual",
     "phase": "train", // train or val
     "gpu_ids": [
         2
