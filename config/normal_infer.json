@@ -1,5 +1,5 @@
 {
-    "name": "normal_infer_crop",
+    "name": "infer_crop_new",
     "phase": "train", // train or val
     "gpu_ids": [
         7
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "/data/diffusion_data/save_data/crop_512_new/new" //pretrain model or training state
+        "resume_state": "/data/new_data/diffusion_data/experiments/crop_512_256_220905_015518/checkpoint/I1000000_E2834" //pretrain model or training state
     },
     "datasets": {
         "train": {
