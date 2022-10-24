@@ -1,5 +1,5 @@
 {
-    "name": "discri_pretrain",
+    "name": "discri_pretrain_144",
     "phase": "train", // train or val
     "gpu_ids": [
         5
