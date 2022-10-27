@@ -8,7 +8,7 @@ from tqdm import tqdm
 import copy
 import light_model.sr3_modules.perceptual as perceptual
 loss_func = nn.L1Loss(reduction='sum')
-layer_indexs = [8,12]
+layer_indexs = [14]
 def _warmup_beta(linear_start, linear_end, n_timestep, warmup_frac):
     betas = linear_end * np.ones(n_timestep, dtype=np.float64)
     warmup_time = int(n_timestep * warmup_frac)
