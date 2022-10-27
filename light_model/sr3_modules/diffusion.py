@@ -339,7 +339,7 @@ class GaussianDiffusion(nn.Module):
             else:
                 x_recon = self.denoise_fn(
                     torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
-            return x_recon,t
+            return x_recon,t,noise
         else:
             continuous_sqrt_alpha_cumprod = torch.FloatTensor(
                 np.random.uniform(

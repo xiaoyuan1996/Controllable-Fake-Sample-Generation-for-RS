@@ -108,8 +108,8 @@ class DDPM(BaseModel):
 
     def optimize_parameters(self):
         self.optG.zero_grad()
-        x_leader,time = self.net_leader(self.data)
-        l_pix = self.netG(self.data,x_leader,time)
+        x_leader,time,noise = self.net_leader(self.data)
+        l_pix = self.netG(self.data,x_leader,time,noise)
         # need to average in multi-gpu
         b, c, h, w = self.data['HR'].shape
         #print("1")
