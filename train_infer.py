@@ -109,6 +109,9 @@ if __name__ == "__main__":
             sr_process_1999 = os.path.join(result_path, '1')
             sr_process_3 = os.path.join(result_path, '2')
             sr_process_2 = os.path.join(result_path, '3')
+            os.makedirs(sr_process_1999, exist_ok=True)
+            os.makedirs(sr_process_3, exist_ok=True)
+            os.makedirs(sr_process_2, exist_ok=True)
             Metrics.save_img(
                 Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_sr.png'.format(sr_process_1999, current_step, idx))
             Metrics.save_img(

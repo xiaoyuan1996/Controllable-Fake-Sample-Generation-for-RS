@@ -1,5 +1,5 @@
 {
-    "name": "color_add_256",
+    "name": "record_infer_256",
     "phase": "train", // train or val
     "gpu_ids": [
        4
