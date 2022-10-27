@@ -14,7 +14,7 @@ import os
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/crop_generate.json',
+    parser.add_argument('-c', '--config', type=str, default='config/infer_256.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['val'], help='val(generation)', default='val')
     parser.add_argument('-gpu', '--gpu_ids', type=str, default=None)
@@ -106,6 +106,15 @@ if __name__ == "__main__":
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
             Metrics.save_img(
                 Metrics.tensor2img(visuals['SR'][-1]), '{}/{}_{}_sr.png'.format(sr_path, current_step, idx))
+            sr_process_1999 = os.path.join(result_path, '1')
+            sr_process_3 = os.path.join(result_path, '2')
+            sr_process_2 = os.path.join(result_path, '3')
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_sr.png'.format(sr_process_1999, current_step, idx))
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][-3]), '{}/{}_{}_sr.png'.format(sr_process_3, current_step, idx))
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][-2]), '{}/{}_{}_sr.png'.format(sr_process_2, current_step, idx))
 
         Metrics.save_img(
             hr_img, '{}/{}_{}_hr.png'.format(hr_path, current_step, idx))
