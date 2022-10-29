@@ -1,5 +1,5 @@
 {
-    "name": "change_train_size_third",
+    "name": "change_size_stratege",
     "phase": "train", // train or val
     "gpu_ids": [
         2
@@ -7,9 +7,8 @@
     "change_sizes":{
         "0.1": 64,
         "0.2": 96,
-        "0.3": 112,
-        "0.5": 128,
-        "0.8": 256,
+        "0.4": 128,
+        "0.6": 256,
         "1.0": 256
     },
     "path": { //set the path
@@ -17,12 +16,12 @@
         "tb_logger": "tb_logger",
         "results": "results",
         "checkpoint": "checkpoint",
-        //"resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/change_train_size_third_221014_020451/checkpoint/I920000_E1304" //pretrain model or training state
+        "resume_state": null
+        //"resume_state": "/data/diffusion_data/experiments/change_train_size_third_221014_020451/checkpoint/I920000_E1304" //pretrain model or training state
     },
     "datasets": {
         "train": {
-            "name": "change_train_size_new",
+            "name": "change_size_stratege",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",
             "datatype": "random", //lmdb or img, path of img files
@@ -86,7 +85,7 @@
         }
     },
     "train": {
-        "n_iter": 1000000,
+        "n_iter": 1300000,
         "val_freq": 1e4,
         "save_checkpoint_freq": 1e4,
         "print_freq": 500,
