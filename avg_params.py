@@ -10,7 +10,7 @@ if __name__ == "__main__":
                         default="/data/new_data/diffusion_data/experiments/false_generate_220824_072639/checkpoint/I880000_E3729_opt.pth")
     parser.add_argument('-path5', '--path5', type=str,
                         default="/data/new_data/diffusion_data/experiments/false_generate_220824_072639/checkpoint/I820000_E3475_opt.pth")
-    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/train_64")
+    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/train_128")
     args = parser.parse_args()
     new_state ={'epoch': 1, 'iter': 1000000,
                      'scheduler': None, 'optimizer': None}
@@ -30,6 +30,8 @@ if __name__ == "__main__":
     new_dict = opt1
     for key,value in opt1.items():
         print(key)
+        print(opt3[key])
+        print(opt3[key])
         new_dict[key] = (opt1[key] + opt2[key] + opt3[key] + opt4[key] + opt5[key])/5
         print(value)
     #new_state['optimizer'] = new_dict
