@@ -10,7 +10,7 @@ if __name__ == "__main__":
                         default="/data/diffusion_data/experiments/train_64_221024_131028/checkpoint/I1000000_E1417_gen.pth")
     parser.add_argument('-path5', '--path5', type=str,
                         default="/data/diffusion_data/experiments/train_64_221024_131028/checkpoint/I930000_E1318_gen.pth")
-    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/train_128")
+    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/train_64")
     args = parser.parse_args()
     new_state ={'epoch': 1, 'iter': 1000000,
                      'scheduler': None, 'optimizer': None}
