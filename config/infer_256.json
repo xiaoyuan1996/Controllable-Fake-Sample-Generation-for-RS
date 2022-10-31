@@ -1,5 +1,5 @@
 {
-    "name": "infer_128",
+    "name": "infer_new_128",
     "phase": "train", // train or val
     "gpu_ids": [
        4
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-         "resume_state": "/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I990000_E4195" //pretrain model or training state
+         "resume_state": "/data/diffusion_data/save_data/train_noise_128/new" //pretrain model or training state
     },
     "datasets": {
         "train": {
