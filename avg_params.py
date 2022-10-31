@@ -10,7 +10,7 @@ if __name__ == "__main__":
                         default="/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I1000000_E4238_gen.pth")
     parser.add_argument('-path5', '--path5', type=str,
                         default="/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I960000_E4068_gen.pth")
-    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/train_128")
+    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/train_noise_128")
     args = parser.parse_args()
     new_state ={'epoch': 1, 'iter': 1000000,
                      'scheduler': None, 'optimizer': None}
