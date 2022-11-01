@@ -20,7 +20,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', type=str,
-                        default='/data/diffusion_data/infer/new_infer_512_256_220916_085236/results/sr_save/',
+                        default='/data/cycle_gan/results/test_latest/fake_B/',
                         help='paths to images')
     args = parser.parse_args()
     path = args.path
