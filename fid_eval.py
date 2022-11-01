@@ -110,8 +110,11 @@ if __name__ == '__main__':
     parser.add_argument('--img_size', type=int, default=256, help='image resolution')
     parser.add_argument('--batch_size', type=int, default=50, help='batch size to use')
     args = parser.parse_args()
-    args.path1 = r'/data/cycle_gan/results/test_latest/fake_B'
-    args.path2 = r'/data/cycle_gan/results/test_latest/real_B'
-    fid_value = calculate_fid_given_paths(args.path1 ,args.path2)
-    #fid_value = calculate_fid_given_dataset(args.paths, args.img_size, args.batch_size)
+    path1 = r'/data/cycle_gan/results/test_latest/fake_B'
+    path2 = r'/data/cycle_gan/results/test_latest/real_B'
+    path = []
+    path.append(path1)
+    path.append(path2)
+    #fid_value = calculate_fid_given_paths(path1 ,path2)
+    fid_value = calculate_fid_given_dataset(path, args.img_size, args.batch_size)
     print('FID: ', fid_value)
