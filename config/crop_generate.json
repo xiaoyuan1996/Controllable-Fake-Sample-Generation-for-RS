@@ -1,13 +1,13 @@
 {
-    "name": "change_size_stratege",
+    "name": "change_size_strategy",
     "phase": "train", // train or val
     "gpu_ids": [
         2
     ],
     "change_sizes":{
         "0.1": 64,
-        "0.2": 96,
-        "0.4": 128,
+        "0.2": 128,
+        "0.4": 192,
         "0.6": 256,
         "1.0": 256
     },
@@ -85,8 +85,8 @@
         }
     },
     "train": {
-        "n_iter": 1300000,
-        "val_freq": 1e4,
+        "n_iter": 1500000,
+        "val_freq": 2e5,
         "save_checkpoint_freq": 1e4,
         "print_freq": 500,
         "optimizer": {
