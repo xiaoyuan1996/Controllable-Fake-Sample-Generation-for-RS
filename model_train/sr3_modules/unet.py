@@ -5,7 +5,7 @@ from torch import nn
 from collections import OrderedDict
 import torch.nn.functional as F
 from inspect import isfunction
-
+from torch.nn import init
 
 def exists(x):
     return x is not None
@@ -273,8 +273,22 @@ class UNet(nn.Module):
 
         return self.final_conv(x)
 
+def weights_init_orthogonal(m):
+    classname = m.__class__.__name__
+    if classname.find('Conv') != -1:
+        init.orthogonal_(m.weight.data, gain=1)
+        if m.bias is not None:
+            m.bias.data.zero_()
+    elif classname.find('Linear') != -1:
+        init.orthogonal_(m.weight.data, gain=1)
+        if m.bias is not None:
+            m.bias.data.zero_()
+    elif classname.find('BatchNorm2d') != -1:
+        init.constant_(m.weight.data, 1.0)
+        init.constant_(m.bias.data, 0.0)
 if __name__=="__main__":
     model = UNet()
+    model.apply(weights_init_orthogonal)
     print(model)
     x = torch.randn((2, 6, 32*2, 32*2))
     t = torch.tensor([10, 11]).view(2, -1)
