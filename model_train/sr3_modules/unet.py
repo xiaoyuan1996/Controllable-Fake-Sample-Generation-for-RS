@@ -288,7 +288,7 @@ def weights_init_orthogonal(m):
         init.constant_(m.bias.data, 0.0)
 if __name__=="__main__":
     model = UNet()
-    device = torch.device('cuda')
+    device = torch.device('cuda:0' if torch.cuda.is_available() else "cpu")
     model.to(device)
     print(model)
     x = torch.randn((2, 6, 32*2, 32*2))
