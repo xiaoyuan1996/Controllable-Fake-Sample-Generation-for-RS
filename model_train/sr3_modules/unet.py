@@ -300,7 +300,7 @@ if __name__=="__main__":
     begin = Date.time()
     for i in range(5000):
         x_ = model(x, t)
-        if i+1 % 500 ==0:
+        if (i+1) % 500 == 0:
             end = Date.time()
             print(i+1,"次所需时间:",end - begin)
     print(x.shape)
