@@ -291,7 +291,7 @@ if __name__=="__main__":
     model.apply(weights_init_orthogonal)
     device = torch.device('cuda:0' if torch.cuda.is_available() else "cpu")
     x = torch.randn((4, 6, 32*4, 32*4))
-    t = torch.tensor([10, 11]).view(4 -1)
+    t = torch.tensor([10, 11]).view(4,-1)
     x = x.to(device)
     t = t.to(device)
     model.to(device)
