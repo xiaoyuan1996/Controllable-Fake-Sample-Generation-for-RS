@@ -290,7 +290,7 @@ if __name__=="__main__":
     model = UNet()
     model.apply(weights_init_orthogonal)
     device = torch.device('cuda:0' if torch.cuda.is_available() else "cpu")
-    x = torch.randn((2, 6, 32*4, 32*4))
+    x = torch.randn((2, 6, 32*8, 32*8))
     t = torch.tensor([10, 11]).view(2,-1)
     x = x.to(device)
     t = t.to(device)
