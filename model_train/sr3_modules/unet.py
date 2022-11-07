@@ -288,11 +288,11 @@ def weights_init_orthogonal(m):
         init.constant_(m.bias.data, 0.0)
 if __name__=="__main__":
     model = UNet()
-    model.apply(weights_init_orthogonal)
+    device = torch.device('cuda')
+    model.to(device)
     print(model)
     x = torch.randn((2, 6, 32*2, 32*2))
     t = torch.tensor([10, 11]).view(2, -1)
-    device = torch.device('cuda')
     x = x.to(device)
     #t = t.to(device)
     begin = Date.time()
