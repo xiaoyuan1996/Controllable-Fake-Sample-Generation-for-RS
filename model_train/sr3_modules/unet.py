@@ -293,6 +293,7 @@ if __name__=="__main__":
     x = torch.randn((2, 6, 32*2, 32*2))
     t = torch.tensor([10, 11]).view(2, -1)
     x = x.to(device)
+    t = t.to(device)
     model.to(device)
     print(model)
     #t = t.to(device)
