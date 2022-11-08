@@ -1,5 +1,5 @@
 {
-    "name": "train_256",
+    "name": "test_strategy",
     "phase": "train", // train or val
     "gpu_ids": [
        4
