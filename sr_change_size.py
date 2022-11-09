@@ -8,9 +8,16 @@ import core.metrics as Metrics
 from core.wandb_logger import WandbLogger
 #from tensorboardX import SummaryWriter
 import os
-import numpy as np
 import copy
-
+import random
+import numpy as np
+seed = 6666
+print('Random seed :{}'.format(seed))
+random.seed(seed)
+np.random.seed(seed)
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
+torch.backends.cudnn.deterministic = True
 from fid_eval import calculate_fid_given_paths
 torch.autograd.set_detect_anomaly(True)
 

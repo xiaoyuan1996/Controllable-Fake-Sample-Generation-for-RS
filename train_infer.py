@@ -11,7 +11,15 @@ from fid_eval import calculate_fid_given_dataset
 from brisque_eval import eval_brisque
 #from tensorboardX import SummaryWriter
 import os
-
+import random
+import numpy as np
+seed = 6666
+print('Random seed :{}'.format(seed))
+random.seed(seed)
+np.random.seed(seed)
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
+torch.backends.cudnn.deterministic = True
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config', type=str, default='config/infer_256.json',
