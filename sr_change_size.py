@@ -180,8 +180,7 @@ if __name__ == "__main__":
                         train_dataset_opt = copy.deepcopy(opt['datasets']['train'])
                         # print("src: {},{},{}".format(train_dataset_opt["l_resolution"], train_dataset_opt["r_resolution"], train_dataset_opt["batch_size"]))
 
-                        train_dataset_opt["l_resolution"], train_dataset_opt[
-                            "r_resolution"] = resize_resolu, resize_resolu
+                        train_dataset_opt["r_resolution"] =  resize_resolu
 
                         # train_dataset_opt["batch_size"] = int(train_dataset_opt["batch_size"] * (change_sizes[list(change_sizes.keys())[-1]] / resize_resolu))
 
