@@ -261,11 +261,11 @@ class UNet(nn.Module):
                 x = layer(torch.cat((x, feats.pop()), dim=1), t)
             else:
                 x = layer(x)
-        b = Date.time()
-        c = b-a
-        #print("Unet运行所需:",c)
-        self.time_sum = self.time_sum + c
-        self.forward_count = self.forward_count + 1
+        # b = Date.time()
+        # c = b-a
+        # #print("Unet运行所需:",c)
+        # self.time_sum = self.time_sum + c
+        # self.forward_count = self.forward_count + 1
         # if(self.forward_count % 200 == 0):
         #     shape = x.shape
         #     print(shape,self.forward_count,"次所需时间:",self.time_sum)

@@ -63,9 +63,7 @@ class DDPM(BaseModel):
         # gen
         logger.info(
             'load leader model in [{:s}] ...'.format(leader_path))
-        self.net_leader.eval()
         self.schedule_phase = None
-
         # set loss and load resume state
         self.set_loss()
         self.set_new_noise_schedule(
@@ -99,6 +97,7 @@ class DDPM(BaseModel):
         torch.save(state_dict, leader_path)
         network.load_state_dict(torch.load(
             leader_path), strict=False)
+        self.net_leader.eval()
         self.load_network()
         self.print_network()
 
