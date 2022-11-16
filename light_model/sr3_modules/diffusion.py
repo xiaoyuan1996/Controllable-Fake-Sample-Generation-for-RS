@@ -372,7 +372,7 @@ class GaussianDiffusion(nn.Module):
         # #
         # # loss = self.loss_func(noise, x_recon) + optim_loss
 
-            loss = self.loss_func(noise, x_recon)*0.8 + self.perceptual_loss(x_leader,x_recon)*0.2
+            loss = self.loss_func(noise, x_recon)*0.8 + self.loss_func(x_leader,x_recon)*0.2
 
 
             return loss
