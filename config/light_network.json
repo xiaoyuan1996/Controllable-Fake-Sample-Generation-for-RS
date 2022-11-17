@@ -1,5 +1,5 @@
 {
-    "name": "light_network",
+    "name": "leader_network_test",
     "phase": "train", // train or val
     "gpu_ids": [
         5
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/light_network_221013_065111/checkpoint/I970000_E1374" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/experiments/leader_network_perceptual_221116_154840/checkpoint/I1010000_E1446" //pretrain model or training state
     },
     "datasets": {
         "train": {
