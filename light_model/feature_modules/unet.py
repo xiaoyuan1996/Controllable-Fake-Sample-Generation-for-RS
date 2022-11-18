@@ -256,7 +256,7 @@ class UNet(nn.Module):
             else:
                 x = layer(x)
         s = x
-        print(s.shape)
+        # print(s.shape)
 
         for layer in self.ups:
             if isinstance(layer, ResnetBlocWithAttn):
