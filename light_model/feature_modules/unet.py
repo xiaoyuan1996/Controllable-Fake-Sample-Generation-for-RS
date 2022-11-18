@@ -238,7 +238,7 @@ class UNet(nn.Module):
         self.forward_count = 0
 
     def forward(self, x, time):
-        a = Date.time()
+        #a = Date.time()
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
 
@@ -256,6 +256,7 @@ class UNet(nn.Module):
             else:
                 x = layer(x)
         s = x
+        print(s.shape)
 
         for layer in self.ups:
             if isinstance(layer, ResnetBlocWithAttn):
