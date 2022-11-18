@@ -15,7 +15,7 @@ leader_opt = {
         2
     ],
 "model": {
-        "which_model_G": "sr3",
+        "which_model_G": "feature",
         "finetune_norm": False,
         "unet": {
             "in_channel": 6,
