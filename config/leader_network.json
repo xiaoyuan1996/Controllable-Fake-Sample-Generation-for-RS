@@ -1,5 +1,5 @@
 {
-    "name": "leader_network_perceptual",
+    "name": "leader_network_feature",
     "phase": "train", // train or val
     "gpu_ids": [
         2
@@ -36,7 +36,7 @@
         }
     },
     "model": {
-        "which_model_G": "sr3", // use the ddpm or sr3 network structure
+        "which_model_G": "feature", // use the ddpm or sr3 network structure
         "finetune_norm": false,
         "unet": {
             "in_channel": 6,

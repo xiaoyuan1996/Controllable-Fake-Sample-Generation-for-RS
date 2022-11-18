@@ -88,8 +88,8 @@ def define_G(opt):
     #     from .ddpm_modules import diffusion, unet
     if model_opt['which_model_G'] == 'sr3':
         from .sr3_modules import diffusion, unet
-    # elif model_opt['which_model_G'] == 'discri':
-    #     from .discri_modules import diffusion, unet
+    elif model_opt['which_model_G'] == 'feature':
+        from .feature_modules import diffusion, unet
     # elif model_opt['which_model_G'] == 'sr_z1':
     #     from .sr_z1_modules import diffusion, unet
     if model_opt['diffusion']['loss_type'] != None and model_opt['diffusion']['loss_type'] != '':
