@@ -3,14 +3,14 @@ import argparse
 import os
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-path1', '--path1', type=str, default="/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I990000_E4195_gen.pth")
-    parser.add_argument('-path2', '--path2', type=str, default="/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I980000_E4153_gen.pth")
-    parser.add_argument('-path3', '--path3', type=str, default="/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I970000_E4111_gen.pth")
+    parser.add_argument('-path1', '--path1', type=str, default="/data/diffusion_data/experiments/change_size_strategy_221115_091208/checkpoint/I1500000_E4250_gen.pth")
+    parser.add_argument('-path2', '--path2', type=str, default="/data/diffusion_data/experiments/change_size_strategy_221115_091208/checkpoint/I1490000_E4222_gen.pth")
+    parser.add_argument('-path3', '--path3', type=str, default="/data/diffusion_data/experiments/change_size_strategy_221115_091208/checkpoint/I1480000_E4194_gen.pth")
     parser.add_argument('-path4', '--path4', type=str,
-                        default="/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I1000000_E4238_gen.pth")
+                        default="/data/diffusion_data/experiments/change_size_strategy_221115_091208/checkpoint/I1470000_E4165_gen.pth")
     parser.add_argument('-path5', '--path5', type=str,
-                        default="/data/new_data/diffusion_data/experiments/noise_multiple_128_220905_043227/checkpoint/I960000_E4068_gen.pth")
-    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/train_noise_128")
+                        default="/data/diffusion_data/experiments/change_size_strategy_221115_091208/checkpoint/I1460000_E4137_gen.pth")
+    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/change_size/")
     args = parser.parse_args()
     new_state ={'epoch': 1, 'iter': 1000000,
                      'scheduler': None, 'optimizer': None}
