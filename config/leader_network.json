@@ -1,8 +1,8 @@
 {
-    "name": "leader_network_planA_150w",
+    "name": "leader_network_planA",
     "phase": "train", // train or val
     "gpu_ids": [
-        2
+        3
     ],
     "path": { //set the path
         "log": "logs",
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "/data/diffusion_data/experiments/leader_network_perceptual_221116_154840/checkpoint/I1250000_E2126" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/experiments/leader_network_perceptual_221116_131714/checkpoint/I300000_E850" //pretrain model or training state
     },
     "datasets": {
         "train": {
