@@ -371,6 +371,7 @@ class GaussianDiffusion(nn.Module):
         # # optim_loss = self.optim_loss(next_x, x_in['HR'])
         # #
         # # loss = self.loss_func(noise, x_recon) + optim_loss
+            print(x_leader.shape,x_recon.shape)
 
             loss = self.loss_func(noise, x_recon)*0.8 + self.loss_func(x_leader,x_recon)*0.2
 
