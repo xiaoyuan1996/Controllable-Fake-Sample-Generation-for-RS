@@ -22,7 +22,7 @@ torch.cuda.manual_seed_all(seed)
 torch.backends.cudnn.deterministic = True
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='config/light_network.json',
+    parser.add_argument('-c', '--config', type=str, default='config/normal_infer.json',
                         help='JSON file for configuration')
     parser.add_argument('-p', '--phase', type=str, choices=['val'], help='val(generation)', default='val')
     parser.add_argument('-gpu', '--gpu_ids', type=str, default=None)
@@ -110,22 +110,29 @@ if __name__ == "__main__":
         else:
             # grid img
             sr_img = Metrics.tensor2img(visuals['SR'])  # uint8
+            hr_process = Metrics.tensor2img(visuals['new_HR'])
             Metrics.save_img(
                 sr_img, '{}/{}_{}_sr_process.png'.format(result_path, current_step, idx))
             Metrics.save_img(
                 Metrics.tensor2img(visuals['SR'][-1]), '{}/{}_{}_sr.png'.format(sr_path, current_step, idx))
-            # sr_process_1999 = os.path.join(result_path, '1')
-            # sr_process_3 = os.path.join(result_path, '2')
-            # sr_process_2 = os.path.join(result_path, '3')
-            # os.makedirs(sr_process_1999, exist_ok=True)
-            # os.makedirs(sr_process_3, exist_ok=True)
-            # os.makedirs(sr_process_2, exist_ok=True)
-            # Metrics.save_img(
-            #     Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_sr.png'.format(sr_process_1999, current_step, idx))
-            # Metrics.save_img(
-            #     Metrics.tensor2img(visuals['SR'][-3]), '{}/{}_{}_sr.png'.format(sr_process_3, current_step, idx))
-            # Metrics.save_img(
-            #     Metrics.tensor2img(visuals['SR'][-2]), '{}/{}_{}_sr.png'.format(sr_process_2, current_step, idx))
+            sr_process_1999 = os.path.join(result_path, '1')
+            sr_process_3 = os.path.join(result_path, '2')
+            sr_process_2 = os.path.join(result_path, '3')
+            os.makedirs(sr_process_1999, exist_ok=True)
+            os.makedirs(sr_process_3, exist_ok=True)
+            os.makedirs(sr_process_2, exist_ok=True)
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_sr.png'.format(sr_process_1999, current_step, idx))
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['new_HR'][1]), '{}/{}_{}_hr5.png'.format(sr_process_1999, current_step, idx))
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][-3]), '{}/{}_{}_sr.png'.format(sr_process_3, current_step, idx))
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_hr10.png'.format(sr_process_3, current_step, idx))
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][-2]), '{}/{}_{}_sr.png'.format(sr_process_2, current_step, idx))
+            Metrics.save_img(
+                Metrics.tensor2img(visuals['SR'][3]), '{}/{}_{}_hr15.png'.format(sr_process_2, current_step, idx))
 
         Metrics.save_img(
             hr_img, '{}/{}_{}_hr.png'.format(hr_path, current_step, idx))

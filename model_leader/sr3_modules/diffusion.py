@@ -6,9 +6,9 @@ from functools import partial
 import numpy as np
 from tqdm import tqdm
 import copy
-
-
-
+#import light_model.sr3_modules.perceptual as perceptual
+loss_func = nn.L1Loss(reduction='sum')
+layer_indexs = [14]
 def _warmup_beta(linear_start, linear_end, n_timestep, warmup_frac):
     betas = linear_end * np.ones(n_timestep, dtype=np.float64)
     warmup_time = int(n_timestep * warmup_frac)
@@ -69,6 +69,7 @@ class GaussianDiffusion(nn.Module):
         image_size,
         channels=3,
         loss_type='l1',
+        is_leader = False,
         conditional=True,
         schedule_opt=None
     ):
@@ -77,6 +78,7 @@ class GaussianDiffusion(nn.Module):
         self.image_size = image_size
         self.denoise_fn = denoise_fn
         self.loss_type = loss_type
+        self.is_leader = is_leader
         self.conditional = conditional
         self.device = torch.device('cuda')
         if schedule_opt is not None:
@@ -210,28 +212,6 @@ class GaussianDiffusion(nn.Module):
     @torch.no_grad()
     def p_sample_loop(self, x_in, hr_in = None,continous=False,condition_ddim = False,steps = 2000,eta = 1.0):
         device = self.betas.device
-        noise = None
-        x_start = hr_in
-        hr_img = hr_in
-        # print(x_start.shape)
-        # print(torch.max(x_start[0]),torch.min(x_start[0]))
-        [b, c, h, w] = x_start.shape
-        list = [500,1000,1500]
-        for t in list :
-            continuous_sqrt_alpha_cumprod = torch.FloatTensor(
-                np.random.uniform(
-                    self.sqrt_alphas_cumprod_prev[t - 1],
-                    self.sqrt_alphas_cumprod_prev[t],
-                    size=b
-                )
-            ).to(x_start.device)
-            continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
-                b, -1)
-
-            noise = default(noise, lambda: torch.randn_like(x_start))
-            x_noisy = self.q_sample(
-                x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
-            hr_img = torch.cat([hr_img, x_noisy], dim=0)
         if condition_ddim:
             timesteps = steps
             ddim_eta = eta
@@ -309,7 +289,7 @@ class GaussianDiffusion(nn.Module):
                         ret_img = torch.cat([ret_img, img], dim=0)
 
         if continous:
-            return ret_img,hr_img
+            return ret_img
         else:
             return ret_img[-1]
 
@@ -332,19 +312,42 @@ class GaussianDiffusion(nn.Module):
             (1 - continuous_sqrt_alpha_cumprod**2).sqrt() * noise
         )
 
-    def p_losses(self, x_in, noise=None):
+    def p_losses(self, x_in,x_leader = None,feature =None,time = None,noise=None):
         x_start = x_in['HR']
         #print(x_start.shape)
         #print(torch.max(x_start[0]),torch.min(x_start[0]))
         [b, c, h, w] = x_start.shape
-        t = np.random.randint(1, self.num_timesteps + 1)
-        continuous_sqrt_alpha_cumprod = torch.FloatTensor(
-            np.random.uniform(
-                self.sqrt_alphas_cumprod_prev[t-1],
-                self.sqrt_alphas_cumprod_prev[t],
-                size=b
-            )
-        ).to(x_start.device)
+        if self.is_leader == True:
+            t = np.random.randint(1, self.num_timesteps + 1)
+            continuous_sqrt_alpha_cumprod = torch.FloatTensor(
+                np.random.uniform(
+                    self.sqrt_alphas_cumprod_prev[t-1],
+                    self.sqrt_alphas_cumprod_prev[t],
+                    size=b
+                )
+            ).to(x_start.device)
+            continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
+                b, -1)
+
+            noise = default(noise, lambda: torch.randn_like(x_start))
+            x_noisy = self.q_sample(
+                x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
+
+            if not self.conditional:
+                x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
+            else:
+                x_recon,first_feature = self.denoise_fn(
+                    torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
+            loss = self.loss_func(noise, x_recon)
+            return x_recon,first_feature,t,noise,loss
+        else:
+            continuous_sqrt_alpha_cumprod = torch.FloatTensor(
+                np.random.uniform(
+                    self.sqrt_alphas_cumprod_prev[time - 1],
+                    self.sqrt_alphas_cumprod_prev[time],
+                    size=b
+                )
+            ).to(x_start.device)
         continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
             b, -1)
 
@@ -355,8 +358,9 @@ class GaussianDiffusion(nn.Module):
         if not self.conditional:
             x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
         else:
-            x_recon = self.denoise_fn(
+            x_recon,first_feature = self.denoise_fn(
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
+            #print(x_recon.shape)
 
         # optim loss
         # t = t - 1
@@ -367,10 +371,12 @@ class GaussianDiffusion(nn.Module):
         # # optim_loss = self.optim_loss(next_x, x_in['HR'])
         # #
         # # loss = self.loss_func(noise, x_recon) + optim_loss
-        loss = self.loss_func(noise, x_recon)
+        #     print(x_leader.shape,x_recon.shape)
+
+            loss = self.loss_func(noise, x_recon)*0.8 + self.loss_func(feature,first_feature)*0.2
 
 
-        return loss
+            return loss
 
     def forward(self, x, *args, **kwargs):
         return self.p_losses(x, *args, **kwargs)
