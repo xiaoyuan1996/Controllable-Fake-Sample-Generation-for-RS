@@ -213,25 +213,25 @@ class GaussianDiffusion(nn.Module):
         noise = None
         x_start = hr_in
         hr_img = hr_in
-        # print(x_start.shape)
-        # print(torch.max(x_start[0]),torch.min(x_start[0]))
-        [b, c, h, w] = x_start.shape
-        list_t = [80,200,500]
-        for t in list_t :
-            continuous_sqrt_alpha_cumprod = torch.FloatTensor(
-                np.random.uniform(
-                    self.sqrt_alphas_cumprod_prev[t - 1],
-                    self.sqrt_alphas_cumprod_prev[t],
-                    size=b
-                )
-            ).to(x_start.device)
-            continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
-                b, -1)
-
-            noise = default(noise, lambda: torch.randn_like(x_start))
-            x_noisy = self.q_sample(
-                x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
-            hr_img = torch.cat([hr_img, x_noisy], dim=0)
+        # # print(x_start.shape)
+        # # print(torch.max(x_start[0]),torch.min(x_start[0]))
+        # [b, c, h, w] = x_start.shape
+        # list_t = [80,200,500]
+        # for t in list_t :
+        #     continuous_sqrt_alpha_cumprod = torch.FloatTensor(
+        #         np.random.uniform(
+        #             self.sqrt_alphas_cumprod_prev[t - 1],
+        #             self.sqrt_alphas_cumprod_prev[t],
+        #             size=b
+        #         )
+        #     ).to(x_start.device)
+        #     continuous_sqrt_alpha_cumprod = continuous_sqrt_alpha_cumprod.view(
+        #         b, -1)
+        #
+        #     noise = default(noise, lambda: torch.randn_like(x_start))
+        #     x_noisy = self.q_sample(
+        #         x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
+        #     hr_img = torch.cat([hr_img, x_noisy], dim=0)
         if condition_ddim:
             timesteps = steps
             ddim_eta = eta

@@ -1,5 +1,5 @@
 {
-    "name": "sample_testset",
+    "name": "logit_distillation",
     "phase": "train", // train or val
     "gpu_ids": [
         5
@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": null
-        "resume_state": "/data/new_data/diffusion_data/experiments/crop_512_256_220905_015518/checkpoint/I1000000_E2834" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/save_data/logit_distillation/new" //pretrain model or training state
     },
     "datasets": {
         "train": {
