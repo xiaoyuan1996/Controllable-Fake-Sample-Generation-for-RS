@@ -128,11 +128,11 @@ if __name__ == "__main__":
             Metrics.save_img(
                 Metrics.tensor2img(visuals['SR'][-3]), '{}/{}_{}_sr.png'.format(sr_process_3, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][2]), '{}/{}_{}_hr10.png'.format(sr_process_3, current_step, idx))
+                Metrics.tensor2img(visuals['new_HR'][2]), '{}/{}_{}_hr10.png'.format(sr_process_3, current_step, idx))
             Metrics.save_img(
                 Metrics.tensor2img(visuals['SR'][-2]), '{}/{}_{}_sr.png'.format(sr_process_2, current_step, idx))
             Metrics.save_img(
-                Metrics.tensor2img(visuals['SR'][3]), '{}/{}_{}_hr15.png'.format(sr_process_2, current_step, idx))
+                Metrics.tensor2img(visuals['new_HR'][3]), '{}/{}_{}_hr15.png'.format(sr_process_2, current_step, idx))
 
         Metrics.save_img(
             hr_img, '{}/{}_{}_hr.png'.format(hr_path, current_step, idx))
