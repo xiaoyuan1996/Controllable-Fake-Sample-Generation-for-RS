@@ -216,8 +216,8 @@ class GaussianDiffusion(nn.Module):
         # print(x_start.shape)
         # print(torch.max(x_start[0]),torch.min(x_start[0]))
         [b, c, h, w] = x_start.shape
-        list = [500,1000,1500]
-        for t in list :
+        list_t = [500,1000,1500]
+        for t in list_t :
             continuous_sqrt_alpha_cumprod = torch.FloatTensor(
                 np.random.uniform(
                     self.sqrt_alphas_cumprod_prev[t - 1],
