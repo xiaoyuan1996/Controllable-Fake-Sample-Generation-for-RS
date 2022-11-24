@@ -338,8 +338,7 @@ class GaussianDiffusion(nn.Module):
             else:
                 x_recon,first_feature = self.denoise_fn(
                     torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
-            loss = self.loss_func(noise, x_recon)
-            return x_recon,first_feature,t,noise,loss
+            return x_recon,first_feature,t,noise
         else:
             continuous_sqrt_alpha_cumprod = torch.FloatTensor(
                 np.random.uniform(
@@ -373,7 +372,7 @@ class GaussianDiffusion(nn.Module):
         # # loss = self.loss_func(noise, x_recon) + optim_loss
         #     print(x_leader.shape,x_recon.shape)
 
-            loss = self.loss_func(noise, x_recon)*0.8 + self.loss_func(feature,first_feature)*0.2
+            loss = self.loss_func(noise, x_recon)*0.65 + self.loss_func(feature,first_feature)*0.2+self.loss_func(x_leader,x_recon)*0.15
 
 
             return loss

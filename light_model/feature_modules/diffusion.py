@@ -314,16 +314,16 @@ class GaussianDiffusion(nn.Module):
             (1 - continuous_sqrt_alpha_cumprod**2).sqrt() * noise
         )
 
-    def p_losses(self, x_in,x_leader = None,time = None,noise=None):
+    def p_losses(self, x_in, x_leader=None, feature=None, time=None, noise=None):
         x_start = x_in['HR']
-        #print(x_start.shape)
-        #print(torch.max(x_start[0]),torch.min(x_start[0]))
+        # print(x_start.shape)
+        # print(torch.max(x_start[0]),torch.min(x_start[0]))
         [b, c, h, w] = x_start.shape
         if self.is_leader == True:
             t = np.random.randint(1, self.num_timesteps + 1)
             continuous_sqrt_alpha_cumprod = torch.FloatTensor(
                 np.random.uniform(
-                    self.sqrt_alphas_cumprod_prev[t-1],
+                    self.sqrt_alphas_cumprod_prev[t - 1],
                     self.sqrt_alphas_cumprod_prev[t],
                     size=b
                 )
@@ -333,14 +333,15 @@ class GaussianDiffusion(nn.Module):
 
             noise = default(noise, lambda: torch.randn_like(x_start))
             x_noisy = self.q_sample(
-                x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
+                x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1),
+                noise=noise)
 
             if not self.conditional:
-                x_recon,feature_mid = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
+                x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
             else:
-                x_recon,feature_mid = self.denoise_fn(
+                x_recon, first_feature = self.denoise_fn(
                     torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
-            return feature_mid,t,noise
+            return x_recon, first_feature, t, noise
         else:
             continuous_sqrt_alpha_cumprod = torch.FloatTensor(
                 np.random.uniform(
@@ -357,25 +358,24 @@ class GaussianDiffusion(nn.Module):
             x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
 
         if not self.conditional:
-            x_recon,feature_mid = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
+            x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
         else:
-            x_recon,feature_mid = self.denoise_fn(
+            x_recon, first_feature = self.denoise_fn(
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
-            #print(x_recon.shape)
+            # print(x_recon.shape)
 
-        # optim loss
-        # t = t - 1
-        # x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
-        # model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
-        # noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
-        # next_x = model_mean + noise_ * (0.5 * posterior).exp()
-        # # optim_loss = self.optim_loss(next_x, x_in['HR'])
-        # #
-        # # loss = self.loss_func(noise, x_recon) + optim_loss
-            print(x_leader.shape,feature_mid.shape)
+            # optim loss
+            # t = t - 1
+            # x_ = self.predict_start_from_noise(x_noisy.detach(), t=t, noise=x_recon.detach())
+            # model_mean, posterior = self.q_posterior(x_start=x_, x_t=x_noisy.detach(), t=t)
+            # noise_ = torch.randn_like(x_noisy) if t>0 else torch.zeros_like(x_noisy)
+            # next_x = model_mean + noise_ * (0.5 * posterior).exp()
+            # # optim_loss = self.optim_loss(next_x, x_in['HR'])
+            # #
+            # # loss = self.loss_func(noise, x_recon) + optim_loss
+            #     print(x_leader.shape,x_recon.shape)
 
-            loss = self.loss_func(noise, x_recon)*0.8 + self.feature_loss(x_leader,feature_mid)*0.2
-
+            loss = self.loss_func(noise, x_recon) * 0.65 + self.loss_func(feature,first_feature) * 0.2 + self.loss_func(x_leader, x_recon) * 0.15
 
             return loss
 

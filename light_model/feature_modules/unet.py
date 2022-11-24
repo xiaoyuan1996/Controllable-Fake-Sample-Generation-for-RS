@@ -1,8 +1,6 @@
 import math
 import torch
-import time as Date
 from torch import nn
-from collections import OrderedDict
 import torch.nn.functional as F
 from inspect import isfunction
 
@@ -166,14 +164,14 @@ class UNet(nn.Module):
         self,
         in_channel=6,
         out_channel=3,
-        inner_channel=64,
+        inner_channel=32,
         norm_groups=32,
         channel_mults=(1, 2, 4, 8, 8),
-        attn_res=[16],
-        res_blocks=2,
-        dropout=0.2,
+        attn_res=(8),
+        res_blocks=3,
+        dropout=0,
         with_noise_level_emb=True,
-        image_size=256
+        image_size=128
     ):
         super().__init__()
 
@@ -193,8 +191,9 @@ class UNet(nn.Module):
         pre_channel = inner_channel
         feat_channels = [pre_channel]
         now_res = image_size
-        downs = [nn.Conv2d(in_channel, inner_channel,
-                           kernel_size=3, padding=1)]
+        self.first_layer = nn.Conv2d(in_channel, inner_channel,
+                           kernel_size=3, padding=1)
+        downs = []
         for ind in range(num_mults):
             is_last = (ind == num_mults - 1)
             use_attn = (now_res in attn_res)
@@ -234,15 +233,15 @@ class UNet(nn.Module):
         self.ups = nn.ModuleList(ups)
 
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
-        self.time_sum = 0.0
-        self.forward_count = 0
 
     def forward(self, x, time):
-        #a = Date.time()
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
 
         feats = []
+        x = self.first_layer(x)
+        feats.append(x)
+        first_feature = x
         for layer in self.downs:
             if isinstance(layer, ResnetBlocWithAttn):
                 x = layer(x, t)
@@ -255,38 +254,11 @@ class UNet(nn.Module):
                 x = layer(x, t)
             else:
                 x = layer(x)
-        s = x
-        # print(s.shape)
 
         for layer in self.ups:
             if isinstance(layer, ResnetBlocWithAttn):
                 x = layer(torch.cat((x, feats.pop()), dim=1), t)
             else:
                 x = layer(x)
-        # b = Date.time()
-        # c = b-a
-        # #print("Unet运行所需:",c)
-        # self.time_sum = self.time_sum + c
-        # self.forward_count = self.forward_count + 1
-        # if(self.forward_count % 200 == 0):
-        #     shape = x.shape
-        #     print(shape,self.forward_count,"次所需时间:",self.time_sum)
 
-
-        return self.final_conv(x),x
-
-if __name__=="__main__":
-    model = UNet()
-    print(model)
-    x = torch.randn((2, 6, 32*2, 32*2))
-    t = torch.tensor([10, 11]).view(2, -1)
-    device = torch.device('cuda')
-    x = x.to(device)
-    #t = t.to(device)
-    begin = Date.time()
-    for i in range(5000):
-        x_ = model(x, t)
-        if i+1 % 500 ==0:
-            end = Date.time()
-            print(i+1,"次所需时间:",end - begin)
-    print(x.shape)
+        return self.final_conv(x),first_feature
