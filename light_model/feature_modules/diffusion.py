@@ -381,8 +381,8 @@ class GaussianDiffusion(nn.Module):
             # # loss = self.loss_func(noise, x_recon) + optim_loss
             #     print(x_leader.shape,x_recon.shape)
 
-            loss = self.loss_func(noise, x_recon) * 0.65 + self.loss_func(feature,first_feature) * 0.2 + self.loss_func(x_leader, x_recon) * 0.15
-
+            #loss = self.loss_func(noise, x_recon) * 0.65 + self.loss_func(feature,first_feature) * 0.2 + self.loss_func(x_leader, x_recon) * 0.15
+            loss = self.loss_func(noise, x_recon) * 0.8 + self.loss_func(feature, first_feature) * 0.2
             return loss
 
     def forward(self, x, *args, **kwargs):
