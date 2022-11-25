@@ -70,17 +70,17 @@ class DDPM(BaseModel):
             self.netG.train()
             # find the parameters to optimize
             if opt['model']['finetune_norm']:
-                optim_params = []
+                optim_params_G = []
                 for k, v in self.netG.named_parameters():
                     v.requires_grad = False
                     if k.find('transformer') >= 0:
                         v.requires_grad = True
                         v.data.zero_()
-                        optim_params.append(v)
+                        optim_params_G.append(v)
                         logger.info(
                             'Params [{:s}] initialized to 0 and will optimize.'.format(k))
             else:
-                optim_params = list(self.netG.parameters())
+                optim_params_G = list(self.netG.parameters())
             self.net_leader.train()
             # find the parameters to optimize
             if opt['model']['finetune_norm']:
@@ -96,6 +96,8 @@ class DDPM(BaseModel):
             else:
                 optim_params = list(self.net_leader.parameters())
 
+            self.opt_leader = torch.optim.Adam(
+                optim_params_G, lr=opt['train']["optimizer"]["lr"])
             self.opt_leader = torch.optim.Adam(
                 optim_params, lr=opt['train']["optimizer"]["lr"])
             # self.lossD_optimizer = torch.optim.Adam(list(netD.parameters()), lr=0.0001)
