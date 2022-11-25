@@ -1,6 +1,6 @@
 import torch
 import data as Data
-import model_leader as Model
+import light_model as Model
 import argparse
 import logging
 import core.logger as Logger
