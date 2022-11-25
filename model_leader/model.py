@@ -51,7 +51,7 @@ leader_opt = {
         }
     }
 }
-leader_path = "/data/diffusion_data/save_data/large_scale/new_gen.pth"
+#leader_path = "/data/diffusion_data/save_data/large_scale/new_gen.pth"
 
 class DDPM(BaseModel):
     def __init__(self, opt):

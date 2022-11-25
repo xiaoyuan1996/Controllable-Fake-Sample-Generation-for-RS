@@ -175,11 +175,13 @@ class GaussianDiffusion(nn.Module):
         noise_level = torch.FloatTensor(
             [self.sqrt_alphas_cumprod_prev[t+1]]).repeat(batch_size, 1).to(x.device)
         if condition_x is not None:
+            noise, first_feature = self.denoise_fn(torch.cat([condition_x, x], dim=1), noise_level)
             x_recon = self.predict_start_from_noise(
-                x, t=t, noise=self.denoise_fn(torch.cat([condition_x, x], dim=1), noise_level))
+                x, t=t, noise=noise)
         else:
+            noise, first_feature = self.denoise_fn(x, noise_level)
             x_recon = self.predict_start_from_noise(
-                x, t=t, noise=self.denoise_fn(x, noise_level))
+                x, t=t, noise=noise)
 
         x_next =x*self.test_sqrt_recip_alphas[t]-x_recon*self.test_sqrt_recipm1_alphas[t]
         return x_next
@@ -189,11 +191,13 @@ class GaussianDiffusion(nn.Module):
         noise_level = torch.FloatTensor(
             [self.sqrt_alphas_cumprod_prev[t+1]]).repeat(batch_size, 1).to(x.device)
         if condition_x is not None:
+            noise, first_feature = self.denoise_fn(torch.cat([condition_x, x], dim=1), noise_level)
             x_recon = self.predict_start_from_noise(
-                x, t=t, noise=self.denoise_fn(torch.cat([condition_x, x], dim=1), noise_level))
+                x, t=t, noise=noise)
         else:
+            noise, first_feature = self.denoise_fn(x, noise_level)
             x_recon = self.predict_start_from_noise(
-                x, t=t, noise=self.denoise_fn(x, noise_level))
+                x, t=t, noise=noise)
 
         if clip_denoised:
             x_recon.clamp_(-1., 1.)
@@ -246,7 +250,7 @@ class GaussianDiffusion(nn.Module):
 
                 noise_level = torch.FloatTensor([self.sqrt_alphas_cumprod_prev[i + 1]]).repeat(batch_size, 1).to(
                     x.device)
-                et = self.denoise_fn(torch.cat([x_in, x], dim=1), noise_level)
+                et,first_feature = self.denoise_fn(torch.cat([x_in, x], dim=1), noise_level)
 
                 x0_t = (x - et * (1 - at).sqrt()) / at.sqrt()
 
@@ -355,7 +359,7 @@ class GaussianDiffusion(nn.Module):
             x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
 
         if not self.conditional:
-            x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
+            x_recon,first_feature = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
         else:
             x_recon,first_feature = self.denoise_fn(
                 torch.cat([x_in['SR'], x_noisy], dim=1), continuous_sqrt_alpha_cumprod)
