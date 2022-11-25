@@ -254,7 +254,7 @@ class GaussianDiffusion(nn.Module):
                     x.device)
                 et,feature = self.denoise_fn(torch.cat([x_in, x], dim=1), noise_level)
 
-                print(et.shape,at.shape)
+                # print(et.shape,at.shape)
 
                 x0_t = (x - et * (1 - at).sqrt()) / at.sqrt()
 
