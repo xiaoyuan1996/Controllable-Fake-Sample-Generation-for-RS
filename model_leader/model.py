@@ -96,7 +96,7 @@ class DDPM(BaseModel):
             else:
                 optim_params = list(self.net_leader.parameters())
 
-            self.opt_leader = torch.optim.Adam(
+            self.optG = torch.optim.Adam(
                 optim_params_G, lr=opt['train']["optimizer"]["lr"])
             self.opt_leader = torch.optim.Adam(
                 optim_params, lr=opt['train']["optimizer"]["lr"])
