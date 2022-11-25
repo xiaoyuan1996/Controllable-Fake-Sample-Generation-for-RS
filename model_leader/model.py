@@ -61,8 +61,6 @@ class DDPM(BaseModel):
         self.net_leader = self.set_device(networks.define_G(leader_opt))
         self.set_leader_schedule(leader_opt)
         # gen
-        logger.info(
-            'load leader model in [{:s}] ...'.format(leader_path))
         self.schedule_phase = None
         # set loss and load resume state
         self.set_loss()
