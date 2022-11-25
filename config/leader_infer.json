@@ -1,5 +1,5 @@
 {
-    "name": "logit_distillation",
+    "name": "logit_test",
     "phase": "train", // train or val
     "gpu_ids": [
         5
@@ -36,7 +36,7 @@
         }
     },
     "model": {
-        "which_model_G": "feature", // use the ddpm or sr3 network structure
+        "which_model_G": "sr3", // use the ddpm or sr3 network structure
         "finetune_norm": false,
         "unet": {
             "in_channel": 6,
