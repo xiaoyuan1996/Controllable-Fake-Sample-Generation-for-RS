@@ -1,6 +1,6 @@
 {
     "name": "logit_test",
-    "phase": "train", // train or val
+    "phase": "val", // train or val
     "gpu_ids": [
         5
     ],
