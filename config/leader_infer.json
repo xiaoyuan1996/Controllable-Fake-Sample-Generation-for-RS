@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": "/data/diffusion_data/experiments/light_network_221013_065111/checkpoint/I1000000_E1417"
-        "resume_state": "/data/diffusion_data/experiments/leader_fusion_221124_180842/checkpoint/I1040000_E1531" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/save_data/feature_distillation/new" //pretrain model or training state
     },
     "datasets": {
         "train": {
@@ -32,7 +32,7 @@
             "datatype": "infer", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 256,
-            "data_len": 20 // data length in validation
+            "data_len": -1 // data length in validation
         }
     },
     "model": {

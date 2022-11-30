@@ -3,14 +3,14 @@ import argparse
 import os
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-path1', '--path1', type=str, default="/data/diffusion_data/experiments/leader_network_planA_150w_221121_110744/checkpoint/I1460000_E2721_gen.pth")
-    parser.add_argument('-path2', '--path2', type=str, default="/data/diffusion_data/experiments/leader_network_planA_150w_221121_110744/checkpoint/I1470000_E2750_gen.pth")
-    parser.add_argument('-path3', '--path3', type=str, default="/data/diffusion_data/experiments/leader_network_planA_150w_221121_110744/checkpoint/I1480000_E2778_gen.pth")
+    parser.add_argument('-path1', '--path1', type=str, default="/data/diffusion_data/experiments/leader_fusion_221125_112229/checkpoint/I1460000_E2721_gen.pth")
+    parser.add_argument('-path2', '--path2', type=str, default="/data/diffusion_data/experiments/leader_fusion_221125_112229/checkpoint/I1470000_E2749_gen.pth")
+    parser.add_argument('-path3', '--path3', type=str, default="/data/diffusion_data/experiments/leader_fusion_221125_112229/checkpoint/I1480000_E2777_gen.pth")
     parser.add_argument('-path4', '--path4', type=str,
-                        default="/data/diffusion_data/experiments/leader_network_planA_150w_221121_110744/checkpoint/I1490000_E2806_gen.pth")
+                        default="/data/diffusion_data/experiments/leader_fusion_221125_112229/checkpoint/I1490000_E2806_gen.pth")
     parser.add_argument('-path5', '--path5', type=str,
-                        default="/data/diffusion_data/experiments/leader_network_planA_150w_221121_110744/checkpoint/I1500000_E2835_gen.pth")
-    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/logit_distillation/")
+                        default="/data/diffusion_data/experiments/leader_fusion_221125_112229/checkpoint/I1500000_E2834_gen.pth")
+    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/feature_distillation/")
     args = parser.parse_args()
     new_state ={'epoch': 1, 'iter': 1000000,
                      'scheduler': None, 'optimizer': None}
