@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //"resume_state": "/data/diffusion_data/experiments/light_network_221013_065111/checkpoint/I1000000_E1417"
-        "resume_state": "/data/diffusion_data/save_data/feature_distillation/new" //pretrain model or training state
+        "resume_state": "/data/diffusion_data/save_data/light_network/new" //pretrain model or training state
     },
     "datasets": {
         "train": {
