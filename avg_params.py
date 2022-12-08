@@ -3,14 +3,14 @@ import argparse
 import os
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-path1', '--path1', type=str, default="/data/diffusion_data/experiments/new_leader_221125_151235/checkpoint/I1280000_E3627_gen.pth")
-    parser.add_argument('-path2', '--path2', type=str, default="/data/diffusion_data/experiments/new_leader_221125_151235/checkpoint/I1290000_E3655_gen.pth")
-    parser.add_argument('-path3', '--path3', type=str, default="/data/diffusion_data/experiments/new_leader_221125_151235/checkpoint/I1300000_E3683_gen.pth")
+    parser.add_argument('-path1', '--path1', type=str, default="/data/diffusion_data/experiments/new_leader_221125_151235/lead_checkpoint/I1280000_E3627_gen.pth")
+    parser.add_argument('-path2', '--path2', type=str, default="/data/diffusion_data/experiments/new_leader_221125_151235/lead_checkpoint/I1290000_E3655_gen.pth")
+    parser.add_argument('-path3', '--path3', type=str, default="/data/diffusion_data/experiments/new_leader_221125_151235/lead_checkpoint/I1300000_E3683_gen.pth")
     parser.add_argument('-path4', '--path4', type=str,
-                        default="/data/diffusion_data/experiments/new_leader_221125_151235/checkpoint/I1310000_E3712_gen.pth")
+                        default="/data/diffusion_data/experiments/new_leader_221125_151235/lead_checkpoint/I1310000_E3712_gen.pth")
     parser.add_argument('-path5', '--path5', type=str,
-                        default="/data/diffusion_data/experiments/new_leader_221125_151235/checkpoint/I1320000_E3740_gen.pth")
-    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/new_leader/")
+                        default="/data/diffusion_data/experiments/new_leader_221125_151235/lead_checkpoint/I1320000_E3740_gen.pth")
+    parser.add_argument('-save_dir', '--save_dir', type=str, default="/data/diffusion_data/save_data/new_lead_checkpoint/")
     args = parser.parse_args()
     new_state ={'epoch': 1, 'iter': 1000000,
                      'scheduler': None, 'optimizer': None}
