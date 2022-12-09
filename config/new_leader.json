@@ -10,7 +10,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         "lead_checkpoint": "lead_checkpoint",
-        "resume_state": "/data/diffusion_data/save_data/new_lead_checkpoint/new",
+        "resume_state": "/data/diffusion_data/experiments/new_leader_221125_151235/checkpoint/I1200000_E3400",
         //"resume_state": "/data/diffusion_data/experiments/leader_network_perceptual_221116_154840/checkpoint/I1250000_E2126",//pretrain model or training
         "leader_state": null
     },
