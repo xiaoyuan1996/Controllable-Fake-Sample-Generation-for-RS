@@ -1,8 +1,4 @@
-
-
-
-
-## The offical PyTorch code for paper ["Efficient and Controllable Remote Sensing Fake Sample Generation Based on Diffusion Model.]()
+## [Controllable-Fake-Sample-Generation-for-RS](https://github.com/xiaoyuan1996/Controllable-Fake-Sample-Generation-for-RS)
 
 ##### Author: Chongyang Hao
 
@@ -32,7 +28,7 @@
 This is CFSG-RS,a fake sample generation method for remote sensing images.
 Here, you can get an efficient remote sensing fake sample generation  framework based on the diffusion model, which can be further modified to achieve more controllable and better generation effect.
 
-![arch image](./figures/title.jpg)
+<center><img src="./figures/title.jpg" width="60%"/><center>
 
 ##
 
@@ -56,15 +52,11 @@ The diffusion model learns too slowly, and the general network starts from low f
 
 ![arch image](./figures/compare_strategy.jpg)
 
-## Citation
-
-If you feel this code helpful or use this code or dataset, please cite it as
-
-```
-
-```
-
 ## Usage
+
+### Brief
+
+Our code is based on [**Image Super-Resolution via Iterative Refinement(SR3)**](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement ).We apply it to the remote sensing pseudo-sample generation task and increase our innovation.
 
 ### Environment
 
@@ -76,12 +68,12 @@ pip install -r requirement.txt
 
 We prepared three Pretrained Models, representing the regular model, the unguided lightweight model, and the tuned lightweight model. The resource consumption of the light-weighted model is much smaller than that of the regular model. The original model contains 97,807,491 parameters, while the optimized diffusion model requires only 42,054,851 parameters to complete the pseudo-sample generation task.
 
-| Type                                                        | Platform（Code：qwer) |
-| ----------------------------------------------------------- | --------------------- |
-| nomal_model                                                 |                       |
-| unlead_light_model                                          |                       |
-| leader_light_model                                          |                       |
-| inception_v3_google-0cc3c7bd.pth(use when eval FID and IS ) |                       |
+| Type                                                        | Platform（Code：hcy1)                                        |
+| ----------------------------------------------------------- | ------------------------------------------------------------ |
+| nomal_model                                                 | [Baidu Yun](https://pan.baidu.com/s/196aCOl0bluVj59swXMcF9w) |
+| unlead_light_model                                          | [Baidu Yun]( https://pan.baidu.com/s/1DbdMx6IIbHainnZNUh2nBw) |
+| leader_light_model                                          | [Baidu Yun](https://pan.baidu.com/s/1Z9JvrpfQjBd1JnmS4CdgFg) |
+| inception_v3_google-0cc3c7bd.pth(use when eval FID and IS ) | [Baidu Yun](https://pan.baidu.com/s/1WriiaR156IQGQpJdsCQyNw) |
 
 ```python
 # Download the pretrain model and edit [false_generate]_[leader_network].json about "resume_state":
@@ -94,9 +86,9 @@ We prepared three Pretrained Models, representing the regular model, the unguide
 
 If you didn't have the data, you can prepare it by following steps:
 
-train dataset
+*[train dataset]()*
 
-testset
+[*testset*]()
 
 then you need to change the datasets config to your data path and image resolution: 
 
@@ -149,43 +141,16 @@ self.hr_path = Util.get_paths_from_images(
                 '{}/images'.format(dataroot))
 ```
 
-### Training/Resume Training
-
-The Normal Training
-
-```python
-# Use the python file in the model_train folder to complete the routine training 
-python train_sr.py -p train -c config/false_generate.json
-```
-
-The Light_network Leader Training
-
-```python
-# Use the python file in the light--model folder to complete the training, the bootstrap training fixed bootstrap model
-
-python leader_sr.py -p train -c config/leader_network.json
-
-#Determine the network structure by changing the which_model_G property in the json file
-"model": {
-        "which_model_G属性": "sr3", // use the feature or sr3 network structure
-}
-```
-
-```python
-# Use the python file in the model_leader folder to complete the training, which trains both the bootstrap model and the lightweight model
-
-python fusion_sr.py -p train -c config/new_leader.json
-
-```
-
 ### Test And Infer
 
 ```python
 # Quantitative evaluation alone using FID/BRISQUE metrics on given result root
+#light_network.json corresponds to light weight model test
+#infer_256.json corresponds to regular model infer
 python train_infer.py -c [config file] -i
 ```
 
-### 存储路径
+### Storage Path
 
 You can change the weight file and output image storage location under the file core/logger.py
 
@@ -207,4 +172,10 @@ Samples of Inference Process
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | <img src="./misc/0_142_sr_process.png" alt="show" style="zoom:90%;" /> | <img src="./misc/0_425_sr_process.png" alt="show" style="zoom:90%;" /> | <img src="./misc/0_435_sr_process.png" alt="show" style="zoom:90%;" /> |
 
-- #### # Controllable-Fake-Sample-Generation-for-RS
+## Citation
+
+If you feel this code helpful or use this code or dataset, please cite it as
+
+```
+
+```

@@ -1,5 +1,5 @@
 {
-    "name": "compare_new",
+    "name": "train_256",
     "phase": "train", // train or val
     "gpu_ids": [
        4
