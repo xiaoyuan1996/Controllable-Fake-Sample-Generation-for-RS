@@ -68,6 +68,8 @@ pip install -r requirement.txt
 
 We prepared three Pretrained Models, representing the regular model, the unguided lightweight model, and the tuned lightweight model. The resource consumption of the light-weighted model is much smaller than that of the regular model. The original model contains 97,807,491 parameters, while the optimized diffusion model requires only 42,054,851 parameters to complete the pseudo-sample generation task.
 
+inception_ v3_ The google-0cc3c7bd.pth file needs to be configured in the python environment, which needs to be used when calculating fid and is
+
 | Type                                                        | Platform（Code：hcy1)                                        |
 | ----------------------------------------------------------- | ------------------------------------------------------------ |
 | nomal_model                                                 | [Baidu Yun](https://pan.baidu.com/s/196aCOl0bluVj59swXMcF9w) |
@@ -76,7 +78,7 @@ We prepared three Pretrained Models, representing the regular model, the unguide
 | inception_v3_google-0cc3c7bd.pth(use when eval FID and IS ) | [Baidu Yun](https://pan.baidu.com/s/1WriiaR156IQGQpJdsCQyNw) |
 
 ```python
-# Download the pretrain model and edit [false_generate]_[leader_network].json about "resume_state":
+# Download the pretrain model and edit [infer_256]_[leader_network].json about "resume_state":
 "resume_state": [your pretrain model path]
 ```
 
@@ -85,8 +87,6 @@ We prepared three Pretrained Models, representing the regular model, the unguide
 #### New Start
 
 If you didn't have the data, you can prepare it by following steps:
-
-*[train dataset]()*
 
 [*testset*]()
 
@@ -98,7 +98,7 @@ then you need to change the datasets config to your data path and image resoluti
             "name": "test_process",
             "mode": "HR", // whether need LR img
             "dataroot": "/data/diffusion_data/dataset/false_generate",//train dastset root path
-            "datatype": "random", //lmdb or img, path of img files
+            "datatype": "random", //noise,random,crop，multiple,data processing method
             "l_resolution": 32,
             "r_resolution": 256, // crop size
             "batch_size": 2,
@@ -109,11 +109,11 @@ then you need to change the datasets config to your data path and image resoluti
         "val": {
             "name": "test_process",
             "mode": "HR",
-            "dataroot": "/data/diffusion_data/val/test",//path of img files
-            "datatype": "infer", //infer,random,crop，multiple
+            "dataroot": "/data/diffusion_data/val/test",//testset root path
+            "datatype": "infer", //infer,random,crop，multiple,data processing method
             "l_resolution": 32,
-            "r_resolution": 256,
-            "data_len": -1 // data length in validation
+            "r_resolution": 256,//input size
+            "data_len": -1 // -1 represents all data used in test
         }
     },
 ```
@@ -141,13 +141,14 @@ self.hr_path = Util.get_paths_from_images(
                 '{}/images'.format(dataroot))
 ```
 
-### Test And Infer
+### Test/Evaluation
 
 ```python
-# Quantitative evaluation alone using FID/BRISQUE metrics on given result root
+#Edit json to add pretrain model path and testset root path, run the evaluation 
 #light_network.json corresponds to light weight model test
 #infer_256.json corresponds to regular model infer
-python train_infer.py -c [config file] -i
+#-i controls the file storage location, step controls the number of reasoning iterations, and eta represents the noise orthogonalization ratio
+python train_infer.py -c [config file] -i --steps 20 --eta 0.0
 ```
 
 ### Storage Path
