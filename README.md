@@ -172,10 +172,3 @@ Samples of Inference Process
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | <img src="./misc/0_142_sr_process.png" alt="show" style="zoom:90%;" /> | <img src="./misc/0_425_sr_process.png" alt="show" style="zoom:90%;" /> | <img src="./misc/0_435_sr_process.png" alt="show" style="zoom:90%;" /> |
 
-## Citation
-
-If you feel this code helpful or use this code or dataset, please cite it as
-
-```
-
-```
