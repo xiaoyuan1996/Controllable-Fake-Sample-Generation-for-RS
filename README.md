@@ -28,7 +28,6 @@
 This is CFSG-RS,a fake sample generation method for remote sensing images.
 Here, you can get an efficient remote sensing fake sample generation  framework based on the diffusion model, which can be further modified to achieve more controllable and better generation effect.
 
-<center><img src="./figures/title.jpg" width="60%"/><center>
 
 ##
 
@@ -173,10 +172,3 @@ Samples of Inference Process
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | <img src="./misc/0_142_sr_process.png" alt="show" style="zoom:90%;" /> | <img src="./misc/0_425_sr_process.png" alt="show" style="zoom:90%;" /> | <img src="./misc/0_435_sr_process.png" alt="show" style="zoom:90%;" /> |
 
-## Citation
-
-If you feel this code helpful or use this code or dataset, please cite it as
-
-```
-
-```
