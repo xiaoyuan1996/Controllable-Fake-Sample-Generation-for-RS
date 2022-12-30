@@ -65,14 +65,13 @@ pip install -r requirement.txt
 
 ### Pretrained Model
 
-We prepared three Pretrained Models, representing the regular model, the unguided lightweight model, and the tuned lightweight model. The resource consumption of the light-weighted model is much smaller than that of the regular model. The original model contains 97,807,491 parameters, while the optimized diffusion model requires only 42,054,851 parameters to complete the pseudo-sample generation task.
+We prepared three Pretrained Models, representing the regular model and the optimized lightweight model. The resource consumption of the light-weighted model is much smaller than that of the regular model. The original model contains 97,807,491 parameters, while the optimized diffusion model requires only 42,054,851 parameters to complete the pseudo-sample generation task.
 
 inception_ v3_ The google-0cc3c7bd.pth file needs to be configured in the python environment, which needs to be used when calculating fid and is
 
 | Type                                                        | Platform（Code：hcy1)                                        |
 | ----------------------------------------------------------- | ------------------------------------------------------------ |
 | nomal_model                                                 | [Baidu Yun](https://pan.baidu.com/s/196aCOl0bluVj59swXMcF9w) |
-| unlead_light_model                                          | [Baidu Yun]( https://pan.baidu.com/s/1DbdMx6IIbHainnZNUh2nBw) |
 | leader_light_model                                          | [Baidu Yun](https://pan.baidu.com/s/1Z9JvrpfQjBd1JnmS4CdgFg) |
 | inception_v3_google-0cc3c7bd.pth(use when eval FID and IS ) | [Baidu Yun](https://pan.baidu.com/s/1WriiaR156IQGQpJdsCQyNw) |
 
@@ -87,7 +86,7 @@ inception_ v3_ The google-0cc3c7bd.pth file needs to be configured in the python
 
 If you didn't have the data, you can prepare it by following steps:
 
-[*testset*]()
+[*testset*](https://pan.baidu.com/s/1GrOql8F2jw8bkq-fQ98f8w)
 
 then you need to change the datasets config to your data path and image resolution: 
 
