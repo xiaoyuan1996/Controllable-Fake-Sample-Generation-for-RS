@@ -14,13 +14,6 @@
 
 ### Welcome :+1:_<big>`Fork and Star`</big>_:+1:, then we'll let you know when we update
 
-```bash
-#### News:
-#### 2022.12.20: ---->The code of CFSG-RS is expected to be released before next year<----
-#### 2021.12.29: ---->The code of CFSG-RS has been open to access<----
-#### 2021.12.30: ---->Updated usage methods and some test results<----
-```
-
 ### -------------------------------------------------------------------------------------
 
 ## INTRODUCTION
