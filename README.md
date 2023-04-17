@@ -1,7 +1,5 @@
 ## [Controllable-Fake-Sample-Generation-for-RS](https://github.com/xiaoyuan1996/Controllable-Fake-Sample-Generation-for-RS)
 
-##### Author: Chongyang Hao
-
 <a href="https://github.com/xiaoyuan1996/Controllable-Fake-Sample-Generation-for-RS"><img src="https://travis-ci.org/Cadene/block.bootstrap.pytorch.svg?branch=master"/></a>
 ![Supported Python versions](https://img.shields.io/badge/python-3.7-blue.svg)
 ![Supported OS](https://img.shields.io/badge/Supported%20OS-Linux-yellow.svg)
